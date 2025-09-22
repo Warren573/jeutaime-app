@@ -33,6 +33,11 @@ flutter:
     - family: ComicSans
       fonts:
         - asset: assets/fonts/ComicSans-Regular.ttf
+        - asset: assets/fonts/ComicSans-Bold.ttf
+    - family: Georgia
+      fonts:
+        - asset: assets/fonts/Georgia-Regular.ttf
+        - asset: assets/fonts/Georgia-Bold.ttf
 
 # Si tu ajoutes d'autres polices, ajoute-les ici :
 #   - family: MaSuperPolice
