@@ -4,8 +4,8 @@ class RandomBarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Bar Aléatoire')),
-      body: Center(child: Text('Bienvenue dans le Bar Aléatoire !')),
+      appBar: AppBar(title: const Text('Bar Aléatoire')),
+      body: const Center(child: Text('Bienvenue dans le Bar Aléatoire !')),
     );
   }
 }
