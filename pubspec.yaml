@@ -1,6 +1,8 @@
 name: jeutaime_app
-description: Nouvelle expérience immersive de rencontre ludique et authentique.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+description: >-
+  JeuTaime — L’app de rencontre immersive, ludique et authentique. 
+  Bars thématiques, défis, quiz, souvenirs : une expérience unique pour des liens vrais.
+publish_to: "none" # Pas publié sur pub.dev
 
 version: 1.0.0+1
 
@@ -10,13 +12,33 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # Ajoute ici tes autres dépendances (Firebase, animations, etc.)
   cupertino_icons: ^1.0.2
-  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
+    - assets/bars/
+
+  fonts:
+    - family: ComicSans
+      fonts:
+        - asset: assets/fonts/ComicSans-Regular.ttf
+
+# Si tu ajoutes d'autres polices, ajoute-les ici :
+#   - family: MaSuperPolice
+#     fonts:
+#       - asset: assets/fonts/MaSuperPolice.ttf
+
+# Exemples d'autres options utiles :
+# flutter_intl:
+#   enabled: true
