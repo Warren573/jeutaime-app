@@ -106,6 +106,7 @@ class AppRoutes {
     
     // Routes des souvenirs
     memoryBox: (context) => MemoryBoxScreen(),
+    '/memory_box': (context) => MemoryBoxScreen(), // Alias pour compatibilité
     
     // Routes du profil
     profile: (context) => ProfileScreen(),
