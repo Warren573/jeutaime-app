@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Modèle utilisateur pour l'application JeuTaime
+/// Gère toutes les informations de profil et statistiques
 class UserModel {
   final String uid;
   final String name;
@@ -13,11 +15,14 @@ class UserModel {
   final int coins;
   final bool isVerified;
   final DateTime lastActive;
+  final DateTime createdAt;
   final Map<String, dynamic> stats;
   final Map<String, dynamic> preferences;
   final String currentBar;
   final double reliabilityScore;
-  final int ghostingScore;
+  final int ghostingCount;
+  final int totalConversations;
+  final int activeConversations;
 
   UserModel({
     required this.uid,
@@ -32,11 +37,14 @@ class UserModel {
     required this.coins,
     required this.isVerified,
     required this.lastActive,
+    required this.createdAt,
     required this.stats,
     required this.preferences,
     this.currentBar = '',
-    this.reliabilityScore = 100.0,
-    this.ghostingScore = 0,
+    this.reliabilityScore = 1000.0,
+    this.ghostingCount = 0,
+    this.totalConversations = 0,
+    this.activeConversations = 0,
   });
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
@@ -55,11 +63,14 @@ class UserModel {
       coins: data['coins'] ?? 0,
       isVerified: data['isVerified'] ?? false,
       lastActive: (data['lastActive'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       stats: Map<String, dynamic>.from(data['stats'] ?? {}),
       preferences: Map<String, dynamic>.from(data['preferences'] ?? {}),
       currentBar: data['currentBar'] ?? '',
-      reliabilityScore: (data['stats']?['reliabilityScore'] ?? 100).toDouble(),
-      ghostingScore: data['stats']?['ghostingScore'] ?? 0,
+      reliabilityScore: (data['stats']?['reliabilityScore'] ?? 1000).toDouble(),
+      ghostingCount: data['stats']?['ghostingCount'] ?? 0,
+      totalConversations: data['stats']?['totalConversations'] ?? 0,
+      activeConversations: data['stats']?['activeConversations'] ?? 0,
     );
   }
 
@@ -78,7 +89,14 @@ class UserModel {
       'coins': coins,
       'isVerified': isVerified,
       'lastActive': FieldValue.serverTimestamp(),
-      'stats': stats,
+      'createdAt': createdAt,
+      'stats': {
+        ...stats,
+        'reliabilityScore': reliabilityScore,
+        'ghostingCount': ghostingCount,
+        'totalConversations': totalConversations,
+        'activeConversations': activeConversations,
+      },
       'preferences': preferences,
       'currentBar': currentBar,
     };
@@ -96,7 +114,7 @@ class UserModel {
     return '${difference.inDays}j';
   }
 
-  // Compatibilité romantique (pour le bar romantique)
+  /// Calcule la compatibilité avec un autre utilisateur
   double getCompatibilityWith(UserModel other) {
     double score = 0.0;
     
@@ -113,8 +131,52 @@ class UserModel {
     else if (ageDiff <= 7) score += 10;
     
     // Score de fiabilité
-    score += (reliabilityScore / 10).clamp(0, 10);
+    score += (reliabilityScore / 100).clamp(0, 10);
     
     return score.clamp(0, 100);
+  }
+
+  /// Copie l'utilisateur avec des modifications
+  UserModel copyWith({
+    String? name,
+    int? age,
+    String? bio,
+    List<String>? photos,
+    List<String>? interests,
+    String? loveLanguage,
+    String? lookingFor,
+    int? coins,
+    bool? isVerified,
+    DateTime? lastActive,
+    Map<String, dynamic>? stats,
+    Map<String, dynamic>? preferences,
+    String? currentBar,
+    double? reliabilityScore,
+    int? ghostingCount,
+    int? totalConversations,
+    int? activeConversations,
+  }) {
+    return UserModel(
+      uid: uid,
+      name: name ?? this.name,
+      age: age ?? this.age,
+      email: email,
+      bio: bio ?? this.bio,
+      photos: photos ?? this.photos,
+      interests: interests ?? this.interests,
+      loveLanguage: loveLanguage ?? this.loveLanguage,
+      lookingFor: lookingFor ?? this.lookingFor,
+      coins: coins ?? this.coins,
+      isVerified: isVerified ?? this.isVerified,
+      lastActive: lastActive ?? this.lastActive,
+      createdAt: createdAt,
+      stats: stats ?? this.stats,
+      preferences: preferences ?? this.preferences,
+      currentBar: currentBar ?? this.currentBar,
+      reliabilityScore: reliabilityScore ?? this.reliabilityScore,
+      ghostingCount: ghostingCount ?? this.ghostingCount,
+      totalConversations: totalConversations ?? this.totalConversations,
+      activeConversations: activeConversations ?? this.activeConversations,
+    );
   }
 }

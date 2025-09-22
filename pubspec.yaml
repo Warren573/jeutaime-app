@@ -10,13 +10,47 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.6
+  # Gestion des images et photos
   image_picker: ^1.0.7
+  # Gestion d'état et navigation
+  provider: ^6.1.1
+  # Services Firebase
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  cloud_firestore: ^4.13.6
+  firebase_storage: ^11.5.6
+  # Interface utilisateur
+  animations: ^2.0.11
+  lottie: ^3.1.0
+  # Utilitaires
+  intl: ^0.19.0
+  uuid: ^4.3.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
+  
+  # Assets pour les illustrations et animations
+  assets:
+    - assets/images/
+    - assets/bars/
+    - assets/animations/
+    - assets/icons/
+  
+  # Polices personnalisées pour les thèmes
+  fonts:
+    - family: ComicSans
+      fonts:
+        - asset: assets/fonts/ComicSans-Regular.ttf
+        - asset: assets/fonts/ComicSans-Bold.ttf
+          weight: 700
+    - family: Georgia
+      fonts:
+        - asset: assets/fonts/Georgia-Regular.ttf
+        - asset: assets/fonts/Georgia-Bold.ttf
+          weight: 700
