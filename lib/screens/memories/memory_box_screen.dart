@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../theme/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MemoryBoxScreen extends StatefulWidget {
   @override
@@ -17,17 +18,17 @@ class _MemoryBoxScreenState extends State<MemoryBoxScreen> {
   }
 
   void _loadMemories() {
-    // À adapter selon votre service Firestore
     setState(() {
       _memoriesFuture = _fetchMemories();
     });
   }
 
   Future<List<Map<String, dynamic>>> _fetchMemories() async {
-    // Exemple basique : à remplacer par appel réel à Firestore
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
     QuerySnapshot snapshot = await FirebaseFirestore.instance
       .collection('memory_box')
-      .where('userId', isEqualTo: 'CURRENT_USER_ID')
+      .where('userId', isEqualTo: user.uid)
       .orderBy('createdAt', descending: true)
       .get();
     return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
@@ -62,21 +63,42 @@ class _MemoryBoxScreenState extends State<MemoryBoxScreen> {
             itemCount: memories.length,
             itemBuilder: (context, idx) {
               final memory = memories[idx];
-              return Card(
-                color: Colors.white,
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ListTile(
-                  leading: Icon(Icons.bookmark, color: AppColors.seriousAccent),
-                  title: Text(memory['title'] ?? 'Souvenir'),
-                  subtitle: Text(memory['description'] ?? ''),
-                  onTap: () {
-                    // Afficher détail du souvenir (lettre, match, défi réussi, etc.)
-                  },
-                ),
-              );
+              if (memory['type'] == 'letter_received' || memory['type'] == 'letter_sent') {
+                return Card(
+                  color: Colors.white,
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: ListTile(
+                    leading: Icon(Icons.mail, color: AppColors.romanticBar),
+                    title: Text(memory['title'] ?? 'Lettre'),
+                    subtitle: Text(memory['description'] ?? ''),
+                    onTap: () {
+                      _showLetterDetail(context, memory['data']);
+                    },
+                  ),
+                );
+              }
+              // ...autres types de souvenirs (matchs, défis, etc.)...
+              return SizedBox.shrink();
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showLetterDetail(BuildContext context, Map<String, dynamic>? data) {
+    if (data == null) return;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(data['subject'] ?? '(Sans sujet)'),
+        content: Text(data['content'] ?? ''),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Fermer'),
+          ),
+        ],
       ),
     );
   }
