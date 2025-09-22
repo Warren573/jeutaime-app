@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'routes/app_routes.dart';
 import 'theme/app_themes.dart';
+import 'routes/app_routes.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+void main() {
   runApp(JeuTaimeApp());
 }
 
@@ -16,7 +13,6 @@ class JeuTaimeApp extends StatelessWidget {
       title: 'JeuTaime',
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
-      themeMode: ThemeMode.system,
       initialRoute: AppRoutes.welcome,
       routes: AppRoutes.routes,
     );
