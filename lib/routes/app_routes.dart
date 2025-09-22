@@ -1,52 +1,33 @@
-import 'package:flutter/material.dart';
-import '../screens/main_navigation_screen.dart';
-import '../screens/onboarding/welcome_screen.dart';
-import '../screens/auth/login_screen.dart';
-import '../screens/auth/register_screen.dart';
-import '../screens/bars/romantic_bar_screen.dart';
-import '../screens/bars/humor_bar_screen.dart';
-import '../screens/bars/weekly_bar_screen.dart';
-import '../screens/bars/mystery_bar_screen.dart';
-import '../screens/bars/random_bar_screen.dart';
-import '../screens/messages/letters_inbox_screen.dart';
-import '../screens/memories/memory_box_screen.dart';
-import '../screens/profile/profile_screen.dart';
-import '../screens/profile/settings_screen.dart';
-import '../screens/quiz/quiz_selection_screen.dart';
-import '../screens/shop/shop_screen.dart';
+// ...imports existants...
+import '../screens/quiz/compatibility_quiz_screen.dart';
+import '../screens/quiz/love_languages_quiz_screen.dart';
+import '../screens/quiz/relationship_style_quiz_screen.dart';
+import '../screens/quiz/mystery_quiz_screen.dart';
+import '../screens/games/love_roulette_screen.dart';
+import '../screens/games/relationship_barometer_screen.dart';
+import '../screens/auth/verification_screen.dart';
+// etc.
 
 class AppRoutes {
-  static const String welcome = '/';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String main = '/main';
-  static const String romanticBar = '/romantic_bar';
-  static const String humorBar = '/humor_bar';
-  static const String weeklyBar = '/weekly_bar';
-  static const String mysteryBar = '/mystery_bar';
-  static const String randomBar = '/random_bar';
-  static const String lettersInbox = '/letters_inbox';
-  static const String memoryBox = '/memory_box';
-  static const String profile = '/profile';
-  static const String settings = '/settings';
-  static const String quizSelection = '/quiz_selection';
-  static const String shop = '/shop';
+  // ...
+  static const String compatibilityQuiz = '/compatibility_quiz';
+  static const String loveLanguagesQuiz = '/love_languages_quiz';
+  static const String relationshipStyleQuiz = '/relationship_style_quiz';
+  static const String mysteryQuiz = '/mystery_quiz';
+  static const String loveRoulette = '/love_roulette';
+  static const String barometer = '/relationship_barometer';
+  static const String verification = '/verification';
+  // ...
 
   static Map<String, WidgetBuilder> get routes => {
-    welcome: (context) => WelcomeScreen(),
-    login: (context) => LoginScreen(),
-    register: (context) => RegisterScreen(),
-    main: (context) => MainNavigationScreen(),
-    romanticBar: (context) => RomanticBarScreen(),
-    humorBar: (context) => HumorBarScreen(),
-    weeklyBar: (context) => WeeklyBarScreen(),
-    mysteryBar: (context) => MysteryBarScreen(),
-    randomBar: (context) => RandomBarScreen(),
-    lettersInbox: (context) => LettersInboxScreen(),
-    memoryBox: (context) => MemoryBoxScreen(),
-    profile: (context) => ProfileScreen(),
-    settings: (context) => SettingsScreen(),
-    quizSelection: (context) => QuizSelectionScreen(),
-    shop: (context) => ShopScreen(),
+    // ...routes existantes...
+    compatibilityQuiz: (context) => CompatibilityQuizScreen(),
+    loveLanguagesQuiz: (context) => LoveLanguagesQuizScreen(),
+    relationshipStyleQuiz: (context) => RelationshipStyleQuizScreen(),
+    mysteryQuiz: (context) => MysteryQuizScreen(),
+    loveRoulette: (context) => LoveRouletteScreen(),
+    barometer: (context) => RelationshipBarometerScreen(partnerId: '', partnerName: ''),
+    verification: (context) => VerificationScreen(),
+    // ...
   };
 }
