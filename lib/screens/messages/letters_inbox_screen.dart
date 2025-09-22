@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../theme/app_colors.dart';
 import '../../services/letter_service.dart';
 
@@ -35,6 +34,10 @@ class _LettersInboxScreenState extends State<LettersInboxScreen> {
     }
   }
 
+  void _goToMemoryBox() {
+    Navigator.pushNamed(context, '/memory_box');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,10 +55,8 @@ class _LettersInboxScreenState extends State<LettersInboxScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.archive, color: AppColors.romanticBar),
-            onPressed: () {
-              // À relier à la boîte à souvenirs
-            },
             tooltip: 'Boîte à souvenirs',
+            onPressed: _goToMemoryBox,
           ),
         ],
       ),
@@ -86,7 +87,17 @@ class _LettersInboxScreenState extends State<LettersInboxScreen> {
                         _loadLetters();
                       },
                       onReply: () {
-                        // À relier à l'écran de réponse
+                        // À relier à l’écran de réponse
+                      },
+                      onArchive: () async {
+                        await LetterService.archiveLetterForUser(letter['id']);
+                        Navigator.pop(context); // Ferme le dialog
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Lettre archivée dans la boîte à souvenirs !"),
+                            backgroundColor: AppColors.romanticBar,
+                          ),
+                        );
                       },
                     );
                   },
@@ -153,16 +164,17 @@ class _LettersInboxScreenState extends State<LettersInboxScreen> {
   }
 }
 
-// ---- Widget pour un aperçu de lettre (cliquable pour lecture détaillée) ----
 class _LetterPreviewTile extends StatelessWidget {
   final Map<String, dynamic> letter;
   final VoidCallback onRead;
   final VoidCallback onReply;
+  final VoidCallback onArchive;
 
   const _LetterPreviewTile({
     required this.letter,
     required this.onRead,
     required this.onReply,
+    required this.onArchive,
   });
 
   Color _getPaperColor(String paperType) {
@@ -319,6 +331,15 @@ class _LetterPreviewTile extends StatelessWidget {
                         onPressed: onReply,
                         icon: Icon(Icons.reply, color: AppColors.romanticBar),
                         label: Text('Répondre'),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: AppColors.romanticBar),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      OutlinedButton.icon(
+                        onPressed: onArchive,
+                        icon: Icon(Icons.auto_awesome, color: AppColors.romanticBar),
+                        label: Text('Archiver'),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: AppColors.romanticBar),
                         ),
