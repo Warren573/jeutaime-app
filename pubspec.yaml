@@ -12,7 +12,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # Ajoute ici tes autres dépendances (Firebase, animations, etc.)
+  # Firebase dependencies
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.7.3
+  cloud_firestore: ^4.8.5
+  # Other dependencies
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
