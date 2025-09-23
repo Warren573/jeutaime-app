@@ -12,7 +12,7 @@ class AppThemes {
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: Colors.orange,
     ),
-    fontFamily: 'ComicSans',
+    // fontFamily: 'ComicSans', // Temporairement commenté
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -26,6 +26,6 @@ class AppThemes {
     colorScheme: ColorScheme.fromSwatch().copyWith(
       secondary: Colors.amber,
     ),
-    fontFamily: 'Georgia',
+    // fontFamily: 'Georgia', // Temporairement commenté
   );
 }

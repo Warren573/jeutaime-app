@@ -64,3 +64,4 @@ app.*.map.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+flutter/

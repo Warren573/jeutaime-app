@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  // Couleurs principales
+  static const Color primary = Color(0xFFFF6B6B);
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [Color(0xFFFF6B6B), Color(0xFFE91E63)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  
   // Mode Fun
   static const Color funPrimary = Color(0xFFFF6B6B);
   static const Color funSecondary = Color(0xFF4ECDC4);

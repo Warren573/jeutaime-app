@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
+import 'theme/app_themes.dart';
+import 'routes/app_routes.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Temporairement désactivé Firebase pour debug
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  runApp(const JeuTaimeApp());
+}
+
+class JeuTaimeApp extends StatelessWidget {
+  const JeuTaimeApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'JeuTaime',
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      initialRoute: AppRoutes.welcome,
+      routes: AppRoutes.routes,
+    );
+  }
+}

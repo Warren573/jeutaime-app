@@ -1,273 +1,348 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../models/user_model.dart';
+import '../models/bar.dart';
+import '../models/group.dart';
+import '../models/user.dart' as app_user;
+import 'dart:math';
 
 class BarService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Récupérer les utilisateurs d'un bar spécifique
-  static Future<List<UserModel>> getUsersInBar(String barId, {String filter = 'all'}) async {
+  // Obtenir tous les bars disponibles
+  static Stream<List<Bar>> getBars() {
+    return _firestore
+        .collection('bars')
+        .where('isActive', isEqualTo: true)
+        .orderBy('category')
+        .orderBy('name')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Bar.fromFirestore(doc))
+            .toList());
+  }
+
+  // Obtenir un bar spécifique
+  static Future<Bar?> getBar(String barId) async {
     try {
-      Query query = _firestore.collection('users')
-        .where('currentBar', isEqualTo: barId)
-        .where('lastActive', isGreaterThan: DateTime.now().subtract(Duration(hours: 24)))
-        .limit(20);
-
-      // Filtres spécifiques par bar
-      if (barId == 'romantic' && filter != 'all') {
-        query = query.where('profile.interests', arrayContains: _getFilterInterest(filter));
+      final doc = await _firestore.collection('bars').doc(barId).get();
+      if (doc.exists) {
+        return Bar.fromFirestore(doc);
       }
-
-      QuerySnapshot snapshot = await query.get();
-      
-      List<UserModel> users = snapshot.docs
-        .map((doc) => UserModel.fromFirestore(doc))
-        .where((user) => user.uid != _auth.currentUser?.uid) // Exclure l'utilisateur actuel
-        .toList();
-
-      // Tri par compatibilité pour le bar romantique
-      if (barId == 'romantic') {
-        users.sort((a, b) => b.reliabilityScore.compareTo(a.reliabilityScore));
-      }
-
-      return users;
+      return null;
     } catch (e) {
-      print('Erreur lors du chargement des utilisateurs: $e');
-      return [];
+      print('Error getting bar: $e');
+      return null;
     }
+  }
+
+  // Obtenir les bars par catégorie
+  static Stream<List<Bar>> getBarsByCategory(String category) {
+    return _firestore
+        .collection('bars')
+        .where('category', isEqualTo: category)
+        .where('isActive', isEqualTo: true)
+        .orderBy('activeUsers', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Bar.fromFirestore(doc))
+            .toList());
   }
 
   // Entrer dans un bar
-  static Future<void> enterBar(String barId) async {
-    if (_auth.currentUser == null) return;
-
+  static Future<String?> enterBar(String userId, String barId) async {
     try {
-      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
-        'currentBar': barId,
-        'lastActive': FieldValue.serverTimestamp(),
-      });
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (!userDoc.exists) return null;
 
-      // Enregistrer l'entrée dans les statistiques du bar
-      await _firestore.collection('bar_stats').doc(barId).set({
-        'totalEntries': FieldValue.increment(1),
-        'currentUsers': FieldValue.increment(1),
-        'lastUpdated': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-
-    } catch (e) {
-      print('Erreur lors de l\'entrée dans le bar: $e');
-    }
-  }
-
-  // Sortir d'un bar
-  static Future<void> exitBar(String barId) async {
-    if (_auth.currentUser == null) return;
-
-    try {
-      await _firestore.collection('users').doc(_auth.currentUser!.uid).update({
-        'currentBar': '',
-        'lastActive': FieldValue.serverTimestamp(),
-      });
-
-      // Mettre à jour les statistiques
-      await _firestore.collection('bar_stats').doc(barId).update({
-        'currentUsers': FieldValue.increment(-1),
-        'lastUpdated': FieldValue.serverTimestamp(),
-      });
-
-    } catch (e) {
-      print('Erreur lors de la sortie du bar: $e');
-    }
-  }
-
-  // Liker un utilisateur
-  static Future<bool> likeUser(String targetUserId, String barId) async {
-    if (_auth.currentUser == null) return false;
-
-    try {
-      String currentUserId = _auth.currentUser!.uid;
+      final user = app_user.User.fromFirestore(userDoc);
       
-      // Enregistrer le like
-      await _firestore.collection('likes').add({
-        'fromUser': currentUserId,
-        'toUser': targetUserId,
-        'barId': barId,
-        'timestamp': FieldValue.serverTimestamp(),
-        'type': 'like',
-      });
+      // Vérifier si l'utilisateur peut entrer dans le bar
+      final bar = await getBar(barId);
+      if (bar == null) return null;
 
-      // Vérifier s'il y a match (like mutuel)
-      QuerySnapshot mutualLike = await _firestore.collection('likes')
-        .where('fromUser', isEqualTo: targetUserId)
-        .where('toUser', isEqualTo: currentUserId)
-        .get();
-
-      if (mutualLike.docs.isNotEmpty) {
-        // C'est un match ! Créer une conversation
-        await _createMatch(currentUserId, targetUserId, barId);
-        return true; // Match trouvé
+      // Vérifications des conditions d'entrée
+      if (bar.isPremiumOnly && !user.isPremium) {
+        throw Exception('Ce bar est réservé aux membres Premium');
       }
 
-      return false; // Pas de match
+      if (bar.minimumAge != null && user.age < bar.minimumAge!) {
+        throw Exception('Âge minimum requis: ${bar.minimumAge} ans');
+      }
+
+      if (bar.requiredInterests.isNotEmpty) {
+        final hasRequiredInterest = bar.requiredInterests
+            .any((interest) => user.interests.contains(interest));
+        if (!hasRequiredInterest) {
+          throw Exception('Intérêts requis: ${bar.requiredInterests.join(', ')}');
+        }
+      }
+
+      // Trouver ou créer un groupe
+      String? groupId = await _findOrCreateGroup(userId, barId, bar);
+      
+      if (groupId != null) {
+        // Mettre à jour la localisation de l'utilisateur
+        await _firestore.collection('users').doc(userId).update({
+          'currentBarId': barId,
+          'currentGroupId': groupId,
+          'lastBarVisit': Timestamp.now(),
+        });
+
+        // Incrémenter le nombre d'utilisateurs actifs du bar
+        await _firestore.collection('bars').doc(barId).update({
+          'activeUsers': FieldValue.increment(1),
+          'lastActivity': Timestamp.now(),
+        });
+      }
+
+      return groupId;
     } catch (e) {
-      print('Erreur lors du like: $e');
-      return false;
+      print('Error entering bar: $e');
+      rethrow;
     }
   }
 
-  // Créer un match
-  static Future<void> _createMatch(String user1, String user2, String barId) async {
+  // Quitter un bar
+  static Future<void> leaveBar(String userId, String barId, String groupId) async {
     try {
-      await _firestore.collection('matches').add({
-        'users': [user1, user2],
-        'barId': barId,
-        'createdAt': FieldValue.serverTimestamp(),
-        'isActive': true,
-        'conversationStarted': false,
+      // Retirer l'utilisateur du groupe
+      await _firestore.collection('groups').doc(groupId).update({
+        'members': FieldValue.arrayRemove([userId]),
+        'leftMembers': FieldValue.arrayUnion([userId]),
+        'lastActivity': Timestamp.now(),
       });
 
-      // Notifier les deux utilisateurs
-      await _sendMatchNotification(user1, user2);
-      await _sendMatchNotification(user2, user1);
-
-      // Récompenser avec des coins
-      await _rewardMatch(user1);
-      await _rewardMatch(user2);
-
-    } catch (e) {
-      print('Erreur lors de la création du match: $e');
-    }
-  }
-
-  // Envoyer notification de match
-  static Future<void> _sendMatchNotification(String userId, String matchedUserId) async {
-    try {
-      await _firestore.collection('notifications').add({
-        'userId': userId,
-        'type': 'match',
-        'title': '🎉 Nouveau Match !',
-        'message': 'Vous avez un match ! Commencez la conversation.',
-        'data': {'matchedUserId': matchedUserId},
-        'createdAt': FieldValue.serverTimestamp(),
-        'isRead': false,
-      });
-    } catch (e) {
-      print('Erreur notification: $e');
-    }
-  }
-
-  // Récompenser un match
-  static Future<void> _rewardMatch(String userId) async {
-    try {
+      // Mettre à jour l'utilisateur
       await _firestore.collection('users').doc(userId).update({
-        'coins': FieldValue.increment(10), // 10 coins par match
-        'stats.totalMatches': FieldValue.increment(1),
+        'currentBarId': null,
+        'currentGroupId': null,
       });
-    } catch (e) {
-      print('Erreur récompense: $e');
-    }
-  }
 
-  // Obtenir les statistiques d'un bar
-  static Future<Map<String, dynamic>> getBarStats(String barId) async {
-    try {
-      DocumentSnapshot doc = await _firestore.collection('bar_stats').doc(barId).get();
-      
-      if (doc.exists) {
-        return doc.data() as Map<String, dynamic>;
-      } else {
-        // Créer les stats par défaut
-        Map<String, dynamic> defaultStats = {
-          'totalEntries': 0,
-          'currentUsers': 0,
-          'totalMatches': 0,
-          'satisfactionRate': 4.5,
-          'lastUpdated': FieldValue.serverTimestamp(),
-        };
-        
-        await _firestore.collection('bar_stats').doc(barId).set(defaultStats);
-        return defaultStats;
+      // Décrémenter le nombre d'utilisateurs actifs du bar
+      await _firestore.collection('bars').doc(barId).update({
+        'activeUsers': FieldValue.increment(-1),
+      });
+
+      // Vérifier si le groupe est maintenant vide
+      final groupDoc = await _firestore.collection('groups').doc(groupId).get();
+      if (groupDoc.exists) {
+        final group = Group.fromFirestore(groupDoc);
+        if (group.members.isEmpty) {
+          // Marquer le groupe comme inactif
+          await _firestore.collection('groups').doc(groupId).update({
+            'isActive': false,
+            'endedAt': Timestamp.now(),
+          });
+        }
       }
     } catch (e) {
-      print('Erreur stats bar: $e');
-      return {'currentUsers': 0, 'totalMatches': 0, 'satisfactionRate': 4.0};
+      print('Error leaving bar: $e');
+      rethrow;
     }
   }
 
-  // Obtenir l'intérêt correspondant au filtre
-  static String _getFilterInterest(String filter) {
-    switch (filter) {
-      case 'poetry': return 'Poésie';
-      case 'music': return 'Musique';
-      case 'sunset': return 'Couchers de soleil';
-      case 'books': return 'Lecture';
-      default: return '';
+  // Obtenir les groupes actifs d'un bar
+  static Stream<List<Group>> getActiveGroups(String barId) {
+    return _firestore
+        .collection('groups')
+        .where('barId', isEqualTo: barId)
+        .where('isActive', isEqualTo: true)
+        .where('isPrivate', isEqualTo: false)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Group.fromFirestore(doc))
+            .toList());
+  }
+
+  // Obtenir l'activité en cours d'un bar
+  static Future<BarActivity?> getCurrentActivity(String barId) async {
+    try {
+      final bar = await getBar(barId);
+      if (bar == null || bar.activities.isEmpty) return null;
+
+      final now = DateTime.now();
+      
+      // Pour simplifier, on retourne la première activité disponible
+      // Dans une version plus avancée, on pourrait avoir un système de planning
+      
+      final currentActivity = bar.activities.first;
+      return currentActivity;
+    } catch (e) {
+      print('Error getting current activity: $e');
+      return null;
+    }
+  }
+
+  // Participer à une activité
+  static Future<void> participateInActivity(
+    String userId,
+    String barId,
+    String groupId,
+    String activityType,
+  ) async {
+    try {
+      final participationData = {
+        'userId': userId,
+        'barId': barId,
+        'groupId': groupId,
+        'activityType': activityType,
+        'createdAt': Timestamp.now(),
+        'isCompleted': false,
+      };
+
+      await _firestore.collection('activities').add(participationData);
+
+      // Mettre à jour les statistiques du groupe
+      await _firestore.collection('groups').doc(groupId).update({
+        'activityCount': FieldValue.increment(1),
+        'lastActivity': Timestamp.now(),
+      });
+    } catch (e) {
+      print('Error participating in activity: $e');
+      rethrow;
+    }
+  }
+
+  // Créer un bar hebdomadaire (admin)
+  static Future<String> createWeeklyBar({
+    required String name,
+    required String description,
+    required String theme,
+    required List<Map<String, dynamic>> activities,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) async {
+    final weeklyBar = Bar(
+      barId: '',
+      name: name,
+      type: BarType.weekly,
+      isActive: true,
+      maxParticipants: 200,
+      activeUsers: 0,
+      expiresAt: endDate,
+    );
+
+    final docRef = await _firestore.collection('bars').add(weeklyBar.toFirestore());
+    
+    // Notifier tous les utilisateurs
+    await _notifyUsersAboutNewBar(docRef.id, name);
+    
+    return docRef.id;
+  }
+
+  // Trouver ou créer un groupe approprié
+  static Future<String?> _findOrCreateGroup(String userId, String barId, Bar bar) async {
+    try {
+      // Chercher un groupe existant avec de la place
+      final existingGroupsQuery = await _firestore
+          .collection('groups')
+          .where('barId', isEqualTo: barId)
+          .where('isActive', isEqualTo: true)
+          .where('isPrivate', isEqualTo: false)
+          .get();
+
+      for (final doc in existingGroupsQuery.docs) {
+        final group = Group.fromFirestore(doc);
+        if (group.members.length < group.maxSize) {
+          // Rejoindre ce groupe
+          await _firestore.collection('groups').doc(group.id).update({
+            'members': FieldValue.arrayUnion([userId]),
+            'lastActivity': Timestamp.now(),
+          });
+          return group.id;
+        }
+      }
+
+      // Créer un nouveau groupe
+      final groupData = Group(
+        groupId: '',
+        type: GroupType.bar, 
+        barId: barId,
+        createdAt: DateTime.now(),
+        name: _generateGroupName(bar.type.value),
+        description: 'Nouveau groupe dans ${bar.name}',
+        members: [userId],
+        maxSize: bar.maxParticipants,
+        isActive: true,
+        isPrivate: false,
+        theme: bar.type.value,
+      );
+
+      final newGroupRef = await _firestore.collection('groups').add(groupData.toFirestore());
+      return newGroupRef.id;
+    } catch (e) {
+      print('Error finding or creating group: $e');
+      return null;
+    }
+  }
+
+  // Générer un nom de groupe aléatoire
+  static String _generateGroupName(String theme) {
+    final themeNames = {
+      'romantic': ['Les Romantiques', 'Cœurs Tendres', 'Amour Éternel', 'Passion Rose'],
+      'humorous': ['Les Rigolos', 'Sourires Complices', 'Éclats de Rire', 'Humour & Cie'],
+      'pirates': ['L\'Équipage', 'Corsaires Libres', 'Aventuriers des Mers', 'Boucaniers'],
+      'intellectual': ['Les Penseurs', 'Esprits Brillants', 'Philosophes Modernes', 'Culture Club'],
+      'adventure': ['Aventuriers', 'Explorateurs', 'Adrénaline', 'Grand Air'],
+    };
+
+    final names = themeNames[theme] ?? ['Groupe Sympa', 'Nouvelle Aventure', 'Rencontres'];
+    final random = Random();
+    return names[random.nextInt(names.length)];
+  }
+
+  // Notifier les utilisateurs d'un nouveau bar
+  static Future<void> _notifyUsersAboutNewBar(String barId, String barName) async {
+    // Cette fonction pourrait être optimisée avec Cloud Functions
+    // Pour le moment, on crée juste une notification générale
+    
+    await _firestore.collection('notifications').add({
+      'type': 'new_bar',
+      'barId': barId,
+      'title': 'Nouveau bar disponible!',
+      'message': 'Découvrez $barName et rencontrez de nouvelles personnes.',
+      'createdAt': Timestamp.now(),
+      'isGlobal': true,
+    });
+  }
+
+  // Obtenir les utilisateurs dans un bar spécifique
+  static Future<List<app_user.User>> getUsersInBar(String barType) async {
+    try {
+      // Pour la démo, on simule des utilisateurs selon le type de bar
+      final querySnapshot = await _firestore
+          .collection('users')
+          .where('interests', arrayContains: barType)
+          .limit(10)
+          .get();
+
+      return querySnapshot.docs
+          .map((doc) => app_user.User.fromFirestore(doc))
+          .toList();
+    } catch (e) {
+      print('Error getting users in bar: $e');
+      return [];
     }
   }
 
   // Vérifier l'accès au bar mystère
   static Future<bool> canAccessMysteryBar(String userId) async {
     try {
-      // Vérifier si l'utilisateur a résolu l'énigme du jour
-      DocumentSnapshot puzzle = await _firestore
-        .collection('daily_puzzles')
-        .doc(DateTime.now().toString().substring(0, 10)) // YYYY-MM-DD
-        .get();
+      final userDoc = await _firestore.collection('users').doc(userId).get();
+      if (!userDoc.exists) return false;
 
-      if (!puzzle.exists) return false;
-
-      DocumentSnapshot userProgress = await _firestore
-        .collection('user_puzzles')
-        .doc('${userId}_${DateTime.now().toString().substring(0, 10)}')
-        .get();
-
-      return userProgress.exists && userProgress.get('solved') == true;
+      final user = app_user.User.fromFirestore(userDoc);
+      
+      // Conditions d'accès au bar mystère :
+      // - Premium actif
+      // - Au moins 1000 pièces
+      // - Badge spécial "Explorer"
+      return user.isPremium && 
+             user.coins >= 1000 && 
+             user.hasBadge('explorer');
     } catch (e) {
-      print('Erreur accès bar mystère: $e');
+      print('Error checking mystery bar access: $e');
       return false;
     }
-  }
-
-  // Enregistrer un ghosting
-  static Future<void> reportGhosting(String ghosterId, String victimId) async {
-    try {
-      // Sanctionner le ghosteur
-      await _firestore.collection('users').doc(ghosterId).update({
-        'stats.ghostingScore': FieldValue.increment(-10),
-        'stats.reliabilityScore': FieldValue.increment(-5),
-        'coins': FieldValue.increment(-20), // Perte de coins
-      });
-
-      // Récompenser la victime
-      await _firestore.collection('users').doc(victimId).update({
-        'stats.ghostingScore': FieldValue.increment(5),
-        'stats.reliabilityScore': FieldValue.increment(2),
-        'coins': FieldValue.increment(10), // Coins de compensation
-      });
-
-      // Enregistrer le report
-      await _firestore.collection('ghosting_reports').add({
-        'ghosterId': ghosterId,
-        'victimId': victimId,
-        'timestamp': FieldValue.serverTimestamp(),
-        'processed': true,
-      });
-
-    } catch (e) {
-      print('Erreur report ghosting: $e');
-    }
-  }
-
-  // Stream des utilisateurs en temps réel
-  static Stream<List<UserModel>> getUsersInBarStream(String barId) {
-    return _firestore.collection('users')
-      .where('currentBar', isEqualTo: barId)
-      .where('lastActive', isGreaterThan: DateTime.now().subtract(Duration(hours: 2)))
-      .snapshots()
-      .map((snapshot) => snapshot.docs
-        .map((doc) => UserModel.fromFirestore(doc))
-        .where((user) => user.uid != _auth.currentUser?.uid)
-        .toList());
   }
 }

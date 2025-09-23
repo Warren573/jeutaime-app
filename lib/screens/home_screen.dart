@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/bar_card.dart';
 import '../models/bar_model.dart';
 import '../theme/app_colors.dart';
@@ -19,6 +18,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool _isFunMode = true; // Mode fun/sérieux
+
+  final List<Widget> _screens = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _screens.addAll([
+      _BarsTabScreen(isFunMode: _isFunMode, bars: bars, navigateToBar: _navigateToBar),
+      MessagesScreen(),
+      _QuizTabScreen(),
+      _ShopTabScreen(),
+    ]);
+  }
 
   final List<BarModel> bars = [
     BarModel(
@@ -67,119 +79,63 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _isFunMode ? AppColors.funBackground : AppColors.seriousBackground,
-      appBar: AppBar(
-        title: Text(
-          'JeuTaime',
-          style: TextStyle(
-            fontFamily: _isFunMode ? 'ComicSans' : 'Montserrat',
-            fontWeight: FontWeight.bold,
-            color: _isFunMode ? AppColors.funPrimary : AppColors.seriousPrimary,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(_isFunMode ? Icons.sentiment_very_satisfied : Icons.business_center),
-            onPressed: () => setState(() => _isFunMode = !_isFunMode),
-            tooltip: _isFunMode ? 'Mode sérieux' : 'Mode fun',
-          ),
-          IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()),
-            ),
-          ),
-        ],
-      ),
-      body: _selectedIndex == 0 ? _buildBarsGrid() : _buildOtherScreens(),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: _isFunMode ? AppColors.funPrimary : AppColors.seriousPrimary,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Bars',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.quiz),
-            label: 'Quiz',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: 'Boutique',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBarsGrid() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: IndexedStack(
+        index: _selectedIndex,
         children: [
-          Text(
-            'Choisissez votre ambiance',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: _isFunMode ? AppColors.funText : AppColors.seriousText,
-              fontFamily: _isFunMode ? 'ComicSans' : 'Montserrat',
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            'Chaque bar a sa personnalité unique',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              fontFamily: _isFunMode ? 'ComicSans' : 'Montserrat',
-            ),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.8,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-              ),
-              itemCount: bars.length,
-              itemBuilder: (context, index) {
-                return BarCard(
-                  bar: bars[index],
-                  isFunMode: _isFunMode,
-                  onTap: () => _navigateToBar(bars[index]),
-                );
-              },
-            ),
-          ),
+          _BarsTabScreen(isFunMode: _isFunMode, bars: bars, navigateToBar: _navigateToBar),
+          MessagesScreen(),
+          _QuizTabScreen(),
+          _ShopTabScreen(),
         ],
       ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) => setState(() => _selectedIndex = index),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedItemColor: _isFunMode ? AppColors.funPrimary : AppColors.seriousPrimary,
+          unselectedItemColor: Colors.grey,
+          selectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_bar),
+              activeIcon: Icon(Icons.local_bar, size: 28),
+              label: 'Bars',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outline),
+              activeIcon: Icon(Icons.chat_bubble, size: 28),
+              label: 'Messages',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.quiz_outlined),
+              activeIcon: Icon(Icons.quiz, size: 28),
+              label: 'Quiz',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.store_outlined),
+              activeIcon: Icon(Icons.store, size: 28),
+              label: 'Boutique',
+            ),
+          ],
+        ),
+      ),
     );
-  }
-
-  Widget _buildOtherScreens() {
-    switch (_selectedIndex) {
-      case 1:
-        return MessagesScreen();
-      case 2:
-        return Center(child: Text('Quiz à venir'));
-      case 3:
-        return Center(child: Text('Boutique à venir'));
-      default:
-        return _buildBarsGrid();
-    }
   }
 
   void _navigateToBar(BarModel bar) {
@@ -211,3 +167,175 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// Onglet des Bars
+class _BarsTabScreen extends StatelessWidget {
+  final bool isFunMode;
+  final List<BarModel> bars;
+  final Function(BarModel) navigateToBar;
+  
+  const _BarsTabScreen({
+    required this.isFunMode,
+    required this.bars,
+    required this.navigateToBar,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: isFunMode ? AppColors.funBackground : AppColors.seriousBackground,
+      appBar: AppBar(
+        title: Text(
+          'JeuTaime',
+          style: TextStyle(
+            fontFamily: isFunMode ? 'ComicSans' : 'Montserrat',
+            fontWeight: FontWeight.bold,
+            color: isFunMode ? AppColors.funPrimary : AppColors.seriousPrimary,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfileScreen()),
+            ),
+          ),
+        ],
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Choisissez votre ambiance',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: isFunMode ? AppColors.funText : AppColors.seriousText,
+                fontFamily: isFunMode ? 'ComicSans' : 'Montserrat',
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Chaque bar a sa personnalité unique',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+                fontFamily: isFunMode ? 'ComicSans' : 'Montserrat',
+              ),
+            ),
+            SizedBox(height: 24),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                  childAspectRatio: 0.85,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: bars.length,
+                itemBuilder: (context, index) {
+                  return BarCard(
+                    bar: bars[index],
+                    isFunMode: isFunMode,
+                    onTap: () => navigateToBar(bars[index]),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Onglet Quiz
+class _QuizTabScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Quiz & Jeux'),
+        backgroundColor: AppColors.funSecondary,
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.psychology, color: AppColors.funPrimary),
+                title: Text('Quiz de compatibilité'),
+                subtitle: Text('Découvrez votre personnalité amoureuse'),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  // TODO: Naviguer vers le quiz
+                },
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.games, color: AppColors.funSecondary),
+                title: Text('Jeux d\'interaction'),
+                subtitle: Text('Brise-glace et activités amusantes'),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  // TODO: Naviguer vers les jeux
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Onglet Boutique
+class _ShopTabScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Boutique'),
+        backgroundColor: AppColors.funAccent,
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.star, color: Colors.amber),
+                title: Text('Premium'),
+                subtitle: Text('Accès illimité à tous les bars'),
+                trailing: Text('9.99€/mois'),
+                onTap: () {
+                  // TODO: Naviguer vers l'abonnement premium
+                },
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.monetization_on, color: AppColors.funAccent),
+                title: Text('Pièces'),
+                subtitle: Text('Achetez des pièces virtuelles'),
+                trailing: Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  // TODO: Naviguer vers l'achat de pièces
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Suppression des anciennes méthodes

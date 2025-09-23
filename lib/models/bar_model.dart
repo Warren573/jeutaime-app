@@ -10,6 +10,16 @@ class BarModel {
   final int currentUsers;
   final bool isLocked;
   final String? lockReason;
+  final bool isPremiumOnly;
+  final int minimumAge;
+  final List<String> requiredInterests;
+  final String category;
+  final String theme;
+  final List<String> activities;
+  final int maxCapacity;
+  final int defaultGroupSize;
+  final DateTime createdAt;
+  final DateTime validUntil;
 
   BarModel({
     required this.id,
@@ -21,5 +31,16 @@ class BarModel {
     this.currentUsers = 0,
     this.isLocked = false,
     this.lockReason,
-  });
+    this.isPremiumOnly = false,
+    this.minimumAge = 18,
+    this.requiredInterests = const [],
+    this.category = '',
+    this.theme = '',
+    this.activities = const [],
+    this.maxCapacity = 100,
+    this.defaultGroupSize = 4,
+    DateTime? createdAt,
+    DateTime? validUntil,
+  }) : createdAt = createdAt ?? DateTime.now(),
+       validUntil = validUntil ?? DateTime.now().add(const Duration(days: 30));
 }

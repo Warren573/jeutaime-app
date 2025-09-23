@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/user_card.dart';
 import '../../services/bar_service.dart';
-import '../../models/user_model.dart';
+import '../../models/user.dart' as app_user;
 
 class HumorBarScreen extends StatefulWidget {
+  const HumorBarScreen({Key? key}) : super(key: key);
+
   @override
   State<HumorBarScreen> createState() => _HumorBarScreenState();
 }
 
 class _HumorBarScreenState extends State<HumorBarScreen> {
-  List<UserModel> _users = [];
+  List<app_user.User> _users = [];
   bool _isLoading = true;
 
   @override

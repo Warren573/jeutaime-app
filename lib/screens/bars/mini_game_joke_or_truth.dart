@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 
 class MiniGameJokeOrTruth extends StatefulWidget {
+  const MiniGameJokeOrTruth({Key? key}) : super(key: key);
+
   @override
   State<MiniGameJokeOrTruth> createState() => _MiniGameJokeOrTruthState();
 }

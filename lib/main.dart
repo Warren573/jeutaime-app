@@ -9,10 +9,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(JeuTaimeApp());
+  runApp(const JeuTaimeApp());
 }
 
 class JeuTaimeApp extends StatelessWidget {
+  const JeuTaimeApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

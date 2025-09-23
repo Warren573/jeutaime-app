@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../theme/app_colors.dart';
 import '../../services/auth_service.dart';
 import '../home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }

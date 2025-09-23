@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class VerificationScreen extends StatefulWidget {
+  const VerificationScreen({Key? key}) : super(key: key);
+
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
 }

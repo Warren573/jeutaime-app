@@ -18,6 +18,12 @@ class UserModel {
   final String currentBar;
   final double reliabilityScore;
   final int ghostingScore;
+  final Map<String, double>? location;
+  final bool isPremium;
+  final DateTime createdAt;
+  final int totalConversations;
+  final int ghostingCount;
+  final int activeConversations;
 
   UserModel({
     required this.uid,
@@ -37,7 +43,13 @@ class UserModel {
     this.currentBar = '',
     this.reliabilityScore = 100.0,
     this.ghostingScore = 0,
-  });
+    this.location,
+    this.isPremium = false,
+    DateTime? createdAt,
+    this.totalConversations = 0,
+    this.ghostingCount = 0,
+    this.activeConversations = 0,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -60,6 +72,14 @@ class UserModel {
       currentBar: data['currentBar'] ?? '',
       reliabilityScore: (data['stats']?['reliabilityScore'] ?? 100).toDouble(),
       ghostingScore: data['stats']?['ghostingScore'] ?? 0,
+      location: data['location'] != null 
+          ? Map<String, double>.from(data['location']) 
+          : null,
+      isPremium: data['isPremium'] ?? false,
+      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      totalConversations: data['stats']?['totalConversations'] ?? 0,
+      ghostingCount: data['stats']?['ghostingCount'] ?? 0,
+      activeConversations: data['stats']?['activeConversations'] ?? 0,
     );
   }
 

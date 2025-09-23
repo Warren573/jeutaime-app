@@ -1,6 +1,6 @@
 name: jeutaime_app
 description: >-
-  JeuTaime — L’app de rencontre immersive, ludique et authentique. 
+  JeuTaime — L'app de rencontre immersive, ludique et authentique. 
   Bars thématiques, défis, quiz, souvenirs : une expérience unique pour des liens vrais.
 publish_to: "none" # Pas publié sur pub.dev
 
@@ -16,8 +16,15 @@ dependencies:
   firebase_core: ^2.15.1
   firebase_auth: ^4.7.3
   cloud_firestore: ^4.8.5
-  # Image picking
+  firebase_storage: ^11.2.6
+  # Google Sign In
+  google_sign_in: ^6.1.4
+  # Image picking and handling
   image_picker: ^1.0.4
+  # Location services
+  geolocator: ^10.1.0
+  # HTTP requests
+  http: ^1.1.0
   # Other dependencies
   cupertino_icons: ^1.0.2
 
@@ -35,15 +42,15 @@ flutter:
     - assets/animations/
     - assets/bars/
 
-  fonts:
-    - family: ComicSans
-      fonts:
-        - asset: assets/fonts/ComicSans-Regular.ttf
-        - asset: assets/fonts/ComicSans-Bold.ttf
-    - family: Georgia
-      fonts:
-        - asset: assets/fonts/Georgia-Regular.ttf
-        - asset: assets/fonts/Georgia-Bold.ttf
+  # fonts:
+  #   - family: ComicSans
+  #     fonts:
+  #       - asset: assets/fonts/ComicSans-Regular.ttf
+  #       - asset: assets/fonts/ComicSans-Bold.ttf
+  #   - family: Georgia
+  #     fonts:
+  #       - asset: assets/fonts/Georgia-Regular.ttf
+  #       - asset: assets/fonts/Georgia-Bold.ttf
 
 # Si tu ajoutes d'autres polices, ajoute-les ici :
 #   - family: MaSuperPolice

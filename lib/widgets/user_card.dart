@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/user_model.dart';
+import '../models/user.dart' as app_user;
 import '../theme/app_colors.dart';
 
 class UserCard extends StatefulWidget {
-  final UserModel user;
+  final app_user.User user;
   final String barTheme;
   final VoidCallback onLike;
   final VoidCallback onMessage;
@@ -107,14 +107,14 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(color: _getThemeColor(), width: 3),
-                              image: widget.user.mainPhoto.isNotEmpty
+                              image: widget.user.avatarUrl != null && widget.user.avatarUrl!.isNotEmpty
                                 ? DecorationImage(
-                                    image: NetworkImage(widget.user.mainPhoto),
+                                    image: NetworkImage(widget.user.avatarUrl!),
                                     fit: BoxFit.cover,
                                   )
                                 : null,
                             ),
-                            child: widget.user.mainPhoto.isEmpty
+                            child: widget.user.avatarUrl == null || widget.user.avatarUrl!.isEmpty
                               ? Icon(Icons.person, size: 40, color: _getThemeColor())
                               : null,
                           ),
@@ -131,7 +131,7 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                               Row(
                                 children: [
                                   Text(
-                                    widget.user.name,
+                                    widget.user.displayName,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                                     ),
                                   ),
                                   SizedBox(width: 8),
-                                  if (widget.user.isVerified)
+                                  if (widget.user.certified)
                                     Icon(Icons.verified, color: Colors.blue, size: 20),
                                 ],
                               ),
@@ -161,13 +161,13 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                                     width: 8,
                                     height: 8,
                                     decoration: BoxDecoration(
-                                      color: widget.user.isOnline ? Colors.green : Colors.grey,
+                                      color: !widget.user.disabled ? Colors.green : Colors.grey,
                                       shape: BoxShape.circle,
                                     ),
                                   ),
                                   SizedBox(width: 4),
                                   Text(
-                                    widget.user.onlineStatus,
+                                    !widget.user.disabled ? 'En ligne' : 'Hors ligne',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey[600],
@@ -182,7 +182,7 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                                   Icon(Icons.star, color: Colors.amber, size: 16),
                                   SizedBox(width: 4),
                                   Text(
-                                    '${widget.user.reliabilityScore.toInt()}/100',
+                                    '${widget.user.coins}/1000',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey[600],
@@ -206,9 +206,9 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Bio
-                      if (widget.user.bio.isNotEmpty)
+                      if (widget.user.bio != null && widget.user.bio!.isNotEmpty)
                         Text(
-                          widget.user.bio,
+                          widget.user.bio!,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[700],
@@ -218,7 +218,7 @@ class _UserCardState extends State<UserCard> with SingleTickerProviderStateMixin
                           overflow: TextOverflow.ellipsis,
                         ),
                       
-                      if (widget.user.bio.isNotEmpty) SizedBox(height: 12),
+                      if (widget.user.bio != null && widget.user.bio!.isNotEmpty) SizedBox(height: 12),
                       
                       // Intérêts
                       if (widget.user.interests.isNotEmpty)

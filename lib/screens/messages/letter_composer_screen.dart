@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../models/user_model.dart';
+import '../../services/letter_service.dart';port 'package:flutter/material.dart';
 import '../../models/user_model.dart';
 import '../../theme/app_colors.dart';
 import '../../services/letter_service.dart';
@@ -278,7 +280,7 @@ class _LetterComposerScreenState extends State<LetterComposerScreen> with Ticker
             // Aperçu de la lettre
             Container(
               width: double.infinity,
-              min: 300,
+              constraints: const BoxConstraints(minHeight: 300),
               decoration: BoxDecoration(
                 color: _getPaperColor(),
                 borderRadius: BorderRadius.circular(15),
@@ -460,14 +462,26 @@ class _LetterComposerScreenState extends State<LetterComposerScreen> with Ticker
     setState(() => _isSending = true);
 
     try {
-      await LetterService.sendLetter(
-        recipientId: widget.recipient.uid,
-        subject: _subjectController.text.trim(),
+      // Récupérer l'utilisateur actuel
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        throw Exception('Utilisateur non connecté');
+      }
+
+      // Créer ou récupérer un thread entre les deux utilisateurs  
+      final threadId = await LetterService.createThread(
+        userId1: currentUser.uid,
+        userId2: widget.recipient.uid,
+      );
+
+      // Envoyer le message
+      await LetterService.sendMessage(
+        threadId: threadId,
+        senderId: currentUser.uid,
         content: _letterController.text.trim(),
-        paperType: _selectedPaper,
-        inkColor: _selectedInk,
-        isAnonymous: _isAnonymous,
-        cost: _calculateCost(),
+        theme: _selectedPaper,
+        mood: _selectedInk,
+        wordCount: _characterCount,
       );
 
       // Afficher confirmation

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../theme/app_colors.dart';
 import '../../services/letter_service.dart';
+import '../../models/letter_message.dart';
 
 class LettersInboxScreen extends StatefulWidget {
   @override

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../theme/app_colors.dart';
 import '../../services/letter_service.dart';
+import '../../models/letter_message.dart';
 
 class LettersInboxHumorScreen extends StatefulWidget {
   @override
@@ -15,13 +16,26 @@ class _LettersInboxHumorScreenState extends State<LettersInboxHumorScreen> {
   @override
   void initState() {
     super.initState();
-    _loadLetters();
+    _loadReceivedLetters();
   }
 
-  void _loadLetters() {
-    setState(() {
-      _lettersFuture = LetterService.getReceivedLetters(); // Peut être filtré côté service par barId
-    });
+  void _loadReceivedLetters() async {
+    try {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        LetterService.getReceivedLetters(currentUser.uid).listen((letters) {
+          setState(() {
+            _receivedLetters = letters;
+            _isLoading = false;
+          });
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print('Erreur lors du chargement des lettres: $e');
+    }
   }
 
   List<Map<String, dynamic>> _applyFilter(List<Map<String, dynamic>> letters) {
