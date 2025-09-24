@@ -1,147 +1,290 @@
-import 'package:flutter/material.dart';
-import '../models/economy.dart';
+import 'package:flutter/material.dart';import 'package:flutter/material.dart';
+
+import '../theme/app_colors.dart';import '../models/economy.dart';
+
 import '../config/ui_reference.dart';
 
 class ShopItemCard extends StatelessWidget {
-  final ShopItem item;
-  final UserWallet wallet;
-  final int userLevel;
-  final List<String> userAchievements;
-  final VoidCallback onPurchase;
+
+  final String title;class ShopItemCard extends StatelessWidget {
+
+  final String description;  final ShopItem item;
+
+  final int price;  final UserWallet wallet;
+
+  final IconData icon;  final int userLevel;
+
+  final Color color;  final List<String> userAchievements;
+
+  final bool isPopular;  final VoidCallback onPurchase;
+
+  final VoidCallback onBuy;
 
   const ShopItemCard({
-    Key? key,
-    required this.item,
-    required this.wallet,
-    required this.userLevel,
-    required this.userAchievements,
-    required this.onPurchase,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
+  const ShopItemCard({    Key? key,
+
+    Key? key,    required this.item,
+
+    required this.title,    required this.wallet,
+
+    required this.description,    required this.userLevel,
+
+    required this.price,    required this.userAchievements,
+
+    required this.icon,    required this.onPurchase,
+
+    required this.color,  }) : super(key: key);
+
+    this.isPopular = false,
+
+    required this.onBuy,  @override
+
+  }) : super(key: key);  Widget build(BuildContext context) {
+
     bool canAfford = EconomyService.canAfford(wallet, item);
-    bool canPurchase = item.canPurchase(wallet, userLevel, userAchievements);
-    bool isLocked = !canPurchase;
-    
-    return Card(
-      elevation: 6,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: item.rarity.color.withOpacity(0.3),
-          width: 2,
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              item.rarity.color.withOpacity(0.1),
-              item.rarity.color.withOpacity(0.05),
-            ],
-          ),
-        ),
-        child: Stack(
-          children: [
-            // Badge de rareté
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: item.rarity.color,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  item.rarity.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            
-            // Contenu principal
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Icône et nom
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: item.rarity.color.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          item.emoji,
-                          style: const TextStyle(fontSize: 28),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        item.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: UIReference.textPrimary,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        item.description,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: UIReference.textSecondary,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      
-                      // Prérequis si nécessaire
-                      if (item.requiredLevel > 1 || item.requiredAchievements.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.lock_outline,
-                                size: 12,
-                                color: UIReference.textSecondary,
-                              ),
-                              const SizedBox(width: 4),
-                              Expanded(
-                                child: Text(
-                                  _getRequirementText(),
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: UIReference.textSecondary,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                  
+
+  @override    bool canPurchase = item.canPurchase(wallet, userLevel, userAchievements);
+
+  Widget build(BuildContext context) {    bool isLocked = !canPurchase;
+
+    return Card(    
+
+      elevation: isPopular ? 8 : 4,    return Card(
+
+      margin: const EdgeInsets.all(8),      elevation: 6,
+
+      child: Container(      shape: RoundedRectangleBorder(
+
+        decoration: BoxDecoration(        borderRadius: BorderRadius.circular(16),
+
+          borderRadius: BorderRadius.circular(12),        side: BorderSide(
+
+          border: isPopular           color: item.rarity.color.withOpacity(0.3),
+
+              ? Border.all(color: AppColors.goldAccent, width: 2)          width: 2,
+
+              : null,        ),
+
+        ),      ),
+
+        child: Column(      child: Container(
+
+          crossAxisAlignment: CrossAxisAlignment.start,        decoration: BoxDecoration(
+
+          children: [          borderRadius: BorderRadius.circular(14),
+
+            if (isPopular)          gradient: LinearGradient(
+
+              Container(            begin: Alignment.topLeft,
+
+                width: double.infinity,            end: Alignment.bottomRight,
+
+                padding: const EdgeInsets.symmetric(vertical: 4),            colors: [
+
+                decoration: const BoxDecoration(              item.rarity.color.withOpacity(0.1),
+
+                  color: AppColors.goldAccent,              item.rarity.color.withOpacity(0.05),
+
+                  borderRadius: BorderRadius.only(            ],
+
+                    topLeft: Radius.circular(12),          ),
+
+                    topRight: Radius.circular(12),        ),
+
+                  ),        child: Stack(
+
+                ),          children: [
+
+                child: const Text(            // Badge de rareté
+
+                  '🔥 POPULAIRE',            Positioned(
+
+                  textAlign: TextAlign.center,              top: 8,
+
+                  style: TextStyle(              right: 8,
+
+                    color: Colors.white,              child: Container(
+
+                    fontWeight: FontWeight.bold,                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+
+                    fontSize: 12,                decoration: BoxDecoration(
+
+                  ),                  color: item.rarity.color,
+
+                ),                  borderRadius: BorderRadius.circular(8),
+
+              ),                ),
+
+            Expanded(                child: Text(
+
+              child: Padding(                  item.rarity.name,
+
+                padding: const EdgeInsets.all(16),                  style: const TextStyle(
+
+                child: Column(                    color: Colors.white,
+
+                  crossAxisAlignment: CrossAxisAlignment.start,                    fontSize: 10,
+
+                  children: [                    fontWeight: FontWeight.bold,
+
+                    Container(                  ),
+
+                      padding: const EdgeInsets.all(12),                ),
+
+                      decoration: BoxDecoration(              ),
+
+                        color: color.withOpacity(0.1),            ),
+
+                        borderRadius: BorderRadius.circular(8),            
+
+                      ),            // Contenu principal
+
+                      child: Icon(            Padding(
+
+                        icon,              padding: const EdgeInsets.all(12.0),
+
+                        color: color,              child: Column(
+
+                        size: 32,                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                      ),                crossAxisAlignment: CrossAxisAlignment.start,
+
+                    ),                children: [
+
+                    const SizedBox(height: 12),                  // Icône et nom
+
+                    Text(                  Column(
+
+                      title,                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                      style: const TextStyle(                    children: [
+
+                        fontSize: 16,                      Container(
+
+                        fontWeight: FontWeight.bold,                        padding: const EdgeInsets.all(12),
+
+                        color: AppColors.textDark,                        decoration: BoxDecoration(
+
+                      ),                          color: item.rarity.color.withOpacity(0.2),
+
+                    ),                          borderRadius: BorderRadius.circular(12),
+
+                    const SizedBox(height: 8),                        ),
+
+                    Expanded(                        child: Text(
+
+                      child: Text(                          item.emoji,
+
+                        description,                          style: const TextStyle(fontSize: 28),
+
+                        style: TextStyle(                        ),
+
+                          fontSize: 12,                      ),
+
+                          color: AppColors.textDark.withOpacity(0.7),                      const SizedBox(height: 8),
+
+                          height: 1.3,                      Text(
+
+                        ),                        item.name,
+
+                      ),                        style: TextStyle(
+
+                    ),                          fontSize: 16,
+
+                    const SizedBox(height: 12),                          fontWeight: FontWeight.bold,
+
+                    Row(                          color: UIReference.textPrimary,
+
+                      children: [                        ),
+
+                        const Icon(                        maxLines: 2,
+
+                          Icons.monetization_on,                        overflow: TextOverflow.ellipsis,
+
+                          color: AppColors.goldAccent,                      ),
+
+                          size: 16,                      const SizedBox(height: 4),
+
+                        ),                      Text(
+
+                        const SizedBox(width: 4),                        item.description,
+
+                        Text(                        style: TextStyle(
+
+                          price.toString(),                          fontSize: 12,
+
+                          style: const TextStyle(                          color: UIReference.textSecondary,
+
+                            fontSize: 16,                        ),
+
+                            fontWeight: FontWeight.bold,                        maxLines: 2,
+
+                            color: AppColors.goldAccent,                        overflow: TextOverflow.ellipsis,
+
+                          ),                      ),
+
+                        ),                      
+
+                      ],                      // Prérequis si nécessaire
+
+                    ),                      if (item.requiredLevel > 1 || item.requiredAchievements.isNotEmpty)
+
+                  ],                        Padding(
+
+                ),                          padding: const EdgeInsets.only(top: 4),
+
+              ),                          child: Row(
+
+            ),                            children: [
+
+            Padding(                              Icon(
+
+              padding: const EdgeInsets.all(16),                                Icons.lock_outline,
+
+              child: SizedBox(                                size: 12,
+
+                width: double.infinity,                                color: UIReference.textSecondary,
+
+                child: ElevatedButton(                              ),
+
+                  onPressed: onBuy,                              const SizedBox(width: 4),
+
+                  style: ElevatedButton.styleFrom(                              Expanded(
+
+                    backgroundColor: color,                                child: Text(
+
+                    foregroundColor: Colors.white,                                  _getRequirementText(),
+
+                    padding: const EdgeInsets.symmetric(vertical: 12),                                  style: TextStyle(
+
+                    shape: RoundedRectangleBorder(                                    fontSize: 10,
+
+                      borderRadius: BorderRadius.circular(8),                                    color: UIReference.textSecondary,
+
+                    ),                                    fontStyle: FontStyle.italic,
+
+                  ),                                  ),
+
+                  child: const Text('Acheter'),                                  maxLines: 1,
+
+                ),                                  overflow: TextOverflow.ellipsis,
+
+              ),                                ),
+
+            ),                              ),
+
+          ],                            ],
+
+        ),                          ),
+
+      ),                        ),
+
+    );                    ],
+
+  }                  ),
+
+}                  
                   const SizedBox(height: 12),
                   
                   // Prix et bouton d'achat

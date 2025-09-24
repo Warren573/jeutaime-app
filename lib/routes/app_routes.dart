@@ -11,6 +11,11 @@ import '../screens/letters/letters_screen.dart';
 import '../screens/letters/compose_letter_screen.dart';
 import '../screens/main_navigation_screen.dart';
 import '../screens/economy_test_screen.dart';
+import '../screens/chat/chat_list_screen.dart';
+import '../screens/chat/chat_conversation_screen.dart';
+import '../screens/matching/matching_screen.dart';
+import '../screens/profile/photo_management_screen.dart';
+import '../screens/profile/notification_settings_screen.dart';
 
 class AppRoutes {
   static const String welcome = '/welcome';
@@ -22,6 +27,11 @@ class AppRoutes {
   static const String main = '/main';
   static const String profile = '/profile';
   static const String messages = '/messages';
+  static const String chat = '/chat';
+  static const String chatConversation = '/chat-conversation';
+  static const String matching = '/matching';
+  static const String photoManagement = '/photo-management';
+  static const String notificationSettings = '/notification-settings';
   static const String shop = '/shop';
   static const String randomBar = '/random-bar';
   static const String memoryBox = '/memory_box';
@@ -38,6 +48,10 @@ class AppRoutes {
     main: (context) => HomeScreen(), // Alias pour main
     profile: (context) => ProfileScreen(),
     messages: (context) => MessagesScreen(),
+    chat: (context) => ChatListScreen(),
+    matching: (context) => MatchingScreen(),
+    photoManagement: (context) => PhotoManagementScreen(),
+    notificationSettings: (context) => NotificationSettingsScreen(),
     shop: (context) => ShopScreen(),
     randomBar: (context) => RandomBarScreen(),
     memoryBox: (context) => const _MemoryBoxPlaceholder(),
@@ -46,6 +60,26 @@ class AppRoutes {
     mainNavigation: (context) => const MainNavigationScreen(),
     economyTest: (context) => const EconomyTestScreen(),
   };
+
+  // Méthode pour naviguer vers une conversation avec paramètres
+  static void navigateToChatConversation(BuildContext context, {
+    required String conversationId,
+    required String otherUserId,
+    required String otherUserName,
+    String? otherUserPhoto,
+  }) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatConversationScreen(
+          conversationId: conversationId,
+          otherUserId: otherUserId,
+          otherUserName: otherUserName,
+          otherUserPhoto: otherUserPhoto,
+        ),
+      ),
+    );
+  }
 }
 
 // Placeholder widget for memory box functionality
