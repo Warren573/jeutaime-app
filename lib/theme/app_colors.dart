@@ -93,6 +93,13 @@ class AppColors {
   static const Color funAccent = goldAccent;
   static const Color seriousAccent = primaryBrown;
   
+  // Couleurs texte principales
+  static const Color textPrimary = textDark;
+  static const Color textSecondary = Color(0xFF7F8C8D);
+  
+  // Couleurs secondaires
+  static const Color secondary = lightBrown;
+  
   // Couleurs de cartes
   static const Color funCardBackground = cardBackground;
   static const Color seriousCardBackground = cardBackground;

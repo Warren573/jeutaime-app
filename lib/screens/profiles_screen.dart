@@ -161,8 +161,7 @@ class _ProfilesScreenState extends State<ProfilesScreen>
               child: Transform.scale(
                 scale: 0.9,
                 child: ProfileCard(
-                  profile: profiles[currentIndex + 1],
-                  onSwipe: (direction) {},
+                  user: profiles[currentIndex + 1],
                 ),
               ),
             ),
@@ -176,8 +175,7 @@ class _ProfilesScreenState extends State<ProfilesScreen>
                 child: SlideTransition(
                   position: _slideAnimation,
                   child: ProfileCard(
-                    profile: profiles[currentIndex],
-                    onSwipe: _onSwipeAction,
+                    user: profiles[currentIndex],
                   ),
                 ),
               );

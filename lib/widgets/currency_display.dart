@@ -1,70 +1,136 @@
-import 'package:flutter/material.dart';
-import '../models/economy.dart';
+import 'package:flutter/material.dart';import 'package:flutter/material.dart';
+
+import '../theme/app_colors.dart';import '../models/economy.dart';
+
 import '../config/ui_reference.dart';
 
-class CurrencyDisplay extends StatefulWidget {
-  final Currency currency;
-  final int amount;
+class CurrencyDisplay extends StatelessWidget {
+
+  final int coins;class CurrencyDisplay extends StatefulWidget {
+
+  final bool showBackground;  final Currency currency;
+
+  final double fontSize;  final int amount;
+
   final bool showAnimation;
 
   const CurrencyDisplay({
-    super.key,
-    required this.currency,
-    required this.amount,
-    this.showAnimation = false,
+
+    Key? key,  const CurrencyDisplay({
+
+    required this.coins,    super.key,
+
+    this.showBackground = true,    required this.currency,
+
+    this.fontSize = 16,    required this.amount,
+
+  }) : super(key: key);    this.showAnimation = false,
+
   });
 
   @override
-  State<CurrencyDisplay> createState() => _CurrencyDisplayState();
-}
 
-class _CurrencyDisplayState extends State<CurrencyDisplay>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _rotationAnimation;
+  Widget build(BuildContext context) {  @override
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-    
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
+    Widget content = Row(  State<CurrencyDisplay> createState() => _CurrencyDisplayState();
+
+      mainAxisSize: MainAxisSize.min,}
+
+      children: [
+
+        Icon(class _CurrencyDisplayState extends State<CurrencyDisplay>
+
+          Icons.monetization_on,    with SingleTickerProviderStateMixin {
+
+          color: showBackground ? Colors.white : AppColors.goldAccent,  late AnimationController _controller;
+
+          size: fontSize * 1.2,  late Animation<double> _scaleAnimation;
+
+        ),  late Animation<double> _rotationAnimation;
+
+        const SizedBox(width: 4),
+
+        Text(  @override
+
+          _formatCoins(coins),  void initState() {
+
+          style: TextStyle(    super.initState();
+
+            fontSize: fontSize,    _controller = AnimationController(
+
+            fontWeight: FontWeight.bold,      duration: const Duration(milliseconds: 800),
+
+            color: showBackground ? Colors.white : AppColors.goldAccent,      vsync: this,
+
+          ),    );
+
+        ),    
+
+      ],    _scaleAnimation = Tween<double>(
+
+    );      begin: 0.8,
+
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.elasticOut,
-    ));
-    
-    _rotationAnimation = Tween<double>(
-      begin: 0,
-      end: 0.1,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
 
-    if (widget.showAnimation) {
-      _controller.repeat(reverse: true);
-    }
-  }
+    if (showBackground) {    ).animate(CurvedAnimation(
 
-  @override
-  void dispose() {
+      return Container(      parent: _controller,
+
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),      curve: Curves.elasticOut,
+
+        decoration: BoxDecoration(    ));
+
+          gradient: AppColors.coinsGradient,    
+
+          borderRadius: BorderRadius.circular(20),    _rotationAnimation = Tween<double>(
+
+          boxShadow: [      begin: 0,
+
+            BoxShadow(      end: 0.1,
+
+              color: Colors.black.withOpacity(0.2),    ).animate(CurvedAnimation(
+
+              blurRadius: 4,      parent: _controller,
+
+              offset: const Offset(0, 2),      curve: Curves.easeInOut,
+
+            ),    ));
+
+          ],
+
+        ),    if (widget.showAnimation) {
+
+        child: content,      _controller.repeat(reverse: true);
+
+      );    }
+
+    }  }
+
+
+
+    return content;  @override
+
+  }  void dispose() {
+
     _controller.dispose();
-    super.dispose();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Transform.scale(
+  String _formatCoins(int coins) {    super.dispose();
+
+    if (coins >= 1000000) {  }
+
+      return '${(coins / 1000000).toStringAsFixed(1)}M';
+
+    } else if (coins >= 1000) {  @override
+
+      return '${(coins / 1000).toStringAsFixed(1)}K';  Widget build(BuildContext context) {
+
+    }    return AnimatedBuilder(
+
+    return coins.toString();      animation: _controller,
+
+  }      builder: (context, child) {
+
+}        return Transform.scale(
           scale: widget.showAnimation ? _scaleAnimation.value : 1.0,
           child: Transform.rotate(
             angle: widget.showAnimation ? _rotationAnimation.value : 0,

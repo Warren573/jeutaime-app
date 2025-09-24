@@ -97,20 +97,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // TODO: Navigate to edit profile
               },
             ),
+
+            _buildProfileOption(
+              icon: Icons.photo_library,
+              title: 'Mes photos',
+              subtitle: 'Gérer mes photos de profil',
+              onTap: () {
+                Navigator.pushNamed(context, '/photo-management');
+              },
+            ),
             
             _buildProfileOption(
               icon: Icons.favorite,
-              title: 'Mes matchs',
+              title: 'Découvrir',
+              subtitle: 'Trouver de nouveaux matchs',
               onTap: () {
-                // TODO: Navigate to matches
+                Navigator.pushNamed(context, '/matching');
               },
             ),
             
             _buildProfileOption(
               icon: Icons.message,
               title: 'Mes conversations',
+              subtitle: 'Messages et chats',
               onTap: () {
-                // TODO: Navigate to conversations
+                Navigator.pushNamed(context, '/chat');
+              },
+            ),
+
+            _buildProfileOption(
+              icon: Icons.notifications,
+              title: 'Notifications',
+              subtitle: 'Paramètres de notifications',
+              onTap: () {
+                Navigator.pushNamed(context, '/notification-settings');
               },
             ),
             
@@ -127,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'Mes coins',
               subtitle: '100 coins disponibles', // TODO: Get from user data
               onTap: () {
-                // TODO: Navigate to coins/shop
+                Navigator.pushNamed(context, '/shop');
               },
             ),
             

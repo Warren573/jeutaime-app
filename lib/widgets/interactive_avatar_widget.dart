@@ -1,68 +1,132 @@
-/**
- * RÉFÉRENCE OBLIGATOIRE: https://jeutaime-warren.web.app/
+import 'package:flutter/material.dart';/**
+
+import '../models/user.dart'; * RÉFÉRENCE OBLIGATOIRE: https://jeutaime-warren.web.app/
+
  * 
- * Widget d'avatar interactif avec système d'actions
- * Style bois chaleureux JeuTaime
- */
+
+class InteractiveAvatarWidget extends StatelessWidget { * Widget d'avatar interactif avec système d'actions
+
+  final User user; * Style bois chaleureux JeuTaime
+
+  final double size; */
+
+  final VoidCallback? onTap;
 
 import 'package:flutter/material.dart';
-import '../models/emoji_avatar.dart';
-import '../models/interaction_system.dart';
-import '../models/user_profile.dart';
-import '../config/ui_reference.dart';
 
-class InteractiveAvatarWidget extends StatefulWidget {
+  const InteractiveAvatarWidget({import '../models/emoji_avatar.dart';
+
+    Key? key,import '../models/interaction_system.dart';
+
+    required this.user,import '../models/user_profile.dart';
+
+    this.size = 100.0,import '../config/ui_reference.dart';
+
+    this.onTap,
+
+  }) : super(key: key);class InteractiveAvatarWidget extends StatefulWidget {
+
   final UserProfile user;
-  final UserProfile currentUser;
-  final UserRelation relation;
-  final Function(InteractionAction, InteractionEffect)? onInteraction;
-  final double size;
 
-  const InteractiveAvatarWidget({
-    Key? key,
-    required this.user,
-    required this.currentUser,
-    required this.relation,
-    this.onInteraction,
-    this.size = 60.0,
-  }) : super(key: key);
+  @override  final UserProfile currentUser;
 
-  @override
-  _InteractiveAvatarWidgetState createState() => _InteractiveAvatarWidgetState();
-}
+  Widget build(BuildContext context) {  final UserRelation relation;
 
-class _InteractiveAvatarWidgetState extends State<InteractiveAvatarWidget>
-    with TickerProviderStateMixin {
-  late EmojiAvatar avatar;
-  late AnimationController _effectController;
-  late AnimationController _shakeController;
-  late Animation<double> _scaleAnimation;
-  late Animation<Offset> _shakeAnimation;
-  
-  bool showActionsMenu = false;
-  String currentEffect = '';
-  
-  @override
-  void initState() {
-    super.initState();
+    return GestureDetector(  final Function(InteractionAction, InteractionEffect)? onInteraction;
+
+      onTap: onTap,  final double size;
+
+      child: Container(
+
+        width: size,  const InteractiveAvatarWidget({
+
+        height: size,    Key? key,
+
+        decoration: BoxDecoration(    required this.user,
+
+          shape: BoxShape.circle,    required this.currentUser,
+
+          border: Border.all(color: Colors.white, width: 3),    required this.relation,
+
+          boxShadow: [    this.onInteraction,
+
+            BoxShadow(    this.size = 60.0,
+
+              color: Colors.black.withOpacity(0.2),  }) : super(key: key);
+
+              blurRadius: 10,
+
+              offset: const Offset(0, 4),  @override
+
+            ),  _InteractiveAvatarWidgetState createState() => _InteractiveAvatarWidgetState();
+
+          ],}
+
+        ),
+
+        child: ClipOval(class _InteractiveAvatarWidgetState extends State<InteractiveAvatarWidget>
+
+          child: user.avatarUrl != null    with TickerProviderStateMixin {
+
+              ? Image.network(  late EmojiAvatar avatar;
+
+                  user.avatarUrl!,  late AnimationController _effectController;
+
+                  fit: BoxFit.cover,  late AnimationController _shakeController;
+
+                  errorBuilder: (context, error, stackTrace) {  late Animation<double> _scaleAnimation;
+
+                    return _buildDefaultAvatar();  late Animation<Offset> _shakeAnimation;
+
+                  },  
+
+                )  bool showActionsMenu = false;
+
+              : _buildDefaultAvatar(),  String currentEffect = '';
+
+        ),  
+
+      ),  @override
+
+    );  void initState() {
+
+  }    super.initState();
+
     
-    // Génération de l'avatar selon le profil utilisateur
-    avatar = EmojiAvatarGenerator.generateAvatar(
-      gender: widget.user.interests.contains('feminine') ? 'feminine' : 
-             widget.user.interests.contains('masculine') ? 'masculine' : 'neutral',
-      barType: 'romantic',
-      personality: 'romantic',
-      interests: widget.user.interests,
-    );
-    
-    // Contrôleurs d'animation
-    _effectController = AnimationController(
-      duration: Duration(milliseconds: 2000),
-      vsync: this,
-    );
-    
-    _shakeController = AnimationController(
-      duration: Duration(milliseconds: 1200),
+
+  Widget _buildDefaultAvatar() {    // Génération de l'avatar selon le profil utilisateur
+
+    return Container(    avatar = EmojiAvatarGenerator.generateAvatar(
+
+      decoration: const BoxDecoration(      gender: widget.user.interests.contains('feminine') ? 'feminine' : 
+
+        gradient: LinearGradient(             widget.user.interests.contains('masculine') ? 'masculine' : 'neutral',
+
+          colors: [Color(0xFF8B4513), Color(0xFFA0522D)],      barType: 'romantic',
+
+          begin: Alignment.topLeft,      personality: 'romantic',
+
+          end: Alignment.bottomRight,      interests: widget.user.interests,
+
+        ),    );
+
+      ),    
+
+      child: Icon(    // Contrôleurs d'animation
+
+        Icons.person,    _effectController = AnimationController(
+
+        size: size * 0.5,      duration: Duration(milliseconds: 2000),
+
+        color: Colors.white,      vsync: this,
+
+      ),    );
+
+    );    
+
+  }    _shakeController = AnimationController(
+
+}      duration: Duration(milliseconds: 1200),
       vsync: this,
     );
     

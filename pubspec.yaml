@@ -17,14 +17,26 @@ dependencies:
   firebase_auth: ^4.7.3
   cloud_firestore: ^4.8.5
   firebase_storage: ^11.2.6
+  firebase_messaging: ^14.6.7
+  firebase_analytics: ^10.4.5
   # Google Sign In
   google_sign_in: ^6.1.4
   # Image picking and handling
   image_picker: ^1.0.4
+  image: ^4.1.3
   # Location services
   geolocator: ^10.1.0
   # HTTP requests
   http: ^1.1.0
+  # Chat & Notifications
+  socket_io_client: ^2.0.3
+  flutter_local_notifications: ^15.1.1
+  # Payments
+  in_app_purchase: ^3.1.8
+  # Utilities
+  permission_handler: ^11.0.1
+  share_plus: ^7.1.0
+  url_launcher: ^6.1.14
   # Other dependencies
   cupertino_icons: ^1.0.2
 

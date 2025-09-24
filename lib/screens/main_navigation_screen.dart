@@ -5,6 +5,8 @@ import '../screens/messages/messages_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/shop/shop_screen.dart';
 import '../screens/bars_screen.dart';
+import '../screens/chat/chat_list_screen.dart';
+import '../screens/matching/matching_screen.dart';
 import '../config/ui_reference.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -24,10 +26,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   late PageController _pageController;
 
   final List<Widget> _screens = [
-    HomeScreen(),           // 0 - Accueil
-    const LettersScreen(),  // 1 - Lettres
-    BarsScreen(),           // 2 - Bars  
-    MessagesScreen(),       // 3 - Messages
+    MatchingScreen(),       // 0 - Découvrir (Matching)
+    ChatListScreen(),       // 1 - Chat
+    const LettersScreen(),  // 2 - Lettres
+    BarsScreen(),           // 3 - Bars  
     ShopScreen(),           // 4 - Boutique
     ProfileScreen(),        // 5 - Profil
   ];
@@ -76,23 +78,23 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               children: [
                 _buildNavItem(
                   index: 0,
-                  icon: Icons.home_rounded,
-                  label: 'Accueil',
+                  icon: Icons.favorite_rounded,
+                  label: 'Découvrir',
                 ),
                 _buildNavItem(
                   index: 1,
+                  icon: Icons.chat_rounded,
+                  label: 'Chat',
+                ),
+                _buildNavItem(
+                  index: 2,
                   icon: Icons.mail_rounded,
                   label: 'Lettres',
                 ),
                 _buildNavItem(
-                  index: 2,
+                  index: 3,
                   icon: Icons.local_bar_rounded,
                   label: 'Bars',
-                ),
-                _buildNavItem(
-                  index: 3,
-                  icon: Icons.chat_rounded,
-                  label: 'Messages',
                 ),
                 _buildNavItem(
                   index: 4,
