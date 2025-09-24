@@ -65,3 +65,7 @@ app.*.map.json
 !.yarn/sdks
 !.yarn/versions
 flutter/
+
+# Flutter SDK downloads
+*.tar.xz
+flutter_*.tar.xz

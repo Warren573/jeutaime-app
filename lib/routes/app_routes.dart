@@ -7,6 +7,10 @@ import '../screens/home_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/messages/messages_screen.dart';
 import '../screens/shop/shop_screen.dart';
+import '../screens/letters/letters_screen.dart';
+import '../screens/letters/compose_letter_screen.dart';
+import '../screens/main_navigation_screen.dart';
+import '../screens/economy_test_screen.dart';
 
 class AppRoutes {
   static const String welcome = '/welcome';
@@ -21,6 +25,10 @@ class AppRoutes {
   static const String shop = '/shop';
   static const String randomBar = '/random-bar';
   static const String memoryBox = '/memory_box';
+  static const String letters = '/letters';
+  static const String composeLetter = '/compose-letter';
+  static const String mainNavigation = '/main-navigation';
+  static const String economyTest = '/economy-test';
 
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
@@ -33,6 +41,10 @@ class AppRoutes {
     shop: (context) => ShopScreen(),
     randomBar: (context) => RandomBarScreen(),
     memoryBox: (context) => const _MemoryBoxPlaceholder(),
+    letters: (context) => const LettersScreen(),
+    composeLetter: (context) => const ComposeLetterScreen(),
+    mainNavigation: (context) => const MainNavigationScreen(),
+    economyTest: (context) => const EconomyTestScreen(),
   };
 }
 

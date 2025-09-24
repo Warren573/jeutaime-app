@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/common/app_header.dart';
 
-class RomanticBarScreen extends StatelessWidget {
+class PirateBarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,10 +48,10 @@ class RomanticBarScreen extends StatelessWidget {
               
               // Header du bar
               AppHeader(
-                title: "🌹 Bar Romantique",
-                subtitle: "Ambiance tamisée • Discussions profondes",
+                title: "🏴‍☠️ Bar Pirates",
+                subtitle: "Aventure maritime • Camaraderie des flibustiers",
                 userName: "Warren",
-                userStatus: "12 participants connectés",
+                userStatus: "15 participants connectés",
                 coins: 1000,
               ),
               
@@ -60,19 +60,8 @@ class RomanticBarScreen extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
-                    // Section bienvenue
-                    _buildContentCard(
-                      title: "✨ Bienvenue au Bar Romantique",
-                      content: "Rejoignez les groupes \"Poésie & Émotions\" ou \"Voyages Romantiques\" pour des conversations authentiques.",
-                      borderColor: AppColors.romanticBar,
-                      buttonText: "Rejoindre un groupe",
-                      buttonGradient: const LinearGradient(
-                        colors: [Color(0xFFE91E63), Color(0xFFAD1457)],
-                      ),
-                      onButtonPressed: () {
-                        _showBarFeaturesDialog(context, 'romantic');
-                      },
-                    ),
+                    // Chasse au trésor
+                    _buildTreasureHuntCard(context),
                     
                     const SizedBox(height: 20),
                     
@@ -88,20 +77,13 @@ class RomanticBarScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContentCard({
-    required String title,
-    required String content,
-    required Color borderColor,
-    required String buttonText,
-    required LinearGradient buttonGradient,
-    required VoidCallback onButtonPressed,
-  }) {
+  Widget _buildTreasureHuntCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor, width: 2),
+        border: Border.all(color: AppColors.pirateBar, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -113,9 +95,9 @@ class RomanticBarScreen extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            title,
+            "🗺️ Chasse au Trésor Quotidienne",
             style: TextStyle(
-              color: borderColor.withOpacity(0.8),
+              color: AppColors.pirateBar.withOpacity(0.9),
               fontSize: 18,
               fontWeight: FontWeight.bold,
               fontFamily: 'Georgia',
@@ -124,7 +106,7 @@ class RomanticBarScreen extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           Text(
-            content,
+            "\"L'île mystérieuse\" - Résolvez 3 énigmes de navigation pour découvrir le trésor !",
             style: const TextStyle(
               color: Color(0xFF5D4E37),
               fontSize: 16,
@@ -136,18 +118,20 @@ class RomanticBarScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: buttonGradient,
+              gradient: AppColors.pirateGradient,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: borderColor.withOpacity(0.3),
+                  color: AppColors.pirateBar.withOpacity(0.3),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
               ],
             ),
             child: ElevatedButton(
-              onPressed: onButtonPressed,
+              onPressed: () {
+                _showTreasureHuntDialog(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.transparent,
                 shadowColor: Colors.transparent,
@@ -156,9 +140,9 @@ class RomanticBarScreen extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: Text(
-                buttonText,
-                style: const TextStyle(
+              child: const Text(
+                "Partir à l'aventure (+150 pièces)",
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -178,7 +162,7 @@ class RomanticBarScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.cardBackground,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.romanticBar, width: 2),
+        border: Border.all(color: AppColors.pirateBar, width: 2),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -190,9 +174,9 @@ class RomanticBarScreen extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "🎭 Activités disponibles",
+            "⚔️ Activités d'aventuriers",
             style: TextStyle(
-              color: AppColors.romanticBar.withOpacity(0.8),
+              color: AppColors.pirateBar.withOpacity(0.9),
               fontSize: 17,
               fontWeight: FontWeight.bold,
               fontFamily: 'Georgia',
@@ -203,11 +187,12 @@ class RomanticBarScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildActivityItem("💝", "Compliments sincères", "+25 pièces"),
-              _buildActivityItem("📝", "Poèmes express", "+40 pièces"),
-              _buildActivityItem("🌟", "Partage de souvenirs", "+35 pièces"),
-              _buildActivityItem("💭", "Citations préférées", "+30 pièces"),
-              _buildActivityItem("💌", "Lettres d'amour Premium", "Premium"),
+              _buildActivityItem("⚔️", "Récit d'aventure", "+40 pièces"),
+              _buildActivityItem("🧭", "Énigme de navigation", "+50 pièces"),
+              _buildActivityItem("🏴‍☠️", "Défi de courage", "+35 pièces"),
+              _buildActivityItem("🗺️", "Carte au trésor", "+45 pièces"),
+              _buildActivityItem("🐙", "Légende nautique", "+60 pièces"),
+              _buildActivityItem("🚢", "Grande Expédition Premium", "Premium"),
             ],
           ),
         ],
@@ -235,7 +220,7 @@ class RomanticBarScreen extends StatelessWidget {
           Text(
             reward,
             style: TextStyle(
-              color: reward == "Premium" ? AppColors.goldAccent : AppColors.romanticBar,
+              color: reward == "Premium" ? AppColors.goldAccent : AppColors.pirateBar,
               fontSize: 13,
               fontWeight: FontWeight.bold,
               fontFamily: 'Georgia',
@@ -246,21 +231,24 @@ class RomanticBarScreen extends StatelessWidget {
     );
   }
 
-  void _showBarFeaturesDialog(BuildContext context, String barType) {
+  void _showTreasureHuntDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
-          "🌹 Fonctionnalités disponibles",
+          "🗺️ Chasse au Trésor",
           style: TextStyle(fontFamily: 'Georgia'),
         ),
         content: const Text(
-          "• Rejoindre des groupes thématiques\n"
-          "• Participer aux activités romantiques\n"
-          "• Envoyer des compliments sincères\n"
-          "• Partager vos plus beaux souvenirs\n\n"
-          "💫 Bientôt disponible !",
+          "Équipages disponibles :\n"
+          "• Les Corsaires du Rhum (3/4 membres)\n"
+          "• Chasseurs de Légendes (2/4 membres)\n\n"
+          "Activités d'équipage :\n"
+          "• Récits d'aventure\n"
+          "• Défis de navigation\n"
+          "• Création de légendes\n\n"
+          "🚢 Bientôt disponible !",
           style: TextStyle(fontFamily: 'Georgia'),
         ),
         actions: [
@@ -269,7 +257,7 @@ class RomanticBarScreen extends StatelessWidget {
             child: const Text(
               "Compris",
               style: TextStyle(
-                color: AppColors.romanticBar,
+                color: AppColors.pirateBar,
                 fontFamily: 'Georgia',
               ),
             ),

@@ -255,3 +255,313 @@ class LetterAttachment {
     };
   }
 }
+
+// ===== NOUVEAUX MODÈLES POUR LE SYSTÈME DE TEMPLATES =====
+
+/// Template de lettre prédéfini
+class LetterTemplate {
+  final String id;
+  final String name;
+  final String description;
+  final String emoji;
+  final LetterType type;
+  final String templateContent;
+  final Map<String, String> placeholders;
+  final LetterStyle defaultStyle;
+  final bool isPremium;
+  final int unlockLevel;
+
+  const LetterTemplate({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.emoji,
+    required this.type,
+    required this.templateContent,
+    required this.placeholders,
+    required this.defaultStyle,
+    this.isPremium = false,
+    this.unlockLevel = 1,
+  });
+}
+
+/// Style de présentation d'une lettre
+class LetterStyle {
+  final String backgroundColor;
+  final String textColor;
+  final String fontFamily;
+  final double fontSize;
+  final String paperTexture;
+  final String borderStyle;
+  final List<String> decorations;
+
+  const LetterStyle({
+    required this.backgroundColor,
+    required this.textColor,
+    required this.fontFamily,
+    required this.fontSize,
+    required this.paperTexture,
+    required this.borderStyle,
+    this.decorations = const [],
+  });
+}
+
+/// Types de lettres disponibles
+enum LetterType {
+  romantic,      // Lettre romantique
+  friendship,    // Lettre d'amitié
+  apology,      // Lettre d'excuses
+  gratitude,    // Lettre de remerciement
+  confession,   // Déclaration
+  poetry,       // Poésie
+  story,        // Petite histoire
+  surprise,     // Surprise
+  anonymous,    // Lettre anonyme
+  future,       // Lettre future (programmée)
+}
+
+/// Service de gestion des lettres avec templates
+class LetterService {
+  static List<LetterTemplate> getAvailableTemplates({int userLevel = 1}) {
+    return [
+      // Templates romantiques
+      LetterTemplate(
+        id: 'romantic_classic',
+        name: 'Déclaration Classique',
+        description: 'Une déclaration d\'amour intemporelle',
+        emoji: '💕',
+        type: LetterType.romantic,
+        templateContent: '''Mon/Ma {recipient_title} {name},
+
+Depuis que nos chemins se sont croisés, ma vie a pris une couleur nouvelle. 
+Chaque jour passé à tes côtés est un cadeau que je chéris.
+
+{personal_message}
+
+Avec tout mon amour,
+{sender_name} 💖''',
+        placeholders: {
+          'recipient_title': 'chéri(e)',
+          'name': '[Nom]',
+          'personal_message': '[Votre message personnel]',
+          'sender_name': '[Votre nom]',
+        },
+        defaultStyle: LetterStyle(
+          backgroundColor: '#FFF5F5',
+          textColor: '#8B4A6B',
+          fontFamily: 'Georgia',
+          fontSize: 16.0,
+          paperTexture: 'parchemin',
+          borderStyle: 'coeur',
+          decorations: ['roses', 'coeurs'],
+        ),
+      ),
+
+      LetterTemplate(
+        id: 'friendship_warm',
+        name: 'Amitié Chaleureuse',
+        description: 'Pour exprimer une amitié sincère',
+        emoji: '🤗',
+        type: LetterType.friendship,
+        templateContent: '''Salut {name} !
+
+Tu sais, avoir un(e) ami(e) comme toi, c'est vraiment précieux. 
+Tu es toujours là dans les moments importants, et ça me touche beaucoup.
+
+{personal_message}
+
+Ton ami(e) fidèle,
+{sender_name} 🌟''',
+        placeholders: {
+          'name': '[Prénom]',
+          'personal_message': '[Votre message d\'amitié]',
+          'sender_name': '[Votre nom]',
+        },
+        defaultStyle: LetterStyle(
+          backgroundColor: '#F0F8FF',
+          textColor: '#4682B4',
+          fontFamily: 'Georgia',
+          fontSize: 16.0,
+          paperTexture: 'lin',
+          borderStyle: 'simple',
+          decorations: ['etoiles', 'nuages'],
+        ),
+      ),
+
+      LetterTemplate(
+        id: 'apology_sincere',
+        name: 'Excuses Sincères',
+        description: 'Pour présenter des excuses authentiques',
+        emoji: '🙏',
+        type: LetterType.apology,
+        templateContent: '''Cher/Chère {name},
+
+Je réalise que mes mots ou mes actions t'ont blessé(e), et j'en suis vraiment désolé(e).
+Ce n'était pas mon intention, mais je comprends ta réaction.
+
+{personal_message}
+
+J'espère que tu pourras me pardonner.
+{sender_name}''',
+        placeholders: {
+          'name': '[Prénom]',
+          'personal_message': '[Vos excuses personnelles]',
+          'sender_name': '[Votre nom]',
+        },
+        defaultStyle: LetterStyle(
+          backgroundColor: '#FFF8DC',
+          textColor: '#8B4513',
+          fontFamily: 'Georgia',
+          fontSize: 16.0,
+          paperTexture: 'papier_recyclé',
+          borderStyle: 'sobre',
+          decorations: ['feuilles'],
+        ),
+      ),
+
+      LetterTemplate(
+        id: 'gratitude_deep',
+        name: 'Gratitude Profonde',
+        description: 'Pour exprimer une reconnaissance sincère',
+        emoji: '🙏',
+        type: LetterType.gratitude,
+        templateContent: '''Mon/Ma cher/chère {name},
+
+Aujourd'hui, j'ai envie de prendre le temps de te dire MERCI.
+Merci pour {reason_1}.
+Merci pour {reason_2}.
+Merci pour {reason_3}.
+
+{personal_gratitude}
+
+Tu comptes énormément pour moi, et j'avais besoin que tu le saches.
+
+Avec toute ma reconnaissance,
+{sender_name} 🌈''',
+        placeholders: {
+          'name': '[Prénom]',
+          'reason_1': '[première raison de gratitude]',
+          'reason_2': '[deuxième raison de gratitude]',
+          'reason_3': '[troisième raison de gratitude]',
+          'personal_gratitude': '[message personnel de remerciement]',
+          'sender_name': '[Votre nom]',
+        },
+        defaultStyle: LetterStyle(
+          backgroundColor: '#FFF9E6',
+          textColor: '#D97706',
+          fontFamily: 'Georgia',
+          fontSize: 16.0,
+          paperTexture: 'kraft',
+          borderStyle: 'naturel',
+          decorations: ['soleil', 'fleurs_sauvages'],
+        ),
+      ),
+
+      // Templates premium (niveau 3+)
+      if (userLevel >= 3)
+        LetterTemplate(
+          id: 'poetry_romantic',
+          name: 'Poésie Romantique',
+          description: 'Un poème d\'amour personnalisé',
+          emoji: '📝',
+          type: LetterType.poetry,
+          templateContent: '''À toi, {name} 💫
+
+Tes yeux sont des étoiles dans la nuit,
+Ton sourire, le soleil de ma vie.
+{custom_verse_1}
+
+Quand tu parles, le monde s'illumine,
+Quand tu ris, mon cœur se dessine.
+{custom_verse_2}
+
+Alors reste près de moi, mon trésor,
+Car avec toi, je vis encore et encore.
+
+Ton poète épris,
+{sender_name} 🌹''',
+          placeholders: {
+            'name': '[Prénom]',
+            'custom_verse_1': '[Vos vers personnels - ligne 1]',
+            'custom_verse_2': '[Vos vers personnels - ligne 2]',
+            'sender_name': '[Votre nom]',
+          },
+          defaultStyle: LetterStyle(
+            backgroundColor: '#F8F0FF',
+            textColor: '#663399',
+            fontFamily: 'Georgia',
+            fontSize: 18.0,
+            paperTexture: 'parchemin_royal',
+            borderStyle: 'ornements',
+            decorations: ['plumes', 'enluminures'],
+          ),
+          isPremium: true,
+          unlockLevel: 3,
+        ),
+    ].where((template) => template.unlockLevel <= userLevel).toList();
+  }
+
+  /// Génère des suggestions de contenu basées sur le type de lettre
+  static List<String> getContentSuggestions(LetterType type) {
+    switch (type) {
+      case LetterType.romantic:
+        return [
+          "Chaque jour avec toi est comme un rêve qui devient réalité...",
+          "Tu illumines ma vie comme le soleil illumine le monde...",
+          "Dans tes yeux, j'ai trouvé mon foyer...",
+          "Ton amour est la mélodie qui fait danser mon cœur...",
+          "Avec toi, j'ai appris ce que signifie vraiment aimer...",
+        ];
+      
+      case LetterType.friendship:
+        return [
+          "Notre amitié est un trésor que je garde précieusement...",
+          "Tu es cette personne sur qui je peux toujours compter...",
+          "Nos fous rires résonnent encore dans ma mémoire...",
+          "Tu as ce don de rendre tout plus beau, plus simple...",
+          "Grâce à toi, j'ai découvert ce qu'est la vraie amitié...",
+        ];
+
+      case LetterType.apology:
+        return [
+          "Mes mots ont dépassé ma pensée, et j'en suis vraiment désolé(e)...",
+          "Je réalise maintenant l'impact de mes actions...",
+          "Ton pardon serait le plus beau des cadeaux...",
+          "Je veux réparer ce qui peut l'être entre nous...",
+          "Tu mérites mieux que ce que j'ai fait...",
+        ];
+
+      case LetterType.gratitude:
+        return [
+          "Ta générosité me touche au plus profond de mon cœur...",
+          "Tu as été là quand j'en avais le plus besoin...",
+          "Tes petites attentions font toute la différence...",
+          "Je ne sais pas comment te remercier assez...",
+          "Tu m'as appris la vraie valeur de la gentillesse...",
+        ];
+
+      case LetterType.confession:
+        return [
+          "Il y a quelque chose d'important que je dois te dire...",
+          "Mon cœur déborde et j'ai besoin de me confier...",
+          "Ces sentiments grandissent en moi chaque jour...",
+          "Je ne peux plus garder cela pour moi...",
+          "Tu as le droit de connaître mes sentiments...",
+        ];
+
+      default:
+        return [
+          "J'avais envie de prendre de tes nouvelles...",
+          "Tu me manques et j'espère que tu vas bien...",
+          "J'ai pensé à toi aujourd'hui...",
+          "Il faut qu'on se donne des nouvelles plus souvent...",
+          "J'espère que cette lettre te fera sourire...",
+        ];
+    }
+  }
+
+  /// Vérifie si un template est disponible pour l'utilisateur
+  static bool isTemplateUnlocked(LetterTemplate template, int userLevel) {
+    return userLevel >= template.unlockLevel;
+  }
+}
