@@ -99,10 +99,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> {
               ),
               child: InteractiveAvatarWidget(
                 user: widget.profile,
-                currentUser: widget.profile, // Temporaire pour les tests
-                relation: widget.profile.relation ?? UserRelation(),
                 size: 80,
-                showFullInteractions: true,
               ),
             ),
           ),

@@ -79,8 +79,6 @@ class UserProfile {
           messagesCount: 6,
         ),
       ),
-        relation: UserRelation(activitiesShared: true, friendship: true, messagesCount: 5),
-      ),
       UserProfile(
         id: '3',
         name: 'Claire',

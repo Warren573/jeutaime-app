@@ -47,12 +47,9 @@ class RomanticBarScreen extends StatelessWidget {
               ),
               
               // Header du bar
-              AppHeader(
-                title: "🌹 Bar Romantique",
-                subtitle: "Ambiance tamisée • Discussions profondes",
-                userName: "Warren",
-                userStatus: "12 participants connectés",
-                coins: 1000,
+              const AppHeader(
+                title: "💕 Bar Romantique",
+                subtitle: "Ambiance tendre • Conversations intimes",
               ),
               
               // Contenu du bar

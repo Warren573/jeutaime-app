@@ -8,7 +8,8 @@
 import 'package:flutter/material.dart';
 import '../config/ui_reference.dart';
 import '../models/bar_content.dart';
-import '../widgets/enhanced_bar_card.dart';
+import '../models/bar.dart';
+import '../widgets/bars/enhanced_bar_card.dart';
 
 class BarsScreen extends StatefulWidget {
   @override
@@ -163,9 +164,8 @@ class _BarsScreenState extends State<BarsScreen> {
         final isUnlocked = unlockedBars[barContent.id] ?? false;
         
         return EnhancedBarCard(
-          barContent: barContent,
-          isUnlocked: isUnlocked,
-          onTap: () => _handleBarTap(barContent, isUnlocked),
+          bar: _convertToBar(barContent),
+          onJoin: isUnlocked ? () => _handleBarTap(barContent, isUnlocked) : null,
         );
       },
     );
@@ -272,5 +272,31 @@ class _BarsScreenState extends State<BarsScreen> {
         backgroundColor: barContent.themeColor,
       ),
     );
+  }
+
+  Bar _convertToBar(BarContent barContent) {
+    return Bar(
+      barId: barContent.id,
+      name: barContent.name,
+      type: _getBarType(barContent.id),
+      isActive: true,
+      activeUsers: 15, // Valeur par défaut
+      maxParticipants: 4,
+    );
+  }
+
+  BarType _getBarType(String barId) {
+    switch (barId) {
+      case 'romantic':
+        return BarType.romantic;
+      case 'humorous':
+        return BarType.humorous;
+      case 'pirate':
+        return BarType.pirate;
+      case 'weekly':
+        return BarType.weekly;
+      default:
+        return BarType.romantic;
+    }
   }
 }

@@ -8,77 +8,68 @@ class QuizSelectionScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.funBackground,
       appBar: AppBar(
-        title: Text('Quiz & Tests', style: TextStyle(color: AppColors.seriousAccent)),
+        title: Text('Quiz Personnalité'),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.purple.shade100, Colors.white],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
+            Text(
+              'Découvre ta personnalité !',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.purple.shade700,
+                fontFamily: 'Nunito',
               ),
-              child: Column(
-                children: [
-                  Icon(Icons.psychology, size: 40, color: Colors.purple),
-                  SizedBox(height: 8),
-                  Text(
-                    'Découvre ton profil amoureux',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    'et trouve des affinités uniques !',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Des quiz amusants pour mieux te connaître',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey.shade600,
+                fontFamily: 'Nunito',
               ),
             ),
             SizedBox(height: 24),
-            QuizCard(
-              title: 'Quiz de Compatibilité',
-              subtitle: 'Découvre ton pourcentage de compatibilité',
-              icon: Icons.favorite_border,
-              color: Colors.red,
-              duration: '5 min',
-              route: '/compatibility_quiz',
-            ),
-            SizedBox(height: 12),
-            QuizCard(
-              title: 'Langages de l\'Amour',
-              subtitle: 'Paroles, gestes, cadeaux, temps ou contact ?',
-              icon: Icons.chat_bubble_outline,
-              color: Colors.pink,
-              duration: '3 min',
-              route: '/love_languages_quiz',
-            ),
-            SizedBox(height: 12),
-            QuizCard(
-              title: 'Style Relationnel',
-              subtitle: 'Romantique, aventurier, traditionnel ?',
-              icon: Icons.style,
-              color: Colors.purple,
-              duration: '4 min',
-              route: '/relationship_style_quiz',
-            ),
-            SizedBox(height: 12),
-            QuizCard(
-              title: 'Test Mystère du Jour',
-              subtitle: 'Quiz surprise pour débloquer des bonus',
-              icon: Icons.lock,
-              color: Colors.indigo,
-              duration: '2 min',
-              route: '/mystery_quiz',
+            Expanded(
+              child: ListView(
+                children: [
+                  QuizCard(
+                    title: 'Personnalité MBTI',
+                    description: 'Introverti/extraverti, rationnel/émotionnel... Découvre ton type de personnalité',
+                    icon: Icons.psychology_outlined,
+                    color: Colors.purple,
+                    onTap: () {
+                      // TODO: Navigator.pushNamed(context, '/personality_quiz');
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  QuizCard(
+                    title: 'Langages de l\'Amour',
+                    description: 'Paroles, gestes, cadeaux, temps ou contact ? Découvre comment tu exprimes l\'amour',
+                    icon: Icons.favorite_border,
+                    color: Colors.red,
+                    onTap: () {
+                      // TODO: Navigator.pushNamed(context, '/love_languages_quiz');
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  QuizCard(
+                    title: 'Compatibilité Astrologique',
+                    description: 'Balance, Lion, Scorpion... Découvre avec quels signes tu es le plus compatible',
+                    icon: Icons.star_border,
+                    color: Colors.purple,
+                    onTap: () {
+                      // TODO: Navigator.pushNamed(context, '/astro_quiz');
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

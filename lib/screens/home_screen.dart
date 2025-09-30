@@ -14,7 +14,7 @@
 
 import 'package:flutter/material.dart';
 import '../config/ui_reference.dart';
-import '../widgets/progression_widget.dart';
+import '../widgets/common/progression_widget.dart';
 import '../services/progression_service.dart';
 
 // Reproduit https://jeutaime-warren.web.app/ (accueil)
@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 _buildHeader(),
-                _buildProgressionSection(),
+                _buildProgressionSection(context),
                 _buildBarsGrid(),
               ],
             ),
@@ -217,7 +217,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   /// Section de progression utilisateur
-  Widget _buildProgressionSection() {
+  Widget _buildProgressionSection(BuildContext context) {
     // Données de progression simulées pour la démo
     UserProgressData mockUserData = UserProgressData(
       points: 850,
@@ -235,11 +235,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         ProgressionWidget(
-          userData: mockUserData,
-          onProgressUpdate: (newData) {
-            // Ici on pourrait sauvegarder les nouvelles données
-            print('Progression mise à jour: Level ${newData.level}, Points ${newData.points}');
-          },
+          progress: 0.7,
+          title: 'Progression générale',
+          subtitle: 'Niveau 5 - 70% vers le niveau suivant',
         ),
         
         // Bouton de test du système d'économie

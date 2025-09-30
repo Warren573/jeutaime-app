@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/letter.dart';
 import '../../config/ui_reference.dart';
 import '../../services/progression_service.dart';
-import '../../widgets/letter_template_card.dart';
 import '../../widgets/letter_composer.dart';
 
 class ComposeLetterScreen extends StatefulWidget {
@@ -644,14 +643,18 @@ class _ComposeLetterScreenState extends State<ComposeLetterScreen>
             child: Column(
               children: [
                 // Option "Lettre libre"
-                LetterTemplateCard(
-                  template: null,
-                  isSelected: _selectedTemplate == null,
-                  onTap: () {
-                    setState(() {
-                      _selectedTemplate = null;
-                    });
-                  },
+                Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    title: const Text('Lettre libre'),
+                    subtitle: const Text('Écrivez votre propre message'),
+                    selected: _selectedTemplate == null,
+                    onTap: () {
+                      setState(() {
+                        _selectedTemplate = null;
+                      });
+                    },
+                  ),
                 ),
                 
                 const SizedBox(height: 16),
@@ -664,14 +667,18 @@ class _ComposeLetterScreenState extends State<ComposeLetterScreen>
                       final template = filteredTemplates[index];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: LetterTemplateCard(
-                          template: template,
-                          isSelected: _selectedTemplate == template,
-                          onTap: () {
-                            setState(() {
-                              _selectedTemplate = template;
-                            });
-                          },
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          child: ListTile(
+                            title: Text('Template ${template.id}'),
+                            subtitle: Text(template.name),
+                            selected: _selectedTemplate == template,
+                            onTap: () {
+                              setState(() {
+                                _selectedTemplate = template;
+                              });
+                            },
+                          ),
                         ),
                       );
                     },
@@ -728,10 +735,7 @@ class _ComposeLetterScreenState extends State<ComposeLetterScreen>
   Widget _buildComposeStep() {
     return LetterComposer(
       template: _selectedTemplate,
-      letterType: _selectedType,
       recipientName: _recipientName,
-      isAnonymous: _isAnonymous,
-      onBack: _previousStep,
       onSend: _sendLetter,
     );
   }
@@ -772,7 +776,7 @@ class _ComposeLetterScreenState extends State<ComposeLetterScreen>
     }
   }
 
-  void _sendLetter(String content, Map<String, dynamic> customization) {
+  void _sendLetter(String content) {
     // Logique d'envoi de lettre
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

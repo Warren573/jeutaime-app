@@ -1,4 +1,4 @@
-/**
+ça me va, écran suivant/**
  * RÉFÉRENCE OBLIGATOIRE: https://jeutaime-warren.web.app/
  * 
  * Reproduit l'onglet Profils de la référence
@@ -79,6 +79,12 @@ class _ProfilesScreenState extends State<ProfilesScreen>
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  // Filtres d'âge, distance, intérêts, compatibilité
+  RangeValues _ageRange = RangeValues(20, 35);
+  double _maxDistance = 50;
+  List<String> _selectedInterests = [];
+  bool _compatibilityOnly = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,6 +104,7 @@ class _ProfilesScreenState extends State<ProfilesScreen>
           child: Column(
             children: [
               _buildHeader(),
+              _buildFilters(),
               Expanded(
                 child: _buildProfileStack(),
               ),
@@ -106,6 +113,114 @@ class _ProfilesScreenState extends State<ProfilesScreen>
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFilters() {
+    // Liste d'intérêts mockée pour la démo
+    final allInterests = [
+      'Lecture', 'Voyages', 'Photographie', 'Cuisine', 'Art',
+      'Danse', 'Musique', 'Gastronomie', 'Théâtre', 'Peinture',
+      'Nature', 'Yoga', 'Vin', 'Escalade', 'Sports', 'Aventure'
+    ];
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      padding: EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Filtres', style: UIReference.subtitleStyle.copyWith(fontSize: 18)),
+          SizedBox(height: 8),
+          Row(
+            children: [
+              Text('Âge:', style: UIReference.bodyStyle),
+              SizedBox(width: 8),
+              Expanded(
+                child: RangeSlider(
+                  values: _ageRange,
+                  min: 18,
+                  max: 99,
+                  divisions: 81,
+                  labels: RangeLabels(
+                    _ageRange.start.round().toString(),
+                    _ageRange.end.round().toString(),
+                  ),
+                  onChanged: (values) {
+                    setState(() => _ageRange = values);
+                  },
+                ),
+              ),
+              Text('${_ageRange.start.round()}-${_ageRange.end.round()}'),
+            ],
+          ),
+          Row(
+            children: [
+              Text('Distance:', style: UIReference.bodyStyle),
+              SizedBox(width: 8),
+              Expanded(
+                child: Slider(
+                  value: _maxDistance,
+                  min: 1,
+                  max: 100,
+                  divisions: 99,
+                  label: '${_maxDistance.round()} km',
+                  onChanged: (value) {
+                    setState(() => _maxDistance = value);
+                  },
+                ),
+              ),
+              Text('≤ ${_maxDistance.round()} km'),
+            ],
+          ),
+          Wrap(
+            spacing: 6,
+            children: allInterests.map((interest) {
+              final selected = _selectedInterests.contains(interest);
+              return ChoiceChip(
+                label: Text(interest),
+                selected: selected,
+                onSelected: (val) {
+                  setState(() {
+                    if (val) {
+                      _selectedInterests.add(interest);
+                    } else {
+                      _selectedInterests.remove(interest);
+                    }
+                  });
+                },
+                selectedColor: UIReference.colors['accent'],
+                backgroundColor: Colors.grey[200],
+                labelStyle: TextStyle(
+                  fontFamily: 'Georgia',
+                  color: selected ? Colors.white : Colors.black,
+                ),
+              );
+            }).toList(),
+          ),
+          Row(
+            children: [
+              Checkbox(
+                value: _compatibilityOnly,
+                onChanged: (val) {
+                  setState(() => _compatibilityOnly = val ?? false);
+                },
+              ),
+              Text('Compatibilité >80%', style: UIReference.bodyStyle),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -230,9 +345,10 @@ class _ProfilesScreenState extends State<ProfilesScreen>
     );
   }
 
+  int userCoins = 245; // À remplacer par le vrai solde utilisateur
+
   Widget _buildActionButtons() {
     if (currentIndex >= profiles.length) return SizedBox.shrink();
-    
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 40),
       child: Row(
@@ -263,7 +379,54 @@ class _ProfilesScreenState extends State<ProfilesScreen>
               ),
             ),
           ),
-          
+
+          // Bouton Super-Sourire (emoji 😁)
+          GestureDetector(
+            onTap: () {
+              if (userCoins < 50) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Pas assez de pièces pour un Super-Sourire (50 🪙)', style: TextStyle(fontFamily: 'Georgia')),
+                    backgroundColor: Colors.redAccent,
+                  ),
+                );
+                return;
+              }
+              setState(() {
+                userCoins -= 50;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Row(
+                    children: [
+                      Text('😁', style: TextStyle(fontSize: 20)),
+                      SizedBox(width: 10),
+                      Text('Super-Sourire envoyé ! (–50 🪙)', style: TextStyle(fontFamily: 'Georgia')),
+                    ],
+                  ),
+                  backgroundColor: Colors.amber,
+                ),
+              );
+            },
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.amber, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Text('😁', style: TextStyle(fontSize: 28)),
+            ),
+          ),
+
           // Bouton Super Like (étoile)
           GestureDetector(
             onTap: () => _showSuperLikeDialog(),
@@ -289,7 +452,7 @@ class _ProfilesScreenState extends State<ProfilesScreen>
               ),
             ),
           ),
-          
+
           // Bouton Liker
           GestureDetector(
             onTap: () => _onSwipeAction(true),

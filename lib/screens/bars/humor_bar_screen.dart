@@ -60,9 +60,6 @@ class _HumorBarScreenState extends State<HumorBarScreen> {
               const AppHeader(
                 title: "😄 Bar Humoristique",
                 subtitle: "Ambiance festive • Bonne humeur garantie",
-                userName: "Warren",
-                userStatus: "18 participants connectés",
-                coins: 1000,
               ),
               
               // Contenu du bar

@@ -1,23 +1,60 @@
-/**
- * RÉFÉRENCE OBLIGATOIRE: https://jeutaime-warren.web.app/
- * 
- * Écran Lettres - reproduit l'onglet Lettres de la référence
- * Fonctionnalités : correspondances authentiques, lettres romantiques
- */
-
 import 'package:flutter/material.dart';
-import '../config/ui_reference.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/letters_service.dart';
 
-class LettersScreen extends StatelessWidget {
+class LettersScreen extends StatefulWidget {
+  final String userId;
+  
+  const LettersScreen({Key? key, required this.userId}) : super(key: key);
+
+  @override
+  _LettersScreenState createState() => _LettersScreenState();
+}
+
+class _LettersScreenState extends State<LettersScreen> with TickerProviderStateMixin {
+  late TabController _tabController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: UIReference.colors['background'],
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+      appBar: AppBar(
+        title: Text('💌 Lettres Authentiques'),
+        backgroundColor: Colors.amber.shade600,
+        foregroundColor: Colors.white,
+        bottom: TabBar(
+          controller: _tabController,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          tabs: [
+            Tab(icon: Icon(Icons.mail), text: 'Active'),
+            Tab(icon: Icon(Icons.archive), text: 'Archives'),
+            Tab(icon: Icon(Icons.edit), text: 'Écrire'),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildActiveLetters(),
+          _buildArchivedLetters(),
+          _buildWriteLetter(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActiveLetters() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
             colors: [
               UIReference.colors['background']!,
               UIReference.colors['accent']!.withOpacity(0.2),

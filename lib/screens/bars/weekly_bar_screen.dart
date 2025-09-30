@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
-import '../../widgets/user_card.dart';
+import '../../widgets/common/user_card.dart';
 import '../../services/bar_service.dart';
 import '../../models/user.dart' as app_user;
 

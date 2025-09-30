@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>JeuTaime Mobile - Test Autonome</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #c44b9f);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        
+        .container {
+            padding: 20px;
+            max-width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .heart {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .test-button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+        
+        .test-button:active {
+            transform: scale(0.95);
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+        }
+        
+        .scroll-item {
+            min-width: 120px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-item:active {
+            transform: scale(0.9);
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+        
+        .nav-item:active {
+            transform: scale(0.9);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .score {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 1002;
+        }
+        
+        .info-panel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .gesture-test {
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            border: 2px dashed rgba(255,255,255,0.3);
+        }
+        
+        .content-spacer {
+            height: 100px;
+        }
+        
+        @media (max-width: 480px) {
+            .title { font-size: 1.8rem; }
+            .container { padding: 15px; }
+            .test-button { padding: 12px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    <div class="score" id="score">Score: 0 ❤️</div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="heart">💕</div>
+            <div class="title">JeuTaime Mobile</div>
+            <div class="subtitle">Test Autonome - Version Offline</div>
+        </div>
+        
+        <div class="info-panel">
+            <strong>📱 Informations Mobile :</strong><br>
+            <span id="screenInfo">Chargement...</span>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">🖱️ Tests Tactiles</div>
+            <button class="test-button" onclick="testTouch('Tap Simple')">Tap Simple</button>
+            <button class="test-button" onclick="testTouch('Tap Long')">Tap Long (maintenir)</button>
+            <button class="test-button" onclick="testTouch('Double Tap')">Double Tap</button>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">↔️ Scroll Horizontal</div>
+            <div class="scroll-container" id="scrollContainer">
+                <div class="scroll-item" onclick="testScroll(1)">Item 1</div>
+                <div class="scroll-item" onclick="testScroll(2)">Item 2</div>
+                <div class="scroll-item" onclick="testScroll(3)">Item 3</div>
+                <div class="scroll-item" onclick="testScroll(4)">Item 4</div>
+                <div class="scroll-item" onclick="testScroll(5)">Item 5</div>
+                <div class="scroll-item" onclick="testScroll(6)">Item 6</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">✋ Test Gestures</div>
+            <div class="gesture-test" id="gestureArea">
+                Zone de Test Gestures<br>
+                <small>Swipe, Pinch, Pan</small>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">🎮 Tests Interactions</div>
+            <button class="test-button" onclick="testVibration()">Test Vibration</button>
+            <button class="test-button" onclick="testOrientation()">Test Orientation</button>
+            <button class="test-button" onclick="testFullscreen()">Test Plein Écran</button>
+        </div>
+        
+        <div class="content-spacer"></div>
+    </div>
+    
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab(this, 'Accueil')">
+            🏠<br><small>Accueil</small>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'Jeux')">
+            🎮<br><small>Jeux</small>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'Score')">
+            🏆<br><small>Score</small>
+        </div>
+        <div class="nav-item" onclick="switchTab(this, 'Profil')">
+            👤<br><small>Profil</small>
+        </div>
+    </div>
+    
+    <script>
+        let score = 0;
+        let touchStartTime = 0;
+        
+        function updateScreenInfo() {
+            const info = document.getElementById('screenInfo');
+            const orientation = screen.orientation ? screen.orientation.angle : 'N/A';
+            info.innerHTML = `
+                Taille: ${window.innerWidth}x${window.innerHeight}px<br>
+                Orientation: ${orientation}° | Touch: ${('ontouchstart' in window) ? 'Oui' : 'Non'}<br>
+                User Agent: ${navigator.userAgent.substring(0, 50)}...
+            `;
+        }
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function addScore(message, points) {
+            score += points;
+            document.getElementById('score').textContent = `Score: ${score} ❤️`;
+            showNotification(message + ` (+${points} points)`);
+        }
+        
+        function testTouch(type) {
+            addScore(`Test ${type} réussi`, 5);
+            if (type === 'Tap Long') {
+                setTimeout(() => {
+                    showNotification('Tap long détecté ! ⏰');
+                }, 1000);
+            }
+        }
+        
+        function testScroll(item) {
+            addScore(`Item ${item} sélectionné`, 3);
+        }
+        
+        function testVibration() {
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200]);
+                addScore('Vibration testée', 10);
+            } else {
+                showNotification('Vibration non supportée sur cet appareil');
+            }
+        }
+        
+        function testOrientation() {
+            if (screen.orientation) {
+                addScore('Orientation détectée: ' + screen.orientation.angle + '°', 7);
+            } else {
+                showNotification('API Orientation non disponible');
+            }
+        }
+        
+        function testFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+                addScore('Mode plein écran activé', 8);
+            } else {
+                showNotification('Plein écran non supporté');
+            }
+        }
+        
+        function switchTab(element, message) {
+            document.querySelector('.nav-item.active').classList.remove('active');
+            element.classList.add('active');
+            addScore(`Navigation vers ${message}`, 3);
+        }
+        
+        // Gestion des gestures
+        const gestureArea = document.getElementById('gestureArea');
+        let startX, startY;
+        
+        gestureArea.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        });
+        
+        gestureArea.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+        
+        gestureArea.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            const duration = Date.now() - touchStartTime;
+            
+            if (Math.abs(deltaX) > 50 || Math.abs(deltaY) > 50) {
+                let direction = '';
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    direction = deltaX > 0 ? 'droite' : 'gauche';
+                } else {
+                    direction = deltaY > 0 ? 'bas' : 'haut';
+                }
+                addScore(`Swipe ${direction} détecté`, 8);
+            }
+        });
+        
+        // Events système
+        updateScreenInfo();
+        window.addEventListener('resize', updateScreenInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                updateScreenInfo();
+                showNotification('Orientation changée ! 🔄');
+            }, 100);
+        });
+        
+        // Message de bienvenue
+        setTimeout(() => {
+            showNotification('✨ JeuTaime Mobile prêt ! Testez toutes les fonctions !');
+        }, 1000);
+        
+        // Feedback tactile pour tous les éléments interactifs
+        document.querySelectorAll('.test-button, .scroll-item, .nav-item').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.7';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+        });
+        
+        // Test automatique
+        setTimeout(() => {
+            if (score === 0) {
+                showNotification('💡 Astuce: Touchez les boutons pour commencer les tests !');
+            }
+        }, 8000);
+        
+        console.log('JeuTaime Mobile - Version Test Autonome chargée');
+        console.log('Fonctionnalités disponibles:', {
+            touch: 'ontouchstart' in window,
+            vibration: 'vibrate' in navigator,
+            orientation: 'orientation' in screen,
+            fullscreen: 'requestFullscreen' in document.documentElement
+        });
+    </script>
+</body>
+</html>

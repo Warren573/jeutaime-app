@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/economy.dart';
 import '../../config/ui_reference.dart';
-import '../../widgets/shop_item_card.dart';
 import '../../widgets/currency_display.dart';
 import '../../widgets/daily_rewards_dialog.dart';
 import '../../services/progression_service.dart';
@@ -148,14 +147,14 @@ class _ShopScreenState extends State<ShopScreen>
           // Affichage des monnaies
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: EconomyService.currencies.map((currency) {
-              int amount = _wallet.getCurrencyAmount(currency.id);
-              return CurrencyDisplay(
-                currency: currency,
-                amount: amount,
-                showAnimation: true,
-              );
-            }).toList(),
+            children: [
+              CurrencyDisplay(
+                coins: _wallet.getCurrencyAmount('coins'),
+                gems: _wallet.getCurrencyAmount('gems'),
+                showLabels: true,
+                showBackground: false,
+              ),
+            ],
           ),
         ],
       ),
@@ -275,12 +274,17 @@ class _ShopScreenState extends State<ShopScreen>
         itemCount: items.length,
         itemBuilder: (context, index) {
           final item = items[index];
-          return ShopItemCard(
-            item: item,
-            wallet: _wallet,
-            userLevel: _getCurrentUserLevel(),
-            userAchievements: _getCurrentUserAchievements(),
-            onPurchase: () => _purchaseItem(item),
+          return Card(
+            margin: const EdgeInsets.all(8),
+            child: ListTile(
+              leading: Text(item.emoji, style: const TextStyle(fontSize: 24)),
+              title: Text(item.name),
+              subtitle: Text(item.description),
+              trailing: ElevatedButton(
+                onPressed: () => _purchaseItem(item),
+                child: Text('${item.prices['coins'] ?? 0} 🪙'),
+              ),
+            ),
           );
         },
       ),

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>JeuTaime Mobile Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #c44b9f);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            padding: 20px;
+            max-width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .heart {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .test-button {
+            background: linear-gradient(45deg, #ff6b9d, #ff8cc8);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .test-button:hover, .test-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            margin: 15px 0;
+        }
+        
+        .scroll-item {
+            min-width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,107,157,0.2);
+            color: #ff6b9d;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transform: translateY(-100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="heart">❤️</div>
+            <div class="title">JeuTaime</div>
+            <div class="subtitle">Test Mobile Web App</div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">🔥 Tests d'interaction</div>
+            <div class="button-grid">
+                <button class="test-button" onclick="showNotification('Tap réussi! 👆')">
+                    👆 Test Tap
+                </button>
+                <button class="test-button" onclick="showNotification('Coeur ajouté! ❤️')">
+                    ❤️ Aimer
+                </button>
+                <button class="test-button" onclick="showNotification('Message envoyé! 💌')">
+                    💌 Message
+                </button>
+                <button class="test-button" onclick="showNotification('Boutique ouverte! 🛍️')">
+                    🛍️ Boutique
+                </button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">📱 Scroll horizontal (swipe)</div>
+            <div class="horizontal-scroll">
+                <div class="scroll-item" style="background: #ff6b9d;">1</div>
+                <div class="scroll-item" style="background: #ff8cc8;">2</div>
+                <div class="scroll-item" style="background: #c44b9f;">3</div>
+                <div class="scroll-item" style="background: #8e44ad;">4</div>
+                <div class="scroll-item" style="background: #6c5ce7;">5</div>
+                <div class="scroll-item" style="background: #74b9ff;">6</div>
+                <div class="scroll-item" style="background: #00cec9;">7</div>
+                <div class="scroll-item" style="background: #55a3ff;">8</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">📊 Informations écran</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Largeur</div>
+                    <div class="info-value" id="screen-width">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Hauteur</div>
+                    <div class="info-value" id="screen-height">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Type</div>
+                    <div class="info-value" id="device-type">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Orientation</div>
+                    <div class="info-value" id="orientation">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="height: 100px;"></div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="showNotification('Accueil sélectionné')">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Accueil</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showNotification('Lettres sélectionnées')">
+            <div class="nav-icon">💌</div>
+            <div class="nav-label">Lettres</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showNotification('Boutique sélectionnée')">
+            <div class="nav-icon">🛍️</div>
+            <div class="nav-label">Boutique</div>
+        </a>
+        <a href="#" class="nav-item" onclick="showNotification('Profil sélectionné')">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
+        </a>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        function updateScreenInfo() {
+            document.getElementById('screen-width').textContent = window.innerWidth + 'px';
+            document.getElementById('screen-height').textContent = window.innerHeight + 'px';
+            document.getElementById('device-type').textContent = window.innerWidth < 768 ? 'Mobile' : 'Desktop';
+            document.getElementById('orientation').textContent = window.innerWidth > window.innerHeight ? 'Paysage' : 'Portrait';
+        }
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Mise à jour des infos au chargement et redimensionnement
+        updateScreenInfo();
+        window.addEventListener('resize', updateScreenInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateScreenInfo, 100);
+        });
+        
+        // Gestion navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.nav-item.active').classList.remove('active');
+                item.classList.add('active');
+            });
+        });
+        
+        // Message de bienvenue
+        setTimeout(() => {
+            showNotification('Bienvenue sur JeuTaime Mobile! 🎉');
+        }, 1000);
+    </script>
+</body>
+</html>

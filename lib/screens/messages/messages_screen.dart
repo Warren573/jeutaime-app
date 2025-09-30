@@ -85,11 +85,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Implement compose message functionality
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Fonctionnalité à venir !'),
-              backgroundColor: AppColors.info,
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ComposeLetterScreen(),
             ),
           );
         },

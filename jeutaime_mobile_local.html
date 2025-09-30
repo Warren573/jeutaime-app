@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>JeuTaime Mobile - Version Locale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #c44b9f);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            padding: 20px;
+            max-width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .heart {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .test-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .test-button {
+            background: linear-gradient(45deg, #ff6b9d, #ff8cc8);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+        
+        .test-button:hover, .test-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff8cc8, #ffadd6);
+        }
+        
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px 0;
+            margin: 15px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .scroll-item {
+            min-width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .scroll-item:active {
+            transform: scale(0.95);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            color: #666;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,107,157,0.2);
+            color: #ff6b9d;
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transform: translateY(-100px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffe066;
+            margin: 10px 0;
+        }
+        
+        .instructions {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="heart">❤️</div>
+            <div class="title">JeuTaime</div>
+            <div class="subtitle">Version Mobile Locale</div>
+            <div class="score-display" id="score">Score: 0 ❤️</div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">📱 Instructions de test</div>
+            <div class="instructions">
+                Testez toutes les interactions tactiles ci-dessous. Chaque action augmente votre score ! 
+                Vérifiez que les boutons réagissent bien au toucher et que le scroll fonctionne.
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">🔥 Tests d'interaction tactile</div>
+            <div class="button-grid">
+                <button class="test-button" onclick="addScore('Tap réussi! 👆', 10)">
+                    👆 Test Tap
+                </button>
+                <button class="test-button" onclick="addScore('Coeur ajouté! ❤️', 15)">
+                    ❤️ Aimer
+                </button>
+                <button class="test-button" onclick="addScore('Message envoyé! 💌', 20)">
+                    💌 Message
+                </button>
+                <button class="test-button" onclick="addScore('Boutique ouverte! 🛍️', 25)">
+                    🛍️ Boutique
+                </button>
+                <button class="test-button" onclick="addScore('Profil consulté! 👤', 10)">
+                    👤 Profil
+                </button>
+                <button class="test-button" onclick="addScore('Paramètres ouverts! ⚙️', 5)">
+                    ⚙️ Paramètres
+                </button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">📱 Scroll horizontal (swipe avec le doigt)</div>
+            <div class="horizontal-scroll">
+                <div class="scroll-item" style="background: #ff6b9d;" onclick="addScore('Item 1 sélectionné! 🎯', 5)">1</div>
+                <div class="scroll-item" style="background: #ff8cc8;" onclick="addScore('Item 2 sélectionné! ⭐', 5)">2</div>
+                <div class="scroll-item" style="background: #c44b9f;" onclick="addScore('Item 3 sélectionné! 🎉', 5)">3</div>
+                <div class="scroll-item" style="background: #8e44ad;" onclick="addScore('Item 4 sélectionné! 🔥', 5)">4</div>
+                <div class="scroll-item" style="background: #6c5ce7;" onclick="addScore('Item 5 sélectionné! 💎', 5)">5</div>
+                <div class="scroll-item" style="background: #74b9ff;" onclick="addScore('Item 6 sélectionné! 🌟', 5)">6</div>
+                <div class="scroll-item" style="background: #00cec9;" onclick="addScore('Item 7 sélectionné! ✨', 5)">7</div>
+                <div class="scroll-item" style="background: #55a3ff;" onclick="addScore('Item 8 sélectionné! 🎊', 5)">8</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">📊 Informations appareil</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Largeur écran</div>
+                    <div class="info-value" id="screen-width">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Hauteur écran</div>
+                    <div class="info-value" id="screen-height">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Type appareil</div>
+                    <div class="info-value" id="device-type">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Orientation</div>
+                    <div class="info-value" id="orientation">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">User Agent</div>
+                    <div class="info-value" id="user-agent" style="font-size: 0.8rem;">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Support tactile</div>
+                    <div class="info-value" id="touch-support">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="height: 100px;"></div>
+    </div>
+    
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="switchTab(this, 'Accueil sélectionné! 🏠')">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Accueil</div>
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab(this, 'Lettres sélectionnées! 💌')">
+            <div class="nav-icon">💌</div>
+            <div class="nav-label">Lettres</div>
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab(this, 'Boutique sélectionnée! 🛍️')">
+            <div class="nav-icon">🛍️</div>
+            <div class="nav-label">Boutique</div>
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab(this, 'Profil sélectionné! 👤')">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Profil</div>
+        </a>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script>
+        let score = 0;
+        
+        function updateScreenInfo() {
+            document.getElementById('screen-width').textContent = window.innerWidth + 'px';
+            document.getElementById('screen-height').textContent = window.innerHeight + 'px';
+            document.getElementById('device-type').textContent = window.innerWidth < 768 ? 'Mobile' : window.innerWidth < 1024 ? 'Tablette' : 'Desktop';
+            document.getElementById('orientation').textContent = window.innerWidth > window.innerHeight ? 'Paysage' : 'Portrait';
+            document.getElementById('user-agent').textContent = navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop';
+            document.getElementById('touch-support').textContent = 'ontouchstart' in window ? 'Oui ✅' : 'Non ❌';
+        }
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        function addScore(message, points) {
+            score += points;
+            document.getElementById('score').textContent = `Score: ${score} ❤️`;
+            showNotification(message + ` (+${points} points)`);
+        }
+        
+        function switchTab(element, message) {
+            document.querySelector('.nav-item.active').classList.remove('active');
+            element.classList.add('active');
+            showNotification(message);
+            addScore('Navigation', 3);
+        }
+        
+        // Mise à jour des infos au chargement et redimensionnement
+        updateScreenInfo();
+        window.addEventListener('resize', updateScreenInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateScreenInfo, 100);
+        });
+        
+        // Message de bienvenue avec délai
+        setTimeout(() => {
+            showNotification('Bienvenue sur JeuTaime Mobile! 🎉 Testez toutes les interactions !');
+        }, 1500);
+        
+        // Gestion des événements tactiles pour un meilleur feedback
+        document.querySelectorAll('.test-button, .scroll-item, .nav-item').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.7';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+        });
+        
+        // Test automatique après 10 secondes
+        setTimeout(() => {
+            if (score === 0) {
+                showNotification('💡 Astuce: Appuyez sur les boutons pour tester !');
+            }
+        }, 10000);
+        
+        // Célébration quand score élevé
+        setInterval(() => {
+            if (score >= 100 && score < 105) {
+                showNotification('🎉 Excellent ! Vous maîtrisez l\'interface mobile !');
+            } else if (score >= 200 && score < 205) {
+                showNotification('🏆 Champion ! Interface mobile parfaitement testée !');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -47,12 +47,9 @@ class PirateBarScreen extends StatelessWidget {
               ),
               
               // Header du bar
-              AppHeader(
-                title: "🏴‍☠️ Bar Pirates",
-                subtitle: "Aventure maritime • Camaraderie des flibustiers",
-                userName: "Warren",
-                userStatus: "15 participants connectés",
-                coins: 1000,
+              const AppHeader(
+                title: "🏴‍☠️ Bar des Pirates",
+                subtitle: "Aventure maritime • Conversations épiques",
               ),
               
               // Contenu du bar

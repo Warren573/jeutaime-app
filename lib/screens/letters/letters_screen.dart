@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/letter.dart';
 import '../../config/ui_reference.dart';
-import '../../widgets/letter_thread_card.dart';
 import '../../widgets/floating_compose_button.dart';
 import 'compose_letter_screen.dart';
 
@@ -358,9 +357,13 @@ class _LettersScreenState extends State<LettersScreen>
             padding: EdgeInsets.only(
               bottom: index == threads.length - 1 ? 100 : 16,
             ),
-            child: LetterThreadCard(
-              thread: thread,
-              onTap: () => _openThread(thread),
+            child: Card(
+              margin: const EdgeInsets.all(8),
+              child: ListTile(
+                title: Text('Thread ${thread.threadId}'),
+                subtitle: const Text('Message thread'),
+                onTap: () => _openThread(thread),
+              ),
             ),
           );
         },

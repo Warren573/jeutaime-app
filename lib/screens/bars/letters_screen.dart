@@ -47,12 +47,9 @@ class LettersScreen extends StatelessWidget {
               ),
               
               // Header du bar
-              AppHeader(
+              const AppHeader(
                 title: "💌 Mes Lettres",
-                subtitle: "Correspondances authentiques",
-                userName: "Warren",
-                userStatus: "0 conversations actives",
-                coins: 1000,
+                subtitle: "Messages personnalisés • Conversations authentiques",
               ),
               
               // Contenu du bar

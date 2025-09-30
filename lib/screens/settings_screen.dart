@@ -73,29 +73,78 @@ class SettingsScreen extends StatelessWidget {
       padding: EdgeInsets.all(20),
       child: ListView(
         children: [
-          // Section Boutique (maintenant dans Paramètres)
-          Text(
-            '🛍️ Boutique',
-            style: UIReference.titleStyle.copyWith(fontSize: 22),
-          ),
+          // Section Boutique
+          Text('🛍️ Boutique', style: UIReference.titleStyle.copyWith(fontSize: 22)),
           SizedBox(height: 15),
           _buildShopCard('Premium 19,90€/mois', 'Accès illimité aux bars', '👑', Color(0xFFFFD700)),
           _buildShopCard('Pack 100 pièces', 'Pour débloquer les activités', '💰', Color(0xFF4CAF50)),
           _buildShopCard('Pack 500 pièces', 'Le pack populaire', '💎', Color(0xFF2196F3)),
-          
           SizedBox(height: 30),
-          
-          // Section Paramètres
-          Text(
-            '⚙️ Configuration',
-            style: UIReference.titleStyle.copyWith(fontSize: 22),
-          ),
+
+          // Section Sécurité
+          Text('🔒 Sécurité', style: UIReference.titleStyle.copyWith(fontSize: 22)),
           SizedBox(height: 15),
-          _buildSettingItem('Mon profil', Icons.person, () {}),
-          _buildSettingItem('Notifications', Icons.notifications, () {}),
-          _buildSettingItem('Confidentialité', Icons.lock, () {}),
-          _buildSettingItem('Aide & Support', Icons.help, () {}),
-          _buildSettingItem('À propos', Icons.info, () {}),
+          _buildSettingItem('Changer le mot de passe', Icons.password, () {}),
+          _buildSettingItem('Authentification à deux facteurs', Icons.security, () {}),
+          _buildSettingItem('Appareils connectés', Icons.devices, () {}),
+          SizedBox(height: 30),
+
+          // Section Personnalisation
+          Text('🎨 Personnalisation', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Thème clair/sombre', Icons.brightness_6, () {}),
+          _buildSettingItem('Couleur d’accent', Icons.color_lens, () {}),
+          _buildSettingItem('Police d’écriture', Icons.font_download, () {}),
+          SizedBox(height: 30),
+
+          // Section Confidentialité
+          Text('🕵️ Confidentialité', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Masquer mon profil', Icons.visibility_off, () {}),
+          _buildSettingItem('Contrôler qui peut m’envoyer des lettres', Icons.mail_lock, () {}),
+          _buildSettingItem('Historique de connexion', Icons.history, () {}),
+          SizedBox(height: 30),
+
+          // Section Notifications
+          Text('🔔 Notifications', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Notifications push', Icons.notifications_active, () {}),
+          _buildSettingItem('Fréquence des notifications', Icons.schedule, () {}),
+          _buildSettingItem('Notifications par email', Icons.email, () {}),
+          SizedBox(height: 30),
+
+          // Section Compte
+          Text('👤 Compte', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Supprimer mon compte', Icons.delete_forever, () {}),
+          _buildSettingItem('Exporter mes données', Icons.download, () {}),
+          _buildSettingItem('Voir mes données personnelles', Icons.info_outline, () {}),
+          SizedBox(height: 30),
+
+          // Section Social
+          Text('🤝 Social', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Lier un compte Google', Icons.account_circle, () {}),
+          _buildSettingItem('Lier un compte Facebook', Icons.facebook, () {}),
+          _buildSettingItem('Lier un compte Apple', Icons.apple, () {}),
+          _buildSettingItem('Gérer mes contacts bloqués', Icons.block, () {}),
+          _buildSettingItem('Gérer mes amis/favoris', Icons.favorite, () {}),
+          SizedBox(height: 30),
+
+          // Section Application
+          Text('📱 Application', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Langue de l’application', Icons.language, () {}),
+          _buildSettingItem('Tutoriel/guide de démarrage', Icons.school, () {}),
+          _buildSettingItem('Version de l’application', Icons.verified, () {}),
+          SizedBox(height: 30),
+
+          // Section Support
+          Text('🆘 Support', style: UIReference.titleStyle.copyWith(fontSize: 22)),
+          SizedBox(height: 15),
+          _buildSettingItem('Signaler un bug', Icons.bug_report, () {}),
+          _buildSettingItem('Suggérer une amélioration', Icons.lightbulb, () {}),
+          _buildSettingItem('Contacter le support', Icons.support_agent, () {}),
         ],
       ),
     );

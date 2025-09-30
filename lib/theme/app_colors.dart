@@ -100,6 +100,9 @@ class AppColors {
   // Couleurs secondaires
   static const Color secondary = lightBrown;
   
+  // Couleur de fond générique
+  static const Color background = beige;
+  
   // Couleurs de cartes
   static const Color funCardBackground = cardBackground;
   static const Color seriousCardBackground = cardBackground;

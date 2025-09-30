@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/economy.dart';
-import '../widgets/shop_item_card.dart';
 import '../widgets/currency_display.dart';
 import '../widgets/daily_rewards_dialog.dart';
 import '../config/ui_reference.dart';
@@ -42,9 +41,9 @@ class _EconomyTestScreenState extends State<EconomyTestScreen> {
               children: EconomyService.currencies.map((currency) {
                 int amount = _wallet.getCurrencyAmount(currency.id);
                 return CurrencyDisplay(
-                  currency: currency,
-                  amount: amount,
-                  showAnimation: true,
+                  coins: currency.id == 'coins' ? amount : 0,
+                  gems: currency.id == 'gems' ? amount : 0,
+                  showLabels: true,
                 );
               }).toList(),
             ),
@@ -180,12 +179,17 @@ class _EconomyTestScreenState extends State<EconomyTestScreen> {
                 if (index >= items.length) return const SizedBox.shrink();
                 
                 final item = items[index];
-                return ShopItemCard(
-                  item: item,
-                  wallet: _wallet,
-                  userLevel: 5, // Niveau de test
-                  userAchievements: ['first_letter', 'early_bird'],
-                  onPurchase: () => _purchaseItem(item),
+                return Card(
+                  margin: const EdgeInsets.all(8),
+                  child: ListTile(
+                    leading: Text(item.emoji, style: const TextStyle(fontSize: 24)),
+                    title: Text(item.name),
+                    subtitle: Text(item.description),
+                    trailing: ElevatedButton(
+                      onPressed: () => _purchaseItem(item),
+                      child: Text('${item.prices['coins'] ?? 0} 🪙'),
+                    ),
+                  ),
                 );
               },
             ),

@@ -13,6 +13,7 @@ import '../screens/main_navigation_screen.dart';
 import '../screens/economy_test_screen.dart';
 import '../screens/chat/chat_list_screen.dart';
 import '../screens/chat/chat_conversation_screen.dart';
+import '../models/conversation.dart';
 import '../screens/matching/matching_screen.dart';
 import '../screens/profile/photo_management_screen.dart';
 import '../screens/profile/notification_settings_screen.dart';
@@ -40,6 +41,7 @@ class AppRoutes {
   static const String mainNavigation = '/main-navigation';
   static const String economyTest = '/economy-test';
 
+  static const String demo = '/demo';
   static Map<String, WidgetBuilder> routes = {
     welcome: (context) => const WelcomeScreen(),
     login: (context) => const LoginScreen(),
@@ -56,7 +58,8 @@ class AppRoutes {
     randomBar: (context) => RandomBarScreen(),
     memoryBox: (context) => const _MemoryBoxPlaceholder(),
     letters: (context) => const LettersScreen(),
-    composeLetter: (context) => const ComposeLetterScreen(),
+  composeLetter: (context) => const ComposeLetterScreen(),
+  demo: (context) => DemoScreen(),
     mainNavigation: (context) => const MainNavigationScreen(),
     economyTest: (context) => const EconomyTestScreen(),
   };
@@ -68,14 +71,23 @@ class AppRoutes {
     required String otherUserName,
     String? otherUserPhoto,
   }) {
+    // Créer un objet Conversation basique avec les paramètres fournis
+    final conversation = Conversation(
+      id: conversationId,
+      participantIds: [otherUserId],  // L'autre participant
+      participantNames: {otherUserId: otherUserName},
+      participantPhotos: {otherUserId: otherUserPhoto ?? ''},
+      lastMessage: null,
+      lastMessageTime: DateTime.now(),
+      unreadCounts: {otherUserId: 0},
+      createdAt: DateTime.now(),
+    );
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ChatConversationScreen(
-          conversationId: conversationId,
-          otherUserId: otherUserId,
-          otherUserName: otherUserName,
-          otherUserPhoto: otherUserPhoto,
+          conversation: conversation,
         ),
       ),
     );

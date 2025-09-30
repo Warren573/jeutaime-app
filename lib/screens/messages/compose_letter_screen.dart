@@ -2,6 +2,75 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 
 class ComposeLetterScreen extends StatefulWidget {
+  @override
+  _ComposeLetterScreenState createState() => _ComposeLetterScreenState();
+}
+
+class _ComposeLetterScreenState extends State<ComposeLetterScreen> {
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Écrire un message'),
+        backgroundColor: AppColors.primary,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _subjectController,
+              decoration: InputDecoration(
+                labelText: 'Sujet',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: TextField(
+                controller: _contentController,
+                maxLines: null,
+                expands: true,
+                decoration: InputDecoration(
+                  labelText: 'Votre message',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.send),
+                label: Text('Envoyer'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                ),
+                onPressed: () {
+                  // TODO: Envoyer le message (backend à connecter)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Message envoyé !')),
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import '../../theme/app_colors.dart';
+
+class ComposeLetterScreen extends StatefulWidget {
   final String recipientId;
   final String recipientName;
 
