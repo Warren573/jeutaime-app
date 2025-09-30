@@ -69,3 +69,4 @@ flutter/
 # Flutter SDK downloads
 *.tar.xz
 flutter_*.tar.xz
+android-tools.zip
