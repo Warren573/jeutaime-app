@@ -1,4 +1,4 @@
-import { redeemPromoCode } from '../functions/src/callables/promo';
+j'ai relancé j'aatendimport { redeemPromoCode } from '../functions/src/callables/promo';
 
 describe('Promo Code', () => {
   const context = { auth: { uid: 'userUid' } };
