@@ -1,38 +1,14 @@
+
 import 'package:flutter/material.dart';
 import '../config/ui_reference.dart';
 
-/// Modèle pour le contenu thématique d'un bar
-class BarContent {
-  final String id;
-  final String name;
-  final String emoji;
-  final String description;
-  final Color themeColor;
-  final List<BarActivity> activities;
-  final List<BarChallenge> challenges;
-  final BarAccessLevel accessLevel;
-  final String? unlockCondition;
-
-  const BarContent({
-    required this.id,
-    required this.name,
-    required this.emoji,
-    required this.description,
-    required this.themeColor,
-    required this.activities,
-    required this.challenges,
-    required this.accessLevel,
-    this.unlockCondition,
-  });
-}
-
-/// Activité dans un bar thématique
+// Définition minimale pour compatibilité
 class BarActivity {
   final String id;
   final String title;
   final String description;
   final String emoji;
-  final ActivityType type;
+  final dynamic type;
   final int participantsMin;
   final int participantsMax;
   final Duration estimatedDuration;
@@ -50,6 +26,72 @@ class BarActivity {
     required this.rewards,
   });
 }
+
+class Badge {
+  final String name;
+  const Badge({required this.name});
+}
+
+class Reward {
+  final String title;
+  const Reward({required this.title});
+}
+
+/// Modèle pour le contenu thématique d'un bar
+
+class BarContent {
+  final String id;
+  final String name;
+  final String emoji;
+  final String description;
+  final Color themeColor;
+  final List<BarActivity> activities;
+  final List<BarChallenge> challenges;
+  final BarAccessLevel accessLevel;
+  final String? unlockCondition;
+  // Ajouts pour compatibilité UI
+  final List<Group> groups;
+  final List<SpecialEvent> specialEvents;
+  final List<Badge> badges;
+  final List<Reward> rewards;
+  final int totalVisits;
+  final int totalChallengesCompleted;
+
+  const BarContent({
+    required this.id,
+    required this.name,
+    required this.emoji,
+    required this.description,
+    required this.themeColor,
+    required this.activities,
+    required this.challenges,
+    required this.accessLevel,
+    this.unlockCondition,
+    this.groups = const [],
+    this.specialEvents = const [],
+    this.badges = const [],
+    this.rewards = const [],
+    this.totalVisits = 0,
+    this.totalChallengesCompleted = 0,
+  });
+}
+
+
+class Group {
+  final String name;
+  const Group({required this.name});
+}
+
+class SpecialEvent {
+  final String title;
+  const SpecialEvent({required this.title});
+}
+
+
+// Badge et Reward sont supposés être définis ailleurs dans le projet
+// Si besoin, ajouter ici des classes vides pour éviter les erreurs de compilation :
+// class Badge {}
+// class Reward {}
 
 /// Défi/challenge d'un bar
 class BarChallenge {

@@ -1,32 +1,4 @@
-  Future<bool> createAdminAccount({
-    required String userId,
-    required String email,
-    required String displayName,
-    int coins = 1000,
-  }) async {
-    try {
-      await firestore.collection('users').doc(userId).set({
-        'email': email,
-        'displayName': displayName,
-        'coins': coins,
-        'premium': true,
-        'admin': true,
-        'createdAt': FieldValue.serverTimestamp(),
-        'lastDailyBonus': null,
-        'ghostingStrikes': 0,
-        'badges': ['admin', 'premium', 'founder'],
-        'profilePhotoUrl': null,
-        'isPhotoVerified': true,
-        'referralCode': _generateReferralCode(),
-        'referredBy': null,
-        'accessLevel': 'full',
-      });
-      return true;
-    } catch (e) {
-      print('Erreur création compte admin: $e');
-      return false;
-    }
-  }
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -139,7 +111,7 @@ class FirebaseService {
         'badges': [],
         'profilePhotoUrl': null,
         'isPhotoVerified': false,
-        'referralCode': _generateReferralCode(),
+        'referralCode': FirebaseService.generateReferralCode(),
         'referredBy': null,
       });
       return true;
@@ -149,7 +121,37 @@ class FirebaseService {
     }
   }
   
-  String _generateReferralCode() {
+  Future<bool> createAdminAccount({
+    required String userId,
+    required String email,
+    required String displayName,
+    int coins = 1000,
+  }) async {
+    try {
+      await firestore.collection('users').doc(userId).set({
+        'email': email,
+        'displayName': displayName,
+        'coins': coins,
+        'premium': true,
+        'admin': true,
+        'createdAt': FieldValue.serverTimestamp(),
+        'lastDailyBonus': null,
+        'ghostingStrikes': 0,
+        'badges': ['admin', 'premium', 'founder'],
+        'profilePhotoUrl': null,
+        'isPhotoVerified': true,
+        'referralCode': FirebaseService.generateReferralCode(),
+        'referredBy': null,
+        'accessLevel': 'full',
+      });
+      return true;
+    } catch (e) {
+      print('Erreur création compte admin: $e');
+      return false;
+    }
+  }
+
+  static String generateReferralCode() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final random = DateTime.now().millisecondsSinceEpoch;
     return List.generate(6, (index) => chars[(random + index) % chars.length]).join();

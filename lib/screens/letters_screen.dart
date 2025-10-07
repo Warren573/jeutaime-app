@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/letters_service.dart';
+import '../config/ui_reference.dart';
 
 class LettersScreen extends StatefulWidget {
   final String userId;
@@ -49,27 +50,38 @@ class _LettersScreenState extends State<LettersScreen> with TickerProviderStateM
     );
   }
 
+  Widget _buildArchivedLetters() {
+    return Center(
+      child: Text('Aucune lettre archivée', style: UIReference.bodyStyle),
+    );
+  }
+
+  Widget _buildWriteLetter() {
+    return Center(
+      child: Text('Écrire une nouvelle lettre', style: UIReference.bodyStyle),
+    );
+  }
+
   Widget _buildActiveLetters() {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-            colors: [
-              UIReference.colors['background']!,
-              UIReference.colors['accent']!.withOpacity(0.2),
-            ],
-          ),
+          colors: [
+            UIReference.colors['background']!,
+            UIReference.colors['accent']!.withOpacity(0.2),
+          ],
         ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: _buildLettersList(),
-              ),
-            ],
-          ),
+      ),
+      child: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(),
+            Expanded(
+              child: _buildLettersList(),
+            ),
+          ],
         ),
       ),
     );

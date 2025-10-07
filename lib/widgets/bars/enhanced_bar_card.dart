@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/bar.dart';
 import '../../theme/app_colors.dart';
+import '../../models/bar_content.dart';
 
 class EnhancedBarCard extends StatefulWidget {
   final Bar bar;
@@ -18,10 +19,15 @@ class EnhancedBarCard extends StatefulWidget {
   State<EnhancedBarCard> createState() => _EnhancedBarCardState();
 }
 
-class _EnhancedBarCardState extends State<EnhancedBarCard>
+
+class _EnhancedBarCardState extends State<EnhancedBarCard> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  bool _isHovered = false;
+
   Widget _buildGroupsPreview() {
     final barContent = BarContentService.getBarById(widget.bar.barId);
-    if (barContent == null || barContent.groups.isEmpty) {
+    if (barContent == null || barContent.groups == null || barContent.groups.isEmpty) {
       return SizedBox.shrink();
     }
     return Wrap(
@@ -38,7 +44,7 @@ class _EnhancedBarCardState extends State<EnhancedBarCard>
 
   Widget _buildEventsPreview() {
     final barContent = BarContentService.getBarById(widget.bar.barId);
-    if (barContent == null || barContent.specialEvents.isEmpty) {
+    if (barContent == null || barContent.specialEvents == null || barContent.specialEvents.isEmpty) {
       return SizedBox.shrink();
     }
     return Wrap(
@@ -55,7 +61,7 @@ class _EnhancedBarCardState extends State<EnhancedBarCard>
 
   Widget _buildBadgesPreview() {
     final barContent = BarContentService.getBarById(widget.bar.barId);
-    if (barContent == null || barContent.badges.isEmpty) {
+    if (barContent == null || barContent.badges == null || barContent.badges.isEmpty) {
       return SizedBox.shrink();
     }
     return Wrap(
@@ -72,7 +78,7 @@ class _EnhancedBarCardState extends State<EnhancedBarCard>
 
   Widget _buildRewardsPreview() {
     final barContent = BarContentService.getBarById(widget.bar.barId);
-    if (barContent == null || barContent.rewards.isEmpty) {
+    if (barContent == null || barContent.rewards == null || barContent.rewards.isEmpty) {
       return SizedBox.shrink();
     }
     return Wrap(
@@ -110,10 +116,6 @@ class _EnhancedBarCardState extends State<EnhancedBarCard>
       ],
     );
   }
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-  bool _isHovered = false;
 
   @override
   void initState() {
@@ -302,23 +304,6 @@ class _EnhancedBarCardState extends State<EnhancedBarCard>
                                   ),
                               ],
                             ),
-  Widget _buildActivitiesPreview() {
-    // Récupérer les activités du bar via BarContentService
-    final barContent = BarContentService.getBarById(widget.bar.barId);
-    if (barContent == null || barContent.activities.isEmpty) {
-      return SizedBox.shrink();
-    }
-    return Wrap(
-      spacing: 8,
-      children: barContent.activities.take(3).map((activity) {
-        return Chip(
-          label: Text(activity.title, style: TextStyle(fontFamily: 'Georgia', fontSize: 12)),
-          avatar: Text(activity.emoji, style: TextStyle(fontSize: 16)),
-          backgroundColor: Colors.white.withOpacity(0.18),
-        );
-      }).toList(),
-    );
-  }
                           ],
                         ),
                       ),
@@ -405,5 +390,22 @@ class _EnhancedBarCardState extends State<EnhancedBarCard>
       default:
         return Icons.local_bar;
     }
+  }
+
+  Widget _buildActivitiesPreview() {
+    final barContent = BarContentService.getBarById(widget.bar.barId);
+    if (barContent == null || barContent.activities.isEmpty) {
+      return SizedBox.shrink();
+    }
+    return Wrap(
+      spacing: 8,
+      children: barContent.activities.take(3).map((activity) {
+        return Chip(
+          label: Text(activity.title, style: TextStyle(fontFamily: 'Georgia', fontSize: 12)),
+          avatar: Text(activity.emoji, style: TextStyle(fontSize: 16)),
+          backgroundColor: Colors.white.withOpacity(0.18),
+        );
+      }).toList(),
+    );
   }
 }

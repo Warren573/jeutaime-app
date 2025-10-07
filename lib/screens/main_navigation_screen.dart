@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import '../screens/home_screen.dart';
-import '../screens/letters/letters_screen.dart';
-import '../screens/messages/messages_screen.dart';
-import '../screens/profile/profile_screen.dart';
-import '../screens/shop/shop_screen.dart';
-import '../screens/bars_screen.dart';
-import '../screens/chat/chat_list_screen.dart';
-import '../screens/matching/matching_screen.dart';
+import 'home_screen.dart';
+import 'profiles_screen.dart';
+import 'bars_screen.dart';
+import 'letters_screen.dart';
+import 'journal_screen.dart';
+import 'settings_screen.dart';
+import '../config/ui_reference.dart';
 import '../config/ui_reference.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -26,12 +25,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   late PageController _pageController;
 
   final List<Widget> _screens = [
-    MatchingScreen(),       // 0 - Découvrir (Matching)
-    ChatListScreen(),       // 1 - Chat
-    const LettersScreen(),  // 2 - Lettres
-    BarsScreen(),           // 3 - Bars  
-    ShopScreen(),           // 4 - Boutique
-    ProfileScreen(),        // 5 - Profil
+    HomeScreen(),         // 0 - Accueil
+    ProfilesScreen(),     // 1 - Profils
+    BarsScreen(),         // 2 - Bars
+    LettersScreen(userId: 'demo'), // 3 - Lettres (userId à adapter)
+    JournalScreen(),      // 4 - Journal
+    SettingsScreen(),     // 5 - Paramètres
   ];
 
   @override
@@ -58,6 +57,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             _currentIndex = index;
           });
         },
+        physics: const NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -72,41 +72,17 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(
-                  index: 0,
-                  icon: Icons.favorite_rounded,
-                  label: 'Découvrir',
-                ),
-                _buildNavItem(
-                  index: 1,
-                  icon: Icons.chat_rounded,
-                  label: 'Chat',
-                ),
-                _buildNavItem(
-                  index: 2,
-                  icon: Icons.mail_rounded,
-                  label: 'Lettres',
-                ),
-                _buildNavItem(
-                  index: 3,
-                  icon: Icons.local_bar_rounded,
-                  label: 'Bars',
-                ),
-                _buildNavItem(
-                  index: 4,
-                  icon: Icons.shopping_bag_rounded,
-                  label: 'Shop',
-                ),
-                _buildNavItem(
-                  index: 5,
-                  icon: Icons.person_rounded,
-                  label: 'Profil',
-                ),
-              ],
+              children: List.generate(UIReference.navigationTabs.length, (index) {
+                final tab = UIReference.navigationTabs[index];
+                return _buildNavItem(
+                  index: index,
+                  icon: tab['icon']!,
+                  label: tab['label']!,
+                );
+              }),
             ),
           ),
         ),
@@ -116,11 +92,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   Widget _buildNavItem({
     required int index,
-    required IconData icon,
+    required String icon,
     required String label,
   }) {
     final isSelected = _currentIndex == index;
-    
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -134,11 +109,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: isSelected 
-            ? UIReference.primaryColor.withOpacity(0.15)
-            : Colors.transparent,
+              ? UIReference.primaryColor.withOpacity(0.15)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -149,27 +124,27 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: isSelected 
-                  ? UIReference.primaryColor
-                  : Colors.transparent,
+                    ? UIReference.primaryColor
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
+              child: Text(
                 icon,
-                color: isSelected 
-                  ? UIReference.white 
-                  : UIReference.textSecondary,
-                size: isSelected ? 22 : 20,
+                style: TextStyle(
+                  fontSize: isSelected ? 22 : 20,
+                  color: isSelected ? UIReference.white : UIReference.textSecondary,
+                ),
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected 
-                  ? UIReference.primaryColor 
-                  : UIReference.textSecondary,
+                    ? UIReference.primaryColor 
+                    : UIReference.textSecondary,
               ),
             ),
             if (isSelected) ...[

@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "dart:ui";
 import "../models/user_profile.dart";
 
 class ProfileCard extends StatelessWidget {

@@ -1,4 +1,4 @@
-ça me va, écran suivant/**
+/**
  * RÉFÉRENCE OBLIGATOIRE: https://jeutaime-warren.web.app/
  * 
  * Reproduit l'onglet Profils de la référence
