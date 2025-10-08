@@ -1,6 +1,44 @@
 # ❤️ JeuTaime — Application Flutter
 
-**JeuTaime** est une application de **rencontres ludiques et bienveillantes**, centrée sur le jeu, la curiosité et la sincérité.  
+*### 🏆 Défis et mini-jeux
+- Petits jeux ou missions collectives dans les bars  
+- Exemples : quiz romantiques, défis photo, "compliment miroir"  
+- Système de score individuel et de groupe
+
+---
+
+## 📸 Captures d'écran
+
+### 📱 Interface mobile
+<!-- Captures d'écran à venir -->
+*Les captures d'écran de l'interface mobile seront ajoutées prochainement.*
+
+### 💌 Système de lettres
+| Fonctionnalité | Capture |
+|---|---|
+| Liste des conversations | 🔄 *À venir* |
+| Écriture d'une lettre | 🔄 *À venir* |
+| Boîte à souvenirs | 🔄 *À venir* |
+
+### 🍸 Bars virtuels
+| Fonctionnalité | Capture |
+|---|---|
+| Interface principale | 🔄 *À venir* |
+| Mini-jeux | 🔄 *À venir* |
+| Bar privé | 🔄 *À venir* |
+
+### 💎 Système d'économie
+| Fonctionnalité | Capture |
+|---|---|
+| Profil avec points | 🔄 *À venir* |
+| Boutique d'offrandes | 🔄 *À venir* |
+| Historique | 🔄 *À venir* |
+
+> 📁 **Organisation** : Toutes les captures d'écran sont organisées dans `/assets/screenshots/` par plateforme et fonctionnalité.
+
+---
+
+## 🧠 Structure du projete** est une application de **rencontres ludiques et bienveillantes**, centrée sur le jeu, la curiosité et la sincérité.  
 Plutôt qu’un “match” instantané, chaque lien se construit à travers **lettres, défis, bars virtuels** et **offrandes symboliques**.
 
 ---
