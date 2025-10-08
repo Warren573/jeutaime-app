@@ -10,29 +10,50 @@
 ## 📸 Captures d'écran
 
 ### 📱 Interface mobile
-<!-- Captures d'écran à venir -->
-*Les captures d'écran de l'interface mobile seront ajoutées prochainement.*
+
+#### 🏠 Écrans d'accueil
+| Fonctionnalité | Capture |
+|---|---|
+| Écran principal | ![Accueil](assets/screenshots/features/home/home_main_v1.png) |
+| Écran de bienvenue | ![Bienvenue](assets/screenshots/features/home/home_welcome_v1.png) |
+| Découverte de profils | ![Découverte](assets/screenshots/features/home/home_profile_discovery_v1.png) |
+
+#### 🔐 Authentification
+| Fonctionnalité | Capture |
+|---|---|
+| Écran de connexion | ![Connexion](assets/screenshots/features/auth/auth_login_v1.png) |
+| Écran d'inscription | ![Inscription](assets/screenshots/features/auth/auth_signup_v1.png) |
+
+#### 👤 Profil utilisateur
+| Fonctionnalité | Capture |
+|---|---|
+| Vue du profil | ![Vue profil](assets/screenshots/features/profile/profile_view_v1.png) |
+| Édition du profil | ![Édition profil](assets/screenshots/features/profile/profile_edit_v1.png) |
+| Paramètres | ![Paramètres](assets/screenshots/features/profile/profile_settings_v1.png) |
 
 ### 💌 Système de lettres
 | Fonctionnalité | Capture |
 |---|---|
-| Liste des conversations | 🔄 *À venir* |
-| Écriture d'une lettre | 🔄 *À venir* |
-| Boîte à souvenirs | 🔄 *À venir* |
+| Liste des conversations | ![Liste lettres](assets/screenshots/features/letters/letters_list_v1.png) |
+| Écriture d'une lettre | ![Écriture lettre](assets/screenshots/features/letters/letters_write_v1.png) |
+| Lecture d'une lettre | ![Lecture lettre](assets/screenshots/features/letters/letters_read_v1.png) |
+| Boîte à souvenirs | ![Boîte souvenirs](assets/screenshots/features/letters/letters_memory_box_v1.png) |
 
 ### 🍸 Bars virtuels
 | Fonctionnalité | Capture |
 |---|---|
-| Interface principale | 🔄 *À venir* |
-| Mini-jeux | 🔄 *À venir* |
-| Bar privé | 🔄 *À venir* |
+| Liste des bars | ![Liste bars](assets/screenshots/features/bars/bars_list_v1.png) |
+| Interface principale | ![Interface bar](assets/screenshots/features/bars/bars_main_v1.png) |
+| Mini-jeux | ![Mini-jeux](assets/screenshots/features/bars/bars_mini_games_v1.png) |
+| Bar privé | ![Bar privé](assets/screenshots/features/bars/bars_create_private_v1.png) |
 
 ### 💎 Système d'économie
 | Fonctionnalité | Capture |
 |---|---|
-| Profil avec points | 🔄 *À venir* |
-| Boutique d'offrandes | 🔄 *À venir* |
-| Historique | 🔄 *À venir* |
+| Affichage des points | ![Points](assets/screenshots/features/economy/economy_points_v1.png) |
+| Boutique d'offrandes | ![Boutique](assets/screenshots/features/economy/economy_shop_v1.png) |
+| Historique transactions | ![Historique](assets/screenshots/features/economy/economy_transaction_history_v1.png) |
+| Système de récompenses | ![Récompenses](assets/screenshots/features/economy/economy_rewards_v1.png) |
 
 > 📁 **Organisation** : Toutes les captures d'écran sont organisées dans `/assets/screenshots/` par plateforme et fonctionnalité.
 

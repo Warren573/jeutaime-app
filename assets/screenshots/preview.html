@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📸 Aperçu Captures JeuTaime</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .screenshot-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        .screenshot-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .screenshot-img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 10px;
+            border: 1px solid #ddd;
+        }
+        .screenshot-info {
+            text-align: center;
+        }
+        .filename {
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+        .filesize {
+            color: #64748b;
+            font-size: 0.9em;
+        }
+        .suggested-name {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 8px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.85em;
+            border-left: 3px solid #3b82f6;
+        }
+        .category {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+        .auth { background: #fef3c7; color: #92400e; }
+        .profile { background: #dbeafe; color: #1e40af; }
+        .letters { background: #f3e8ff; color: #7c2d12; }
+        .bars { background: #dcfce7; color: #166534; }
+        .economy { background: #fce7f3; color: #be185d; }
+        .unknown { background: #f1f5f9; color: #475569; }
+        
+        .analysis-form {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .form-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #374151;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+        .rename-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        .rename-button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📸 JeuTaime - Aperçu des Captures d'Écran</h1>
+        <p>Identifiez et organisez vos captures d'écran par fonctionnalité</p>
+    </div>
+    
+    <div class="gallery">
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2960.PNG" alt="IMG_2960.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2960.PNG</div>
+                <div class="filesize">Taille: 204K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2960.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2960.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2960.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2960.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2960.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2960.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2961.PNG" alt="IMG_2961.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2961.PNG</div>
+                <div class="filesize">Taille: 220K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2961.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2961.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2961.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2961.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2961.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2961.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2962.PNG" alt="IMG_2962.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2962.PNG</div>
+                <div class="filesize">Taille: 160K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2962.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2962.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2962.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2962.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2962.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2962.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2963.PNG" alt="IMG_2963.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2963.PNG</div>
+                <div class="filesize">Taille: 200K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2963.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2963.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2963.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2963.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2963.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2963.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2964.PNG" alt="IMG_2964.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2964.PNG</div>
+                <div class="filesize">Taille: 180K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2964.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2964.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2964.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2964.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2964.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2964.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2965.PNG" alt="IMG_2965.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2965.PNG</div>
+                <div class="filesize">Taille: 264K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2965.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2965.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2965.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2965.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2965.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2965.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2966.PNG" alt="IMG_2966.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2966.PNG</div>
+                <div class="filesize">Taille: 308K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2966.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2966.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2966.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2966.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2966.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2966.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2967.PNG" alt="IMG_2967.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2967.PNG</div>
+                <div class="filesize">Taille: 184K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2967.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2967.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2967.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2967.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2967.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2967.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2968.PNG" alt="IMG_2968.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2968.PNG</div>
+                <div class="filesize">Taille: 164K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2968.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2968.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2968.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2968.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2968.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2968.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2969.PNG" alt="IMG_2969.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2969.PNG</div>
+                <div class="filesize">Taille: 196K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2969.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2969.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2969.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2969.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2969.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2969.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2970.PNG" alt="IMG_2970.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2970.PNG</div>
+                <div class="filesize">Taille: 208K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2970.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2970.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2970.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2970.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2970.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2970.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2971.PNG" alt="IMG_2971.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2971.PNG</div>
+                <div class="filesize">Taille: 184K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2971.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2971.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2971.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2971.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2971.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2971.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2972.PNG" alt="IMG_2972.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2972.PNG</div>
+                <div class="filesize">Taille: 180K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2972.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2972.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2972.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2972.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2972.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2972.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2973.PNG" alt="IMG_2973.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2973.PNG</div>
+                <div class="filesize">Taille: 192K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2973.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2973.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2973.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2973.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2973.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2973.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2974.PNG" alt="IMG_2974.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2974.PNG</div>
+                <div class="filesize">Taille: 176K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2974.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2974.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2974.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2974.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2974.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2974.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2975.PNG" alt="IMG_2975.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2975.PNG</div>
+                <div class="filesize">Taille: 188K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2975.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2975.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2975.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2975.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2975.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2975.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2976.PNG" alt="IMG_2976.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2976.PNG</div>
+                <div class="filesize">Taille: 244K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2976.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2976.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2976.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2976.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2976.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2976.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2977.PNG" alt="IMG_2977.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2977.PNG</div>
+                <div class="filesize">Taille: 220K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2977.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2977.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2977.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2977.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2977.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2977.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2978.PNG" alt="IMG_2978.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2978.PNG</div>
+                <div class="filesize">Taille: 208K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2978.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2978.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2978.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2978.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2978.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2978.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2979.PNG" alt="IMG_2979.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2979.PNG</div>
+                <div class="filesize">Taille: 184K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2979.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2979.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2979.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2979.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2979.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2979.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2980.PNG" alt="IMG_2980.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2980.PNG</div>
+                <div class="filesize">Taille: 32K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2980.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2980.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2980.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2980.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2980.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2980.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2981.PNG" alt="IMG_2981.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2981.PNG</div>
+                <div class="filesize">Taille: 36K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2981.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2981.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2981.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2981.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2981.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2981.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2982.PNG" alt="IMG_2982.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2982.PNG</div>
+                <div class="filesize">Taille: 32K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2982.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2982.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2982.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2982.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2982.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2982.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2983.PNG" alt="IMG_2983.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2983.PNG</div>
+                <div class="filesize">Taille: 28K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2983.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2983.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2983.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2983.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2983.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2983.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2984.PNG" alt="IMG_2984.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2984.PNG</div>
+                <div class="filesize">Taille: 32K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2984.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2984.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2984.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2984.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2984.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2984.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="screenshot-card">
+            <img src="mobile/IMG_2985.PNG" alt="IMG_2985.PNG" class="screenshot-img" 
+                 onclick="this.style.maxWidth = this.style.maxWidth === '100%' ? '200px' : '100%'">
+            <div class="screenshot-info">
+                <div class="filename">IMG_2985.PNG</div>
+                <div class="filesize">Taille: 40K</div>
+                <div class="category unknown">À identifier</div>
+                
+                <div class="analysis-form">
+                    <div class="form-group">
+                        <label for="category-IMG_2985.PNG">Fonctionnalité:</label>
+                        <select id="category-IMG_2985.PNG">
+                            <option value="unknown">🔍 À identifier</option>
+                            <option value="auth">🔐 Authentification</option>
+                            <option value="profile">👤 Profil</option>
+                            <option value="letters">💌 Lettres</option>
+                            <option value="bars">🍸 Bars</option>
+                            <option value="economy">💎 Économie</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="screen-IMG_2985.PNG">Type d'écran:</label>
+                        <input type="text" id="screen-IMG_2985.PNG" placeholder="ex: home, list, edit, detail...">
+                    </div>
+                    <button class="rename-button" onclick="suggestRename('IMG_2985.PNG')">
+                        💡 Suggérer un nom
+                    </button>
+                    <div class="suggested-name" id="suggestion-IMG_2985.PNG" style="display:none;">
+                        Nom suggéré apparaîtra ici
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function suggestRename(filename) {
+            const category = document.getElementById(`category-${filename}`).value;
+            const screen = document.getElementById(`screen-${filename}`).value;
+            const suggestionDiv = document.getElementById(`suggestion-${filename}`);
+            
+            if (category === 'unknown' || !screen) {
+                alert('Veuillez sélectionner une fonctionnalité et saisir un type d\'écran');
+                return;
+            }
+            
+            const newName = `${category}_${screen}_v1.png`;
+            const command = `mv mobile/${filename} features/${category}/${newName}`;
+            
+            suggestionDiv.style.display = 'block';
+            suggestionDiv.innerHTML = `
+                <strong>Nom suggéré:</strong> ${newName}<br>
+                <strong>Commande:</strong> <code>${command}</code><br>
+                <button onclick="copyToClipboard('${command}')" style="margin-top:5px; padding:4px 8px; background:#10b981; color:white; border:none; border-radius:4px; cursor:pointer;">
+                    📋 Copier la commande
+                </button>
+            `;
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Commande copiée ! Exécutez-la dans votre terminal.');
+            });
+        }
+        
+        // Mise à jour de la catégorie visuelle
+        document.addEventListener('change', function(e) {
+            if (e.target.tagName === 'SELECT') {
+                const card = e.target.closest('.screenshot-card');
+                const categoryElement = card.querySelector('.category');
+                const value = e.target.value;
+                
+                categoryElement.className = `category ${value}`;
+                
+                const labels = {
+                    auth: '🔐 Authentification',
+                    profile: '👤 Profil', 
+                    letters: '💌 Lettres',
+                    bars: '🍸 Bars',
+                    economy: '💎 Économie',
+                    unknown: '🔍 À identifier'
+                };
+                
+                categoryElement.textContent = labels[value] || '🔍 À identifier';
+            }
+        });
+    </script>
+</body>
+</html>
