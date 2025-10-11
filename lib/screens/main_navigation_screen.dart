@@ -3,9 +3,8 @@ import 'home_screen.dart';
 import 'profiles_screen.dart';
 import 'bars_screen.dart';
 import 'letters_screen.dart';
-import 'journal_screen.dart';
+import 'pet_mode_selection_screen.dart';
 import 'settings_screen.dart';
-import '../config/ui_reference.dart';
 import '../config/ui_reference.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -28,8 +27,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     HomeScreen(),         // 0 - Accueil
     ProfilesScreen(),     // 1 - Profils
     BarsScreen(),         // 2 - Bars
-    LettersScreen(userId: 'demo'), // 3 - Lettres (userId à adapter)
-    JournalScreen(),      // 4 - Journal
+    const LettersScreen(), // 3 - Lettres
+    PetModeSelectionScreen(onCoinsUpdated: (coins) {}, currentCoins: 0), // 4 - Adoption
     SettingsScreen(),     // 5 - Paramètres
   ];
 

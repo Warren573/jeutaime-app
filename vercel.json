@@ -1,5 +1,5 @@
 {
-  "buildCommand": "flutter build web --target lib/main_offline.dart --base-href /",
+  "buildCommand": "flutter build web --target lib/main_jeutaime.dart --base-href /",
   "outputDirectory": "build/web",
   "framework": null,
   "rewrites": [

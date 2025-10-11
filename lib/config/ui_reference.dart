@@ -24,13 +24,13 @@ class UIReference {
   };
   
   // Navigation bottom avec ces onglets EXACTEMENT:
-  // 🏠 Accueil | 👤 Profils | 🍸 Bars | 💌 Lettres |  Journal | ⚙️ Paramètres | 🛍️ Boutique (dans Paramètres)
+  // 🏠 Accueil | 👤 Profils | 🍸 Bars | 💌 Lettres | 🐾 Adoption | ⚙️ Paramètres
   static const List<Map<String, String>> navigationTabs = [
     {'icon': '🏠', 'label': 'Accueil'},
     {'icon': '👤', 'label': 'Profils'},
     {'icon': '🍸', 'label': 'Bars'},
     {'icon': '💌', 'label': 'Lettres'},
-    {'icon': '📖', 'label': 'Journal'},
+    {'icon': '�', 'label': 'Adoption'},
     {'icon': '⚙️', 'label': 'Paramètres'}
   ];
   
