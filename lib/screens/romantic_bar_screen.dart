@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'continue_histoire_screen.dart';
 
 class RomanticBarScreen extends StatefulWidget {
   final Function(int) onCoinsUpdated;
@@ -53,6 +54,14 @@ class _RomanticBarScreenState extends State<RomanticBarScreen>
       'description': 'Une citation qui vous touche',
       'reward': 30,
       'color': Colors.indigo,
+    },
+    {
+      'icon': '🎭',
+      'title': 'Continue l\'Histoire',
+      'description': 'Créez ensemble une histoire romantique',
+      'reward': 35,
+      'color': Colors.purple,
+      'special': 'story_game',
     },
   ];
 
@@ -140,6 +149,24 @@ class _RomanticBarScreenState extends State<RomanticBarScreen>
   }
 
   void _doActivity(Map<String, dynamic> activity) {
+    // Cas spécial pour le jeu "Continue l'Histoire"
+    if (activity['special'] == 'story_game') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ContinueHistoireScreen(
+            playersCount: 2,
+            isBarMode: false,
+            opponentName: 'Votre partenaire romantique',
+            onCoinsUpdated: widget.onCoinsUpdated,
+            currentCoins: widget.currentCoins,
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Activités normales
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

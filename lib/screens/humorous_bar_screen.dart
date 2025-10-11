@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'continue_histoire_screen.dart';
 
 class HumorousBarScreen extends StatefulWidget {
   final Function(int) onCoinsUpdated;
@@ -73,10 +74,11 @@ class _HumorousBarScreenState extends State<HumorousBarScreen>
     },
     {
       'id': 'story',
-      'title': '📚 Histoire en groupe',
-      'description': 'Continuez l\'histoire commencée par les autres',
-      'reward': 2,
+      'title': '🎭 Continue l\'Histoire',
+      'description': 'Créez ensemble une histoire drôle et délirante !',
+      'reward': 4,
       'icon': '✍️',
+      'special': 'story_game',
     },
   ];
 
@@ -148,6 +150,13 @@ class _HumorousBarScreenState extends State<HumorousBarScreen>
 
   void _startActivity(String activityId) {
     final activity = _activities.firstWhere((a) => a['id'] == activityId);
+    
+    // Cas spécial pour le jeu "Continue l'Histoire"
+    if (activity['special'] == 'story_game') {
+      _showStoryModeDialog();
+      return;
+    }
+    
     setState(() {
       _selectedActivity = activityId;
     });
@@ -155,6 +164,66 @@ class _HumorousBarScreenState extends State<HumorousBarScreen>
     showDialog(
       context: context,
       builder: (context) => _buildActivityDialog(activity),
+    );
+  }
+
+  void _showStoryModeDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1e1e1e),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: const Row(
+          children: [
+            Icon(Icons.auto_stories, color: Color(0xFFFF6B35)),
+            SizedBox(width: 10),
+            Text('🎭 Mode Histoire Drôle', style: TextStyle(color: Colors.white)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Combien de participants pour cette histoire délirante ?',
+              style: TextStyle(color: Colors.white70),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            Wrap(
+              spacing: 10,
+              children: [2, 3, 4, 5, 6].map((count) => 
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContinueHistoireScreen(
+                          playersCount: count,
+                          isBarMode: true,
+                          onCoinsUpdated: widget.onCoinsUpdated,
+                          currentCoins: widget.currentCoins,
+                        ),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF6B35),
+                    shape: const CircleBorder(),
+                  ),
+                  child: Text('$count', style: const TextStyle(color: Colors.white)),
+                ),
+              ).toList(),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler', style: TextStyle(color: Colors.grey)),
+          ),
+        ],
+      ),
     );
   }
 

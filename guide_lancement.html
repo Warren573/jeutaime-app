@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeuTaime - Guide de Lancement</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px;
+            background: linear-gradient(135deg, #E91E63 0%, #9C27B0 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(233, 30, 99, 0.3);
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .methods {
+            display: grid;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .method {
+            background: rgba(30, 30, 30, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(233, 30, 99, 0.3);
+        }
+        .method h3 {
+            color: #E91E63;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .command {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #00ff41;
+            margin: 10px 0;
+            border-left: 4px solid #E91E63;
+        }
+        .files {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .file {
+            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .file:hover {
+            transform: translateY(-5px);
+            border-color: #E91E63;
+        }
+        .file h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        .file-desc {
+            color: #cccccc;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .file-features {
+            color: #888;
+            font-size: 0.8em;
+        }
+        .quick-start {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .quick-start h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        .btn {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.available { background: #4CAF50; }
+        .status.recommended { background: #E91E63; }
+        .troubleshoot {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .troubleshoot h4 {
+            color: #FFC107;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 JeuTaime - Guide de Lancement</h1>
+            <p>Comment démarrer l'aperçu de l'application</p>
+        </div>
+
+        <!-- Quick Start -->
+        <div class="quick-start">
+            <h3>⚡ Démarrage Rapide</h3>
+            <p>Copiez-collez cette commande dans votre terminal :</p>
+            <div class="command">cd /workspaces/jeutaime-app && python3 -m http.server 8080</div>
+            <p>Puis ouvrez <strong>http://localhost:8080</strong> dans votre navigateur</p>
+        </div>
+
+        <!-- Méthodes de lancement -->
+        <div class="methods">
+            <div class="method">
+                <h3>1️⃣ Version Flutter Compilée <span class="status recommended">RECOMMANDÉE</span></h3>
+                <p>L'application Flutter complète compilée en Web avec toutes les fonctionnalités.</p>
+                <div class="command">cd /workspaces/jeutaime-app/build/web<br>python3 -m http.server 8080</div>
+                <p><strong>Avantages :</strong> Performance optimale, toutes les fonctionnalités, responsive design</p>
+            </div>
+
+            <div class="method">
+                <h3>2️⃣ Version HTML Standalone <span class="status available">DISPONIBLE</span></h3>
+                <p>Interface complète simulée en HTML/CSS/JS natif.</p>
+                <div class="command">cd /workspaces/jeutaime-app<br>python3 -m http.server 8080</div>
+                <p><strong>Avantages :</strong> Chargement rapide, démonstration fonctionnelle</p>
+            </div>
+
+            <div class="method">
+                <h3>3️⃣ Alternatives Serveurs</h3>
+                <p>Si Python n'est pas disponible :</p>
+                <div class="command"># Node.js<br>npx serve . -p 8080<br><br># PHP<br>php -S localhost:8080</div>
+            </div>
+        </div>
+
+        <!-- Fichiers disponibles -->
+        <div class="method">
+            <h3>📄 Fichiers d'Aperçu Disponibles</h3>
+            <div class="files">
+                <div class="file">
+                    <h4>🎮 build/web/index.html</h4>
+                    <div class="file-desc">Application Flutter complète compilée</div>
+                    <div class="file-features">
+                        ✅ 8 jeux complets<br>
+                        ✅ 5 bars thématiques<br>
+                        ✅ Système adoption<br>
+                        ✅ Performance optimale
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>🌐 index.html</h4>
+                    <div class="file-desc">Version HTML complète (663 lignes)</div>
+                    <div class="file-features">
+                        ✅ Interface complète<br>
+                        ✅ Navigation 5 onglets<br>
+                        ✅ Thème bois chaleureux<br>
+                        ✅ Démonstration fonctionnelle
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>📱 jeutaime_mobile_local.html</h4>
+                    <div class="file-desc">Version mobile optimisée</div>
+                    <div class="file-features">
+                        ✅ Design mobile-first<br>
+                        ✅ Contrôles tactiles<br>
+                        ✅ Interface responsive<br>
+                        ✅ Optimisé smartphones
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>📊 apercu_app_interactif.html</h4>
+                    <div class="file-desc">Documentation technique interactive</div>
+                    <div class="file-features">
+                        ✅ Statistiques animées<br>
+                        ✅ Architecture détaillée<br>
+                        ✅ Fonctionnalités complètes<br>
+                        ✅ Guide technique
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>🎯 demo_simple.html</h4>
+                    <div class="file-desc">Version démo simplifiée</div>
+                    <div class="file-features">
+                        ✅ Chargement rapide<br>
+                        ✅ Fonctionnalités core<br>
+                        ✅ Démonstration légère<br>
+                        ✅ Tests rapides
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>🎤 presentation.html</h4>
+                    <div class="file-desc">Page de présentation du projet</div>
+                    <div class="file-features">
+                        ✅ Overview du projet<br>
+                        ✅ Fonctionnalités clés<br>
+                        ✅ Vision & roadmap<br>
+                        ✅ Informations techniques
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- URLs d'accès -->
+        <div class="method">
+            <h3>🔗 URLs d'Accès après Démarrage</h3>
+            <div class="command">
+                🌐 Local: http://localhost:8080<br>
+                📱 Version mobile: http://localhost:8080/jeutaime_mobile_local.html<br>
+                📊 Aperçu technique: http://localhost:8080/apercu_app_interactif.html<br>
+                🎯 Démo simple: http://localhost:8080/demo_simple.html
+            </div>
+        </div>
+
+        <!-- Fonctionnalités à tester -->
+        <div class="method">
+            <h3>🎮 Fonctionnalités à Tester</h3>
+            <div class="files">
+                <div class="file">
+                    <h4>🏠 Onglet Accueil</h4>
+                    <div class="file-features">
+                        • Profil utilisateur (niveau, coins)<br>
+                        • Bouton accès profil avancé<br>
+                        • Statistiques XP/achievements
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>🎮 Onglet Social → Jeux</h4>
+                    <div class="file-features">
+                        • Réactivité, Puzzle, Précision<br>
+                        • Tic-Tac-Toe, Casse-Briques<br>
+                        • Memory, Snake, Quiz (NOUVEAUX)
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>🍸 Onglet Social → Bars</h4>
+                    <div class="file-features">
+                        • Bar Romantique, Humoristique<br>
+                        • Bar Pirates, Hebdomadaire<br>
+                        • Bar Secret (énigmes)
+                    </div>
+                </div>
+
+                <div class="file">
+                    <h4>💝 Onglet Social → Adoption</h4>
+                    <div class="file-features">
+                        • Mode Incarnation vs Adoption<br>
+                        • 4 animaux (Chat, Chien, Lapin, Oiseau)<br>
+                        • Stats: Santé, Bonheur, Intelligence, Énergie
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Troubleshooting -->
+        <div class="troubleshoot">
+            <h4>🔧 Dépannage</h4>
+            <div class="command">
+                # Port 8080 occupé → Changer le port<br>
+                python3 -m http.server 3000<br><br>
+                
+                # Python non trouvé → Utiliser Node.js<br>
+                npx serve . -p 8080<br><br>
+                
+                # Problème CORS → Ne PAS ouvrir en file://<br>
+                ❌ file:///path/to/index.html<br>
+                ✅ http://localhost:8080/index.html
+            </command>
+        </div>
+
+        <!-- Script automatique -->
+        <div class="method">
+            <h3>🤖 Script de Lancement Automatique</h3>
+            <p>Un script intelligent qui détecte automatiquement le meilleur serveur et port disponible :</p>
+            <div class="command">./start_preview.sh</div>
+            <p>Ce script :</p>
+            <ul style="color: #ccc; margin: 10px 0 0 20px;">
+                <li>🔍 Détecte Python, Node.js ou PHP automatiquement</li>
+                <li>🎯 Trouve un port libre (8080, 8000, 3000...)</li>
+                <li>📂 Choisit la meilleure version disponible</li>
+                <li>🌐 Affiche toutes les URLs d'accès</li>
+                <li>☁️ Support Codespaces/Gitpod</li>
+            </ul>
+        </div>
+
+        <!-- Call to action final -->
+        <div class="quick-start" style="background: linear-gradient(135deg, #E91E63, #9C27B0);">
+            <h3>🚀 Prêt à Découvrir JeuTaime ?</h3>
+            <p>Choisissez votre méthode préférée et commencez l'exploration !</p>
+            <a href="#" class="btn" onclick="copyCommand()">📋 Copier la Commande Rapide</a>
+            <a href="#" class="btn">🤖 Script Automatique</a>
+        </div>
+    </div>
+
+    <script>
+        function copyCommand() {
+            navigator.clipboard.writeText('cd /workspaces/jeutaime-app && python3 -m http.server 8080').then(() => {
+                alert('✅ Commande copiée ! Collez-la dans votre terminal.');
+            });
+        }
+
+        // Animation des éléments au scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.method, .file').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

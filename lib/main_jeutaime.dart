@@ -17,6 +17,8 @@ import 'screens/precision_master_screen.dart';
 import 'screens/tic_tac_toe_screen.dart';
 import 'screens/breakout_screen.dart';
 import 'screens/adoption_screen.dart';
+import 'screens/card_game_screen.dart';
+import 'screens/continue_histoire_screen.dart';
 
 void main() {
   runApp(const JeuTaimeApp());
@@ -365,99 +367,444 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
   }
 
   Widget _buildHomeScreen() {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Dev Zone
+          // Header avec solde
           Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFFE91E63), width: 2),
-              borderRadius: BorderRadius.circular(20),
-              color: const Color(0xFFE91E63).withOpacity(0.05),
-            ),
             padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.only(bottom: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFFE91E63), Color(0xFFAD1457)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
               children: [
-                const Text(
-                  '📍 Zone de Test - Développement',
-                  style: TextStyle(
-                    color: Color(0xFFE91E63),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.favorite, color: Color(0xFFE91E63), size: 30),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Bienvenue sur JeuTaime ! 💕',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        children: [
+                          const Icon(Icons.monetization_on, color: Colors.white, size: 18),
+                          const SizedBox(width: 5),
+                          Text(
+                            '$_coins pièces',
+                            style: const TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 15),
-                const Text(
-                  'Outils pour tester la création de profils et les fonctionnalités',
-                  style: TextStyle(color: Colors.grey),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(Icons.notifications, color: Colors.white),
                 ),
-                const SizedBox(height: 15),
-                _buildButton('👤 Créer Utilisateur Test', () {
-                  _showMessage('✅ Utilisateur test créé !',
-                      'Un profil de test a été généré avec toutes les données nécessaires.');
-                }),
-                const SizedBox(height: 10),
-                _buildOutlineButton('⚙️ Modifier mon profil', () {
-                  // Navigate to profile edit
-                }),
-                const SizedBox(height: 10),
-                _buildSecondaryButton('👥 Voir les profils', () {
-                  setState(() {
-                    _currentIndex = 1;
-                  });
-                }),
               ],
             ),
           ),
-          // Welcome
+
+          const SizedBox(height: 25),
+
+          // Statistiques rapides
+          Row(
+            children: [
+              Expanded(
+                child: _buildStatCard(
+                  icon: '👥',
+                  title: 'Profils vus',
+                  value: '$_currentProfileIndex',
+                  color: Colors.blue,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: _buildStatCard(
+                  icon: '💕',
+                  title: 'Likes donnés',
+                  value: '12',
+                  color: Colors.pink,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: _buildStatCard(
+                  icon: '✉️',
+                  title: 'Lettres',
+                  value: '5',
+                  color: Colors.orange,
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 25),
+
+          // Actions rapides
           const Text(
-            'Bienvenue sur JeuTaime',
+            '🚀 Actions Rapides',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 32,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 15),
-          // Description card
+
+          // Grille d'actions
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            crossAxisSpacing: 15,
+            mainAxisSpacing: 15,
+            childAspectRatio: 1.3,
+            children: [
+              _buildQuickActionCard(
+                icon: '👥',
+                title: 'Découvrir',
+                subtitle: 'Nouveaux profils',
+                onTap: () => setState(() => _currentIndex = 1),
+                gradient: const LinearGradient(colors: [Colors.blue, Colors.purple]),
+              ),
+              _buildQuickActionCard(
+                icon: '🍻',
+                title: 'Les Bars',
+                subtitle: 'Ambiances uniques',
+                onTap: () => setState(() => _currentIndex = 2),
+                gradient: const LinearGradient(colors: [Colors.orange, Colors.red]),
+              ),
+              _buildQuickActionCard(
+                icon: '🎮',
+                title: 'Mini-Jeux',
+                subtitle: 'Gagnez des pièces',
+                onTap: () => setState(() => _currentIndex = 3),
+                gradient: const LinearGradient(colors: [Colors.green, Colors.teal]),
+              ),
+              _buildQuickActionCard(
+                icon: '✉️',
+                title: 'Mes Lettres',
+                subtitle: 'Conversations',
+                onTap: () => setState(() => _currentIndex = 4),
+                gradient: const LinearGradient(colors: [Colors.purple, Colors.pink]),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 25),
+
+          // Section nouvelles fonctionnalités
           Container(
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: const Color(0xFF1e1e1e),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF333333)),
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: const Color(0xFFE91E63), width: 1),
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.new_releases, color: Color(0xFFE91E63)),
+                    SizedBox(width: 8),
+                    Text(
+                      '✨ Nouveautés !',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                _buildFeatureItem(
+                  icon: '🎴',
+                  title: 'Jeu de Cartes',
+                  description: 'Nouveau jeu de chance et stratégie !',
+                  isNew: true,
+                ),
+                _buildFeatureItem(
+                  icon: '🎭',
+                  title: 'Continue l\'Histoire',
+                  description: 'Créez des histoires ensemble dans les bars',
+                  isNew: true,
+                ),
+                _buildFeatureItem(
+                  icon: '💎',
+                  title: 'Système de Bars amélioré',
+                  description: 'Plus d\'activités et de récompenses',
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 25),
+
+          // Conseils du jour
+          Container(
             padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.deepPurple.shade800, Colors.indigo.shade800],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    Icon(Icons.lightbulb, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      '💡 Conseil du jour',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Participez aux activités des bars pour gagner des pièces et rencontrer des personnes partageant vos centres d\'intérêt !',
+                  style: TextStyle(color: Colors.white70, height: 1.4),
+                ),
+                const SizedBox(height: 15),
+                ElevatedButton.icon(
+                  onPressed: () => setState(() => _currentIndex = 2),
+                  icon: const Icon(Icons.explore),
+                  label: const Text('Explorer les bars'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.deepPurple,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 25),
+
+          // Dev Zone (gardée mais plus discrète)
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade700, width: 1),
+              borderRadius: BorderRadius.circular(15),
+              color: const Color(0xFF2a2a2a),
+            ),
+            padding: const EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'L\'application de rencontres anti-superficielle',
+                  '🛠️ Outils de Test',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
+                    color: Colors.grey,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  'Découvrez les profils en profondeur grâce aux descriptions et jeux de questions. '
-                  'Les photos ne sont révélées qu\'après 10 lettres échangées ou avec un abonnement Premium. '
-                  'Explorez nos 5 bars thématiques pour participer à des activités et rencontrer des personnes authentiques.',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    height: 1.6,
-                  ),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    _buildSmallButton('👤 Test User', () {
+                      _showMessage('✅ Utilisateur test créé !', 'Profil généré');
+                    }),
+                    _buildSmallButton('⚙️ Profil', () {}),
+                    _buildSmallButton('👥 Profils', () {
+                      setState(() => _currentIndex = 1);
+                    }),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard({
+    required String icon,
+    required String title,
+    required String value,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 24)),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              color: color,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            title,
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickActionCard({
+    required String icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+    required Gradient gradient,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(icon, style: const TextStyle(fontSize: 32)),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureItem({
+    required String icon,
+    required String title,
+    required String description,
+    bool isNew = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE91E63).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(icon, style: const TextStyle(fontSize: 20)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (isNew) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE91E63),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          'NEW',
+                          style: TextStyle(color: Colors.white, fontSize: 10),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                Text(
+                  description,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSmallButton(String text, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF444444),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        minimumSize: Size.zero,
+        textStyle: const TextStyle(fontSize: 12),
+      ),
+      child: Text(text),
     );
   }
 
@@ -1032,6 +1379,124 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
     );
   }
 
+  void _showStoryModeDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1e1e1e),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: const Row(
+          children: [
+            Icon(Icons.auto_stories, color: Color(0xFFE91E63)),
+            SizedBox(width: 10),
+            Text('🎭 Continue l\'Histoire', style: TextStyle(color: Colors.white)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Choisissez votre mode de jeu :',
+              style: TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 20),
+            
+            // Mode Groupe/Bar
+            ListTile(
+              leading: const CircleAvatar(
+                backgroundColor: Color(0xFF9C27B0),
+                child: Icon(Icons.groups, color: Colors.white),
+              ),
+              title: const Text('🍻 Mode Bar/Groupe', style: TextStyle(color: Colors.white)),
+              subtitle: const Text('2-8 joueurs - Ambiance détendue', style: TextStyle(color: Colors.white70)),
+              onTap: () {
+                Navigator.pop(context);
+                _showPlayerCountDialog();
+              },
+            ),
+            
+            const SizedBox(height: 10),
+            
+            // Mode Romantique
+            ListTile(
+              leading: const CircleAvatar(
+                backgroundColor: Color(0xFFE91E63),
+                child: Icon(Icons.favorite, color: Colors.white),
+              ),
+              title: const Text('💕 Mode Romantique', style: TextStyle(color: Colors.white)),
+              subtitle: const Text('2 joueurs - Histoire d\'amour', style: TextStyle(color: Colors.white70)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContinueHistoireScreen(
+                      playersCount: 2,
+                      isBarMode: false,
+                      onCoinsUpdated: (coins) {
+                        setState(() {
+                          _coins += coins;
+                        });
+                      },
+                      currentCoins: _coins,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler', style: TextStyle(color: Colors.grey)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPlayerCountDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1e1e1e),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        title: const Text('🍻 Combien de joueurs ?', style: TextStyle(color: Colors.white)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [2, 3, 4, 5, 6, 8].map((count) => 
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: const Color(0xFF9C27B0),
+                child: Text(count.toString(), style: const TextStyle(color: Colors.white)),
+              ),
+              title: Text('$count joueurs', style: const TextStyle(color: Colors.white)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContinueHistoireScreen(
+                      playersCount: count,
+                      isBarMode: true,
+                      onCoinsUpdated: (coins) {
+                        setState(() {
+                          _coins += coins;
+                        });
+                      },
+                      currentCoins: _coins,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ).toList(),
+        ),
+      ),
+    );
+  }
+
   Widget _buildGamesTab() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -1189,6 +1654,50 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                         ),
                       ),
                     );
+                  },
+                ),
+                
+                const SizedBox(height: 15),
+                
+                // Jeu de Cartes
+                _buildGameCard(
+                  emoji: '🎴',
+                  title: 'Jeu de Cartes',
+                  subtitle: 'Chance et stratégie',
+                  description: 'Retournez les cartes pour révéler leurs couleurs. Trouvez les cœurs pour gagner, mais attention aux pièges !',
+                  gradient: LinearGradient(
+                    colors: [const Color(0xFFE91E63), const Color(0xFFAD1457)],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CardGameScreen(
+                          onCoinsUpdated: (coins) {
+                            setState(() {
+                              _coins += coins;
+                            });
+                          },
+                          currentCoins: _coins,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                
+                const SizedBox(height: 15),
+                
+                // Continue l'Histoire
+                _buildGameCard(
+                  emoji: '🎭',
+                  title: 'Continue l\'Histoire',
+                  subtitle: 'Créativité collaborative',
+                  description: 'Créez ensemble une histoire drôle, romantique ou totalement folle ! Parfait pour briser la glace en groupe.',
+                  gradient: LinearGradient(
+                    colors: [Colors.purple.shade600, Colors.purple.shade800],
+                  ),
+                  onTap: () {
+                    _showStoryModeDialog();
                   },
                 ),
               ],
