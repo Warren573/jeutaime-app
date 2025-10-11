@@ -17,6 +17,12 @@ import 'screens/precision_master_screen.dart';
 import 'screens/tic_tac_toe_screen.dart';
 import 'screens/breakout_screen.dart';
 import 'screens/adoption_screen.dart';
+import 'screens/memory_game_screen.dart';
+import 'screens/snake_game_screen.dart';
+import 'screens/quiz_game_screen.dart';
+import 'screens/user_profile_screen.dart';
+import 'services/user_data_manager.dart';
+import 'utils/responsive_helper.dart';
 
 void main() {
   runApp(const JeuTaimeApp());
@@ -51,7 +57,7 @@ class JeuTaimeHomePage extends StatefulWidget {
 class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
     with TickerProviderStateMixin {
   int _currentIndex = 0;
-  int _coins = 245;
+  final UserDataManager _userManager = UserDataManager();
   
   // Animation controllers
   late AnimationController _swipeController;
@@ -101,7 +107,7 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
 
   void _updateCoins(int amount) {
     setState(() {
-      _coins += amount;
+      _userManager.updateCoins(amount);
     });
   }
 
@@ -202,7 +208,7 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
   void _openLetterWrite(String name, String avatar, {bool isFirstLetter = false}) {
     final cost = isFirstLetter ? 50 : 30;
     
-    if (_coins < cost) {
+    if (_userManager.coins < cost) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -229,7 +235,7 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
         builder: (context) => LetterWriteScreen(
           recipientName: name,
           recipientAvatar: avatar,
-          currentCoins: _coins,
+          currentCoins: _userManager.coins,
           onCoinsUpdated: (amount) {
             _updateCoins(amount);
           },
@@ -331,13 +337,49 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                 const Text('💰', style: TextStyle(fontSize: 16)),
                 const SizedBox(width: 5),
                 Text(
-                  '$_coins',
+                  '${_userManager.coins}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          // Profile Button
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const UserProfileScreen(),
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF9C27B0), Color(0xFF673AB7)],
+                ),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('👤', style: TextStyle(fontSize: 16)),
+                  const SizedBox(width: 5),
+                  Text(
+                    'Niv. ${_userManager.level}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -572,15 +614,22 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
   }
 
   Widget _buildProfileCard(Map<String, dynamic> profile, bool isActive) {
+    final isMobile = ResponsiveHelper.isMobile(context);
+    final borderRadius = isMobile ? 15.0 : 25.0;
+    final photoIconSize = ResponsiveHelper.getResponsiveFontSize(context, 48);
+    final nameSize = ResponsiveHelper.getResponsiveFontSize(context, 24);
+    final locationSize = ResponsiveHelper.getResponsiveFontSize(context, 15);
+    final padding = isMobile ? 16.0 : 25.0;
+    
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF1e1e1e),
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(borderRadius),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.5),
-            blurRadius: 40,
-            offset: const Offset(0, 10),
+            blurRadius: isMobile ? 20 : 40,
+            offset: Offset(0, isMobile ? 5 : 10),
           ),
         ],
       ),
@@ -590,41 +639,45 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
           Expanded(
             flex: 3,
             child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
                   colors: [Color(0xFFD3D3D3), Color(0xFFA9A9A9)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
+                  topLeft: Radius.circular(borderRadius),
+                  topRight: Radius.circular(borderRadius),
                 ),
               ),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.6),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(borderRadius),
+                    topRight: Radius.circular(borderRadius),
                   ),
                 ),
-                child: const Center(
+                child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('📸', style: TextStyle(fontSize: 48)),
-                      SizedBox(height: 10),
+                      Text('📸', style: TextStyle(fontSize: photoIconSize)),
+                      SizedBox(height: isMobile ? 5 : 10),
                       Text(
-                        'Photo visible avec',
+                        isMobile ? 'Photo avec' : 'Photo visible avec',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
+                          fontSize: ResponsiveHelper.getResponsiveFontSize(context, 14),
                         ),
                       ),
                       Text(
-                        '10 lettres échangées ou Premium',
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                        isMobile ? '10 lettres ou Premium' : '10 lettres échangées ou Premium',
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: ResponsiveHelper.getResponsiveFontSize(context, 12),
+                        ),
                       ),
                     ],
                   ),
@@ -636,22 +689,22 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(25),
+              padding: EdgeInsets.all(padding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     profile['name'],
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: nameSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: isMobile ? 5 : 10),
                   Text(
                     '📍 ${profile['location']}',
-                    style: const TextStyle(color: Colors.grey, fontSize: 15),
+                    style: TextStyle(color: Colors.grey, fontSize: locationSize),
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -1033,26 +1086,32 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
   }
 
   Widget _buildGamesTab() {
+    final padding = ResponsiveHelper.getResponsivePadding(context);
+    final titleSize = ResponsiveHelper.getResponsiveFontSize(context, 24);
+    final subtitleSize = ResponsiveHelper.getResponsiveFontSize(context, 14);
+    
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: padding.left),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
-          const Text(
+          SizedBox(height: ResponsiveHelper.isMobile(context) ? 15 : 20),
+          Text(
             '🎮 MINI-JEUX',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: titleSize,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Entraînez votre réactivité et gagnez des pièces !',
-            style: TextStyle(color: Colors.grey),
+          Text(
+            ResponsiveHelper.isMobile(context) 
+                ? 'Jouez et gagnez des pièces !'
+                : 'Entraînez votre réactivité et gagnez des pièces !',
+            style: TextStyle(color: Colors.grey, fontSize: subtitleSize),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: ResponsiveHelper.isMobile(context) ? 15 : 20),
           Expanded(
             child: ListView(
               children: [
@@ -1071,11 +1130,10 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                       MaterialPageRoute(
                         builder: (context) => ReactivityGameScreen(
                           onCoinsUpdated: (coins) {
-                            setState(() {
-                              _coins += coins;
-                            });
+                            _userManager.updateGameStats('reactivity', gamesPlayed: 1);
+                            _updateCoins(coins);
                           },
-                          currentCoins: _coins,
+                          currentCoins: _userManager.coins,
                         ),
                       ),
                     );
@@ -1099,11 +1157,10 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                       MaterialPageRoute(
                         builder: (context) => PuzzleChallengeScreen(
                           onCoinsUpdated: (coins) {
-                            setState(() {
-                              _coins += coins;
-                            });
+                            _userManager.updateGameStats('puzzle', gamesPlayed: 1);
+                            _updateCoins(coins);
                           },
-                          currentCoins: _coins,
+                          currentCoins: _userManager.coins,
                         ),
                       ),
                     );
@@ -1127,11 +1184,12 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                       MaterialPageRoute(
                         builder: (context) => PrecisionMasterScreen(
                           onCoinsUpdated: (coins) {
+                            _userManager.updateGameStats('precision', score: coins, coinsEarned: coins);
                             setState(() {
-                              _coins += coins;
+                              _coins = _userManager.coins;
                             });
                           },
-                          currentCoins: _coins,
+                          currentCoins: _userManager.coins,
                         ),
                       ),
                     );
@@ -1155,11 +1213,12 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                       MaterialPageRoute(
                         builder: (context) => TicTacToeScreen(
                           onCoinsUpdated: (coins) {
+                            _userManager.updateGameStats('tictactoe', score: coins, coinsEarned: coins);
                             setState(() {
-                              _coins += coins;
+                              _coins = _userManager.coins;
                             });
                           },
-                          currentCoins: _coins,
+                          currentCoins: _userManager.coins,
                         ),
                       ),
                     );
@@ -1181,11 +1240,99 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                       MaterialPageRoute(
                         builder: (context) => BreakoutScreen(
                           onCoinsUpdated: (coins) {
+                            _userManager.updateGameStats('breakout', score: coins, coinsEarned: coins);
                             setState(() {
-                              _coins += coins;
+                              _coins = _userManager.coins;
                             });
                           },
-                          currentCoins: _coins,
+                          currentCoins: _userManager.coins,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                
+                const SizedBox(height: 15),
+                
+                // Memory Game
+                _buildGameCard(
+                  emoji: '🧠',
+                  title: 'Memory Game',
+                  subtitle: 'Testez votre mémoire !',
+                  description: 'Trouvez toutes les paires en retournant les cartes. Plus vous êtes rapide, plus vous gagnez de points !',
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF9C27B0), Color(0xFF673AB7)],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MemoryGameScreen(
+                          onCoinsUpdated: (coins) {
+                            _userManager.updateGameStats('memory', score: coins, coinsEarned: coins);
+                            setState(() {
+                              _coins = _userManager.coins;
+                            });
+                          },
+                          currentCoins: _userManager.coins,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                
+                const SizedBox(height: 15),
+                
+                // Snake Game
+                _buildGameCard(
+                  emoji: '🐍',
+                  title: 'Snake Game',
+                  subtitle: 'Le serpent affamé !',
+                  description: 'Dirigez le serpent pour manger les pommes. Attention à ne pas vous mordre la queue !',
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF4CAF50), Color(0xFF388E3C)],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SnakeGameScreen(
+                          onCoinsUpdated: (coins) {
+                            _userManager.updateGameStats('snake', score: coins, coinsEarned: coins);
+                            setState(() {
+                              _coins = _userManager.coins;
+                            });
+                          },
+                          currentCoins: _userManager.coins,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                
+                const SizedBox(height: 15),
+                
+                // Quiz de Couple
+                _buildGameCard(
+                  emoji: '💕',
+                  title: 'Quiz de Couple',
+                  subtitle: 'Testez vos connaissances romantiques !',
+                  description: 'Questions sur l\'amour, les relations et la vie de couple. Apprenez tout en vous amusant !',
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFE91E63), Color(0xFFC2185B)],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuizGameScreen(
+                          onCoinsUpdated: (coins) {
+                            _userManager.updateGameStats('quiz', score: coins, coinsEarned: coins);
+                            setState(() {
+                              _coins = _userManager.coins;
+                            });
+                          },
+                          currentCoins: _userManager.coins,
                         ),
                       ),
                     );
@@ -1207,21 +1354,27 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
     required LinearGradient gradient,
     required VoidCallback onTap,
   }) {
+    final isMobile = ResponsiveHelper.isMobile(context);
+    final cardPadding = isMobile ? 16.0 : 20.0;
+    final emojiSize = ResponsiveHelper.getResponsiveFontSize(context, 32);
+    final titleSize = ResponsiveHelper.getResponsiveFontSize(context, 18);
+    final subtitleSize = ResponsiveHelper.getResponsiveFontSize(context, 14);
+    
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(15),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(cardPadding),
           decoration: BoxDecoration(
             gradient: gradient,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.3),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+                blurRadius: isMobile ? 5 : 10,
+                offset: Offset(0, isMobile ? 2 : 5),
               ),
             ],
           ),
@@ -1232,24 +1385,27 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                 children: [
                   Text(
                     emoji,
-                    style: const TextStyle(fontSize: 32),
+                    style: TextStyle(fontSize: emojiSize),
                   ),
-                  const SizedBox(width: 15),
+                  SizedBox(width: isMobile ? 12 : 15),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: titleSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           subtitle,
-                          style: const TextStyle(color: Colors.white70),
+                          style: TextStyle(
+                            color: Colors.white70, 
+                            fontSize: subtitleSize,
+                          ),
                         ),
                       ],
                     ),
@@ -1551,6 +1707,10 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
   }
 
   Widget _buildBottomNavigation() {
+    final isMobile = ResponsiveHelper.isMobile(context);
+    final iconSize = ResponsiveHelper.getResponsiveFontSize(context, 22);
+    final labelSize = ResponsiveHelper.getResponsiveFontSize(context, 11);
+    
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xFF1a1a1a),
@@ -1568,32 +1728,32 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
         },
         selectedItemColor: const Color(0xFFE91E63),
         unselectedItemColor: Colors.grey,
-        selectedFontSize: 11,
-        unselectedFontSize: 11,
-        items: const [
+        selectedFontSize: labelSize,
+        unselectedFontSize: labelSize,
+        items: [
           BottomNavigationBarItem(
-            icon: Text('🏠', style: TextStyle(fontSize: 22)),
-            label: 'Accueil',
+            icon: Text('🏠', style: TextStyle(fontSize: iconSize)),
+            label: isMobile ? 'Home' : 'Accueil',
           ),
           BottomNavigationBarItem(
-            icon: Text('👤', style: TextStyle(fontSize: 22)),
+            icon: Text('👤', style: TextStyle(fontSize: iconSize)),
             label: 'Profils',
           ),
           BottomNavigationBarItem(
-            icon: Text('👥', style: TextStyle(fontSize: 22)),
+            icon: Text('👥', style: TextStyle(fontSize: iconSize)),
             label: 'Social',
           ),
           BottomNavigationBarItem(
-            icon: Text('✨', style: TextStyle(fontSize: 22)),
+            icon: Text('✨', style: TextStyle(fontSize: iconSize)),
             label: 'Magie',
           ),
           BottomNavigationBarItem(
-            icon: Text('💌', style: TextStyle(fontSize: 22)),
-            label: 'Lettres',
+            icon: Text('💌', style: TextStyle(fontSize: iconSize)),
+            label: isMobile ? 'Msg' : 'Lettres',
           ),
           BottomNavigationBarItem(
-            icon: Text('⚙️', style: TextStyle(fontSize: 22)),
-            label: 'Paramètres',
+            icon: Text('⚙️', style: TextStyle(fontSize: iconSize)),
+            label: isMobile ? 'Config' : 'Paramètres',
           ),
         ],
       ),
