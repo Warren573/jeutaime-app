@@ -1,146 +1,85 @@
-# ❤️ JeuTaime — Application Flutter
+# 💕 JeuTaime - Application de Rencontre Flutter
 
-**JeuTaime** est une application de **rencontres ludiques et bienveillantes**, centrée sur le jeu, la curiosité et la sincérité.  
-Plutôt qu'un "match" instantané, chaque lien se construit à travers **lettres, défis, bars virtuels** et **offrandes symboliques**.
+## 🎯 Description
+Application de rencontre innovante avec système de jeux intégrés et bars thématiques pour des connexions authentiques.
 
----
+## 🎮 Fonctionnalités Principales
 
-## 🎯 Objectif
-Créer des connexions réelles à travers des interactions humaines et des mini-jeux.  
-Chaque action (défi réussi, offrande, sourire…) permet de renforcer les liens et de gagner des points.
+### Jeux Intégrés
+- 🧱 **Casse-Briques** - Jeu d'arcade classique
+- 🐱 **Adoption** - Système d'adoption d'animaux virtuels
+- ⚡ **Morpion** - Tic-tac-toe stratégique
+- 🔥 **Réactivité** - Tests de rapidité
+- 🧩 **Puzzle Challenge** - Casse-tête évolutifs
+- 🎯 **Precision Master** - Jeu de précision
 
----
+### Bars Thématiques
+- 🌹 **Bar Romantique** - Discussions profondes et poésie
+- 😄 **Bar Humoristique** - Rires et jeux de mots
+- 🏴‍☠️ **Bar Pirates** - Aventures et camaraderie  
+- 📅 **Bar Hebdomadaire** - Groupes de 4 renouvelés
+- 🔒 **Bar Secret** - Accès par énigmes
 
-## 📸 Captures d'écran
+### Système Social
+- 💌 **Lettres** - Correspondances authentiques
+- 👤 **Profils** - Matching intelligent
+- 🛍️ **Shop** - Économie de l'application
 
-### 📱 Interface mobile
+## 🚀 Installation & Lancement
 
-#### 🏠 Écrans d'accueil
-| Fonctionnalité | Capture |
-|---|---|
-| Écran principal | ![Accueil](assets/screenshots/features/home/home_main_v1.png) |
-| Écran de bienvenue | ![Bienvenue](assets/screenshots/features/home/home_welcome_v1.png) |
-| Découverte de profils | ![Découverte](assets/screenshots/features/home/home_profile_discovery_v1.png) |
-
-#### 🔐 Authentification
-| Fonctionnalité | Capture |
-|---|---|
-| Écran de connexion | ![Connexion](assets/screenshots/features/auth/auth_login_v1.png) |
-| Écran d'inscription | ![Inscription](assets/screenshots/features/auth/auth_signup_v1.png) |
-
-#### 👤 Profil utilisateur
-| Fonctionnalité | Capture |
-|---|---|
-| Vue du profil | ![Vue profil](assets/screenshots/features/profile/profile_view_v1.png) |
-| Édition du profil | ![Édition profil](assets/screenshots/features/profile/profile_edit_v1.png) |
-| Paramètres | ![Paramètres](assets/screenshots/features/profile/profile_settings_v1.png) |
-
-### 💌 Système de lettres
-| Fonctionnalité | Capture |
-|---|---|
-| Liste des conversations | ![Liste lettres](assets/screenshots/features/letters/letters_list_v1.png) |
-| Écriture d'une lettre | ![Écriture lettre](assets/screenshots/features/letters/letters_write_v1.png) |
-| Lecture d'une lettre | ![Lecture lettre](assets/screenshots/features/letters/letters_read_v1.png) |
-| Boîte à souvenirs | ![Boîte souvenirs](assets/screenshots/features/letters/letters_memory_box_v1.png) |
-
-### 🍸 Bars virtuels
-| Fonctionnalité | Capture |
-|---|---|
-| Liste des bars | ![Liste bars](assets/screenshots/features/bars/bars_list_v1.png) |
-| Interface principale | ![Interface bar](assets/screenshots/features/bars/bars_main_v1.png) |
-| Mini-jeux | ![Mini-jeux](assets/screenshots/features/bars/bars_mini_games_v1.png) |
-| Bar privé | ![Bar privé](assets/screenshots/features/bars/bars_create_private_v1.png) |
-
-### 💎 Système d'économie
-| Fonctionnalité | Capture |
-|---|---|
-| Affichage des points | ![Points](assets/screenshots/features/economy/economy_points_v1.png) |
-| Boutique d'offrandes | ![Boutique](assets/screenshots/features/economy/economy_shop_v1.png) |
-| Historique transactions | ![Historique](assets/screenshots/features/economy/economy_transaction_history_v1.png) |
-| Système de récompenses | ![Récompenses](assets/screenshots/features/economy/economy_rewards_v1.png) |
-
----
-
-## 🧩 Fonctionnalités principales
-
-### 💌 Lettres et interactions
-- Lettres limitées à **500 mots**  
-- Une lettre à la fois → favorise les réponses sincères  
-- Possibilité d'archiver les lettres dans la **Boîte à Souvenirs**  
-- Relance automatique en cas de silence (anti-ghosting)
-
-### 🍸 Bars
-- Groupes éphémères : **2 hommes / 2 femmes** maximum  
-- Mini-jeux et défis thématiques chaque semaine  
-- Remplacement automatique des membres inactifs  
-- Bars privés : le créateur choisit les thèmes, musiques et défis  
-
-### 💎 Points, Offrandes et Magie
-- +50 points chaque jour de connexion  
-- Points gagnés via défis, jeux ou interactions spéciales  
-- Offrir une rose, un café ou un sort symbolique (magie douce)  
-- Les animations spéciales (bars privés, offrandes rares) coûtent des points  
-
-### 🧸 Adoption (nouveauté)
-- Un membre expérimenté peut **"adopter"** un nouvel arrivant  
-- L'adopté bénéficie d'un guide et de bonus de démarrage  
-- L'adoptant gagne des points et un badge "Protecteur"
-
-### 🏆 Défis et mini-jeux
-- Petits jeux ou missions collectives dans les bars  
-- Exemples : quiz romantiques, défis photo, "compliment miroir"  
-- Système de score individuel et de groupe
-
----
-
-## 🛠️ Technologies utilisées
-
-- **Flutter** - Framework mobile cross-platform
-- **Firebase** - Backend et authentification
-- **Dart** - Langage de programmation
-- **VS Code** - Environnement de développement
-
----
-
-## 🚀 Installation et développement
-
-### Prérequis
-- Flutter SDK
-- Dart SDK
-- Android Studio / Xcode (pour l'émulation)
-- Firebase CLI
-
-### Commandes utiles
+### Option 1: Application Compilée (Recommandée)
 ```bash
-# Installer les dépendances
-flutter pub get
-
-# Lancer en mode debug
-flutter run
-
-# Build pour production
-flutter build apk
+cd COMPILATION_FINALE_SAUVEGARDE/
+# Ouvrir index.html dans un navigateur
+# OU démarrer un serveur HTTP:
+python3 -m http.server 8080
 ```
 
+### Option 2: Développement Flutter
+```bash
+flutter pub get
+flutter run -d web
+```
+
+## 📁 Structure du Projet
+
+```
+lib/                              # Code source Flutter
+├── screens/                     # Écrans de l'application
+│   ├── games/                   # Jeux intégrés
+│   ├── bars/                    # Bars thématiques
+│   └── ...
+├── services/                    # Services et logique métier
+└── widgets/                     # Composants réutilisables
+
+COMPILATION_FINALE_SAUVEGARDE/   # Application web compilée (prête à l'emploi)
+android/                         # Configuration Android
+ios/                            # Configuration iOS
+web/                            # Configuration Web
+```
+
+## 🛠️ Technologies Utilisées
+- **Flutter** 3.22.0 - Framework multi-plateforme
+- **Dart** - Langage de programmation
+- **Firebase** - Backend et authentification
+- **PWA** - Progressive Web App
+
+## 📱 Plateformes Supportées
+- 🌐 Web (Progressive Web App)
+- 📱 iOS & Android (Mobile)
+- 💻 Desktop (Windows, macOS, Linux)
+
+## 🎨 Caractéristiques Techniques
+- Interface responsive et adaptative
+- Dark theme élégant
+- Animations fluides
+- Performance optimisée
+- Offline support (PWA)
+
+## �� Licence
+Ce projet est développé pour des fins personnelles et éducatives.
+
 ---
 
-## 📁 Organisation des captures d'écran
-
-> 📸 **Toutes les captures d'écran** sont organisées dans `/assets/screenshots/` par plateforme et fonctionnalité.
-> 
-> 🔧 **Outils disponibles** :
-> - `scripts/take_screenshots.sh` - Prise automatique de captures
-> - `scripts/auto_organize_screenshots.sh` - Organisation automatique
-> - `scripts/create_preview.sh` - Aperçu HTML interactif
-
----
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! Consultez nos guides de développement dans `/docs/` pour plus d'informations.
-
----
-
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
+**Développé avec ❤️ et Flutter**  
+*Créez des connexions authentiques à travers le jeu et la conversation*

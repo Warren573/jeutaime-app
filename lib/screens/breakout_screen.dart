@@ -403,7 +403,7 @@ class _BreakoutScreenState extends State<BreakoutScreen>
               children: [
                 // Scores
                 Container(
-                  padding: EdgeInsets.all(ResponsiveHelper.getResponsivePadding(context)),
+                  padding: ResponsiveHelper.getResponsivePadding(context),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -503,7 +503,7 @@ class _BreakoutScreenState extends State<BreakoutScreen>
                 // Instructions adaptées selon le dispositif
                 Padding(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ResponsiveHelper.getResponsivePadding(context),
+                    horizontal: 20.0,
                   ),
                   child: Text(
                     isMobile 
