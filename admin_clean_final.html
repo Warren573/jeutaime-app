@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Admin JeuTaime - Version Propre</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #e91e63;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #e91e63;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .game-card {
+            background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.2);
+            border-color: #e91e63;
+        }
+        
+        .game-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .game-icon {
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e91e63, #ff6b9d);
+            border-radius: 50%;
+            color: white;
+        }
+        
+        .game-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .game-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            margin-left: 0.5rem;
+        }
+        
+        .version-info {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(233, 30, 99, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💖 JeuTaime Admin</h1>
+        <p>Interface d'administration - Version Nettoyée</p>
+    </div>
+    
+    <div class="container">
+        <div class="section">
+            <h2>🎮 Jeux Disponibles (7 Jeux Légitimes)</h2>
+            
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">⚡</div>
+                        <div class="game-title">Jeu de Réactivité</div>
+                    </div>
+                    <div class="game-description">
+                        Testez vos réflexes et votre vitesse de réaction dans ce jeu captivant.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 1-2</span>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🧩</div>
+                        <div class="game-title">Puzzle Challenge</div>
+                    </div>
+                    <div class="game-description">
+                        Résolvez des puzzles complexes ensemble pour renforcer votre complicité.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 1-2</span>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🎯</div>
+                        <div class="game-title">Précision Master</div>
+                    </div>
+                    <div class="game-description">
+                        Développez votre précision et votre coordination dans des défis amusants.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 1-2</span>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">⭕</div>
+                        <div class="game-title">Morpion</div>
+                    </div>
+                    <div class="game-description">
+                        Le classique jeu de morpion revisité pour les couples amoureux.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 2</span>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🧱</div>
+                        <div class="game-title">Casse-Briques</div>
+                    </div>
+                    <div class="game-description">
+                        Cassez des briques ensemble dans cette version coopérative du classique.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 1-2</span>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🎴</div>
+                        <div class="game-title">Jeu de Cartes</div>
+                    </div>
+                    <div class="game-description">
+                        Diverses variantes de jeux de cartes pour passer du temps ensemble.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 2</span>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🎭</div>
+                        <div class="game-title">Continue l'Histoire</div>
+                    </div>
+                    <div class="game-description">
+                        Créez des histoires ensemble en alternant les phrases et les idées.
+                    </div>
+                    <div class="game-stats">
+                        <span>Actif <span class="status-indicator"></span></span>
+                        <span>Joueurs: 2+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>✅ Statut du Nettoyage</h2>
+            <p style="color: #4CAF50; font-weight: 600; font-size: 1.1rem;">
+                ✅ Jeux indésirables supprimés avec succès :<br>
+                • Snake Game ❌ (supprimé)<br>
+                • Quiz Couple ❌ (supprimé)<br>
+                • Memory Game ❌ (supprimé)
+            </p>
+            <p style="margin-top: 1rem; color: #666;">
+                Cette interface ne montre maintenant que les 7 jeux légitimes de votre application JeuTaime.
+            </p>
+        </div>
+    </div>
+    
+    <div class="version-info">
+        Version Propre - 12 Oct 2025
+    </div>
+</body>
+</html>

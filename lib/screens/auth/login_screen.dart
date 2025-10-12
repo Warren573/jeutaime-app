@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../theme/app_colors.dart';
 import '../../services/auth_service.dart';
+import '../../utils/gamification_mixin.dart';
 import 'register_screen.dart';
 import '../home_screen.dart';
 
@@ -12,7 +14,7 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with GamificationMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -241,11 +243,20 @@ class _LoginScreenState extends State<LoginScreen> {
         password: _passwordController.text,
       );
       
+      // Tracking gamification pour connexion
+      trackLogin();
+      
+      // Feedback haptique de succès
+      HapticFeedback.heavyImpact();
+      
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } catch (e) {
+      // Feedback haptique d'erreur
+      HapticFeedback.lightImpact();
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erreur: ${e.toString()}'),

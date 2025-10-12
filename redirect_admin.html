@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Redirection Interface Admin JeuTaime</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .redirect-container {
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 3px solid #ff5722;
+            max-width: 800px;
+            width: 100%;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .warning-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            color: #ff5722;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .title {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #ff5722;
+            font-weight: bold;
+        }
+
+        .explanation {
+            font-size: 18px;
+            color: #bbb;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .interface-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid;
+        }
+
+        .old-interface {
+            border-color: #f44336;
+        }
+
+        .new-interface {
+            border-color: #4caf50;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .old-title {
+            color: #f44336;
+        }
+
+        .new-title {
+            color: #4caf50;
+        }
+
+        .features-list {
+            text-align: left;
+            margin: 15px 0;
+        }
+
+        .features-list li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .features-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #888;
+        }
+
+        .redirect-button {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            border: none;
+            padding: 25px 50px;
+            border-radius: 20px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 20px 0;
+            animation: glow 3s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.5);
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 10px 30px rgba(76, 175, 80, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 15px 40px rgba(76, 175, 80, 0.8);
+                transform: scale(1.05);
+            }
+        }
+
+        .redirect-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 60px rgba(76, 175, 80, 0.9);
+            color: white;
+            text-decoration: none;
+        }
+
+        .countdown-text {
+            font-size: 18px;
+            color: #4caf50;
+            margin: 20px 0;
+        }
+
+        .countdown {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        .screenshot-note {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="redirect-container">
+        <div class="warning-icon">⚠️</div>
+        
+        <h1 class="title">Mauvaise Interface !</h1>
+        
+        <div class="explanation">
+            Vous regardez l'<strong>ancienne interface utilisateur</strong> de Claude.ai<br>
+            (Warren, 1000 pièces, bars utilisateur)<br><br>
+            Je vais vous rediriger vers la <strong>vraie interface administrateur</strong> !
+        </div>
+
+        <div class="comparison">
+            <div class="interface-card old-interface">
+                <div class="card-title old-title">
+                    <span>❌</span>
+                    <span>Ce que vous voyez (Ancien)</span>
+                </div>
+                <ul class="features-list">
+                    <li>Interface utilisateur normal</li>
+                    <li>Warren avec 1000 pièces</li>
+                    <li>Bar Romantique utilisateur</li>
+                    <li>Bar Humoristique utilisateur</li>
+                    <li>Pas d'outils admin</li>
+                </ul>
+            </div>
+            
+            <div class="interface-card new-interface">
+                <div class="card-title new-title">
+                    <span>✅</span>
+                    <span>Interface Admin (Nouvelle)</span>
+                </div>
+                <ul class="features-list">
+                    <li>Dashboard administrateur</li>
+                    <li>Gestion 2,847 utilisateurs</li>
+                    <li>Gestion 12 bars admin</li>
+                    <li>8 jeux configurables</li>
+                    <li>Analytics et statistiques</li>
+                    <li>Événements et thèmes</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="screenshot-note">
+            📸 <strong>Différence Importante :</strong><br>
+            L'interface que vous avez montrée = Interface UTILISATEUR normale<br>
+            L'interface que je redirige = Interface ADMINISTRATEUR pour gérer l'app
+        </div>
+
+        <a href="/APERCU_INTERFACE_ADMIN.html" class="redirect-button" onclick="redirectNow()">
+            🚀 ACCÉDER À L'INTERFACE ADMIN RÉELLE
+        </a>
+
+        <div class="countdown-text">
+            Redirection automatique dans :<br>
+            <span class="countdown" id="countdown">5</span> secondes
+        </div>
+    </div>
+
+    <script>
+        let timeLeft = 5;
+        const countdownEl = document.getElementById('countdown');
+        
+        function redirectNow() {
+            // Rediriger vers l'interface admin réelle
+            window.location.href = '/APERCU_INTERFACE_ADMIN.html';
+        }
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdownEl.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                redirectNow();
+            }
+        }, 1000);
+
+        // Message de confirmation
+        console.log('🎯 Redirection vers la VRAIE interface administrateur JeuTaime !');
+        console.log('📊 Dashboard, gestion utilisateurs, bars, jeux, analytics...');
+    </script>
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeuTaime - Design System Moderne</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B9D, #C147E9, #FF6B35);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #FF6B9D;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(180deg, #FF6B9D, #C147E9);
+            border-radius: 3px;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .color-card {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .color-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-swatch {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .color-swatch::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), transparent);
+            z-index: -1;
+        }
+
+        .color-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .color-code {
+            font-family: 'Monaco', monospace;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .component-demo {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .component-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #C147E9;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            border: none;
+            border-radius: 16px;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(255, 107, 157, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 48px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #FF6B9D;
+            border-radius: 16px;
+            padding: 1rem 2rem;
+            color: #FF6B9D;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 107, 157, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-modern {
+            background: linear-gradient(135deg, rgba(22, 33, 62, 0.9), rgba(42, 42, 62, 0.9));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card-modern:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .input-modern {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .input-modern:focus {
+            outline: none;
+            border-color: #FF6B9D;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .input-modern::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 107, 157, 0.2);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 20px;
+            color: #FF6B9D;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .chip:hover {
+            background: rgba(255, 107, 157, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .level-badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0F0F23;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .level-badge::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #FFD700, #FFA500, #FFD700);
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .navigation-demo {
+            background: rgba(22, 33, 62, 0.95);
+            border-radius: 24px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), rgba(193, 71, 233, 0.2));
+            border: 1px solid rgba(255, 107, 157, 0.3);
+        }
+
+        .nav-item:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .animations-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .animation-demo {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .animation-demo:hover {
+            transform: scale(1.05);
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .responsive-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .device-mockup {
+            background: #000;
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-mockup::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .device-screen {
+            background: linear-gradient(135deg, #0F0F23, #1A1A2E);
+            border-radius: 16px;
+            height: 400px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mock-header {
+            background: rgba(255, 107, 157, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            color: #FF6B9D;
+            font-weight: 600;
+        }
+
+        .mock-content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.1) 25%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                rgba(255, 255, 255, 0.1) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-snippet {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(193, 71, 233, 0.1));
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #FF6B9D;
+        }
+
+        .feature-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .components-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Design System Moderne</h1>
+
+        <div class="section slide-in">
+            <h2 class="section-title">🎨 Palette de Couleurs</h2>
+            <p>Système de couleurs unifié avec dégradés modernes pour une expérience visuelle cohérente.</p>
+            
+            <div class="color-palette">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #FF6B9D, #FF8FB3);"></div>
+                    <div class="color-name">Primary Pink</div>
+                    <div class="color-code">#FF6B9D</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #C147E9, #D16BFF);"></div>
+                    <div class="color-name">Primary Purple</div>
+                    <div class="color-code">#C147E9</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #FF6B35, #FF8A50);"></div>
+                    <div class="color-name">Orange Accent</div>
+                    <div class="color-code">#FF6B35</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #FFD700, #FFA500);"></div>
+                    <div class="color-name">Gold Accent</div>
+                    <div class="color-code">#FFD700</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #4CAF50, #66BB6A);"></div>
+                    <div class="color-name">Success Green</div>
+                    <div class="color-code">#4CAF50</div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: linear-gradient(135deg, #0F0F23, #1A1A2E);"></div>
+                    <div class="color-name">Background Dark</div>
+                    <div class="color-code">#0F0F23</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section fade-in">
+            <h2 class="section-title">🧩 Composants Modernes</h2>
+            <p>Bibliothèque de composants réutilisables avec animations et effets visuels avancés.</p>
+            
+            <div class="components-grid">
+                <div class="component-demo">
+                    <div class="component-title">Boutons</div>
+                    <button class="btn-primary">Bouton Principal</button>
+                    <button class="btn-secondary">Bouton Secondaire</button>
+                </div>
+                
+                <div class="component-demo">
+                    <div class="component-title">Cartes Modernes</div>
+                    <div class="card-modern">
+                        <h3 style="color: #FF6B9D; margin-bottom: 1rem;">Carte Premium</h3>
+                        <p>Design glassmorphism avec effets de blur et bordures subtiles.</p>
+                    </div>
+                </div>
+                
+                <div class="component-demo">
+                    <div class="component-title">Champs de Saisie</div>
+                    <input type="text" class="input-modern" placeholder="Nom d'utilisateur">
+                    <br><br>
+                    <input type="email" class="input-modern" placeholder="Email">
+                </div>
+                
+                <div class="component-demo">
+                    <div class="component-title">Chips & Tags</div>
+                    <div class="chip">🎮 Gaming</div>
+                    <div class="chip">🎵 Musique</div>
+                    <div class="chip">🏃 Sport</div>
+                    <div class="chip">📚 Lecture</div>
+                </div>
+                
+                <div class="component-demo">
+                    <div class="component-title">Badge de Niveau</div>
+                    <div class="level-badge">42</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <p style="text-align: center; font-size: 0.9rem; opacity: 0.8;">Niveau 42 - 750/1000 XP</p>
+                </div>
+                
+                <div class="component-demo">
+                    <div class="component-title">Navigation Moderne</div>
+                    <div class="navigation-demo">
+                        <div class="nav-item active">
+                            <span class="nav-icon">🏠</span>
+                            <span class="nav-label">Accueil</span>
+                        </div>
+                        <div class="nav-item">
+                            <span class="nav-icon">👥</span>
+                            <span class="nav-label">Profils</span>
+                        </div>
+                        <div class="nav-item">
+                            <span class="nav-icon">💬</span>
+                            <span class="nav-label">Chat</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section scale-in">
+            <h2 class="section-title">✨ Animations & Transitions</h2>
+            <p>Système d'animations fluides pour une expérience utilisateur premium et engageante.</p>
+            
+            <div class="animations-showcase">
+                <div class="animation-demo slide-in" onclick="this.classList.toggle('slide-in')">
+                    <h3>Slide In</h3>
+                    <p>Animation de glissement</p>
+                </div>
+                <div class="animation-demo fade-in" onclick="this.classList.toggle('fade-in')">
+                    <h3>Fade In</h3>
+                    <p>Animation de fondu</p>
+                </div>
+                <div class="animation-demo scale-in" onclick="this.classList.toggle('scale-in')">
+                    <h3>Scale In</h3>
+                    <p>Animation d'échelle</p>
+                </div>
+                <div class="animation-demo bounce-in" onclick="this.classList.toggle('bounce-in')">
+                    <h3>Bounce In</h3>
+                    <p>Animation rebond</p>
+                </div>
+            </div>
+            
+            <div class="code-snippet">
+ModernAnimations.slideTransition&lt;T&gt;(
+  page: NewScreen(),
+  direction: SlideDirection.left,
+  duration: Duration(milliseconds: 250),
+)
+            </div>
+        </div>
+
+        <div class="section bounce-in">
+            <h2 class="section-title">📱 Design Responsive</h2>
+            <p>Adaptation automatique pour mobile, tablette et desktop avec breakpoints intelligents.</p>
+            
+            <div class="responsive-demo">
+                <div class="device-mockup">
+                    <div class="device-screen">
+                        <div class="mock-header">Mobile 📱</div>
+                        <div class="mock-content">
+                            <div style="height: 20px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 1rem;" class="shimmer"></div>
+                            <div style="height: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 0.5rem;" class="shimmer"></div>
+                            <div style="height: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; width: 70%;" class="shimmer"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-mockup">
+                    <div class="device-screen">
+                        <div class="mock-header">Tablette 📺</div>
+                        <div class="mock-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <div style="height: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 1rem;" class="shimmer"></div>
+                                <div style="height: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 0.5rem;" class="shimmer"></div>
+                            </div>
+                            <div>
+                                <div style="height: 15px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 1rem;" class="shimmer"></div>
+                                <div style="height: 12px; background: rgba(255,255,255,0.1); border-radius: 8px; margin-bottom: 0.5rem;" class="shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="device-mockup">
+                    <div class="device-screen">
+                        <div class="mock-header">Desktop 🖥️</div>
+                        <div class="mock-content" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem;">
+                            <div>
+                                <div style="height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 0.5rem;" class="shimmer"></div>
+                                <div style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 6px;" class="shimmer"></div>
+                            </div>
+                            <div>
+                                <div style="height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 0.5rem;" class="shimmer"></div>
+                                <div style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 6px;" class="shimmer"></div>
+                            </div>
+                            <div>
+                                <div style="height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; margin-bottom: 0.5rem;" class="shimmer"></div>
+                                <div style="height: 10px; background: rgba(255,255,255,0.1); border-radius: 6px;" class="shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-snippet">
+ResponsiveSystem.adaptiveLayout(
+  context: context,
+  mobile: MobileLayout(),
+  tablet: TabletLayout(),
+  desktop: DesktopLayout(),
+)
+            </div>
+        </div>
+
+        <div class="section fade-in">
+            <h2 class="section-title">🚀 Fonctionnalités Avancées</h2>
+            <p>Système complet avec composants spécialisés pour une application de dating moderne.</p>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎨</span>
+                    <h3 class="feature-title">Design System Unifié</h3>
+                    <p class="feature-description">
+                        Couleurs cohérentes, typographies standardisées, espacements harmonieux et composants réutilisables pour une expérience visuelle exceptionnelle.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">✨</span>
+                    <h3 class="feature-title">Animations Fluides</h3>
+                    <p class="feature-description">
+                        Transitions de pages, micro-interactions, effets hover et animations de loading pour une navigation premium et engageante.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">📱</span>
+                    <h3 class="feature-title">Responsive Intelligent</h3>
+                    <p class="feature-description">
+                        Adaptation automatique pour tous les formats d'écran avec breakpoints optimisés et layouts adaptatifs pour mobile, tablette et desktop.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🧩</span>
+                    <h3 class="feature-title">Composants Modulaires</h3>
+                    <p class="feature-description">
+                        Bibliothèque riche avec cartes de profil, boutons gradients, champs modernes, badges de niveau et navigation animée.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">🔮</span>
+                    <h3 class="feature-title">Effets Glassmorphism</h3>
+                    <p class="feature-description">
+                        Cartes avec effet de verre, blur backdrop, bordures subtiles et ombres élégantes pour un design moderne et immersif.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Performance Optimale</h3>
+                    <p class="feature-description">
+                        Animations hardware-accelerated, loading states intelligents, shimmer effects et transitions optimisées pour une fluidité parfaite.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 4rem; padding: 3rem;">
+            <div class="glass-card" style="display: inline-block;">
+                <h2 style="color: #FF6B9D; margin-bottom: 1rem;">✨ Design System Complet ✨</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9;">
+                    Architecture moderne • Composants réutilisables • Animations premium
+                </p>
+                <p style="font-size: 1rem; opacity: 0.7; margin-top: 1rem;">
+                    Phase 6/6 - Interface Utilisateur Moderne 🎯
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animation des éléments au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Animation des barres de progression
+        setTimeout(() => {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }, 1000);
+
+        // Interaction avec les démos d'animation
+        document.querySelectorAll('.animation-demo').forEach(demo => {
+            demo.addEventListener('click', function() {
+                const classes = ['slide-in', 'fade-in', 'scale-in', 'bounce-in'];
+                classes.forEach(cls => {
+                    this.classList.remove(cls);
+                });
+                
+                setTimeout(() => {
+                    if (this.textContent.includes('Slide')) this.classList.add('slide-in');
+                    if (this.textContent.includes('Fade')) this.classList.add('fade-in');
+                    if (this.textContent.includes('Scale')) this.classList.add('scale-in');
+                    if (this.textContent.includes('Bounce')) this.classList.add('bounce-in');
+                }, 50);
+            });
+        });
+
+        // Effet de hover sur les cartes
+        document.querySelectorAll('.color-card, .feature-card, .component-demo').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

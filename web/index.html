@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -31,15 +18,51 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>JeuTaime - App de Rencontre</title>
+  <title>JeuTaime - App de Rencontre avec Interface Admin</title>
   <link rel="manifest" href="manifest.json">
   
   <!-- Thème couleur dynamique -->
   <meta name="theme-color" content="#FF1493">
   <meta name="msapplication-navbutton-color" content="#FF1493">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Interface Admin Integration -->
+  <style>
+    .admin-overlay {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 99999;
+    }
+    .admin-btn {
+      background: linear-gradient(135deg, #6A1B9A, #9C27B0);
+      border: none;
+      padding: 15px 25px;
+      border-radius: 25px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(156, 39, 176, 0.5);
+      animation: glow 3s ease-in-out infinite;
+      font-size: 16px;
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 5px 20px rgba(156, 39, 176, 0.5); }
+      50% { box-shadow: 0 8px 30px rgba(156, 39, 176, 0.8); }
+    }
+    .admin-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
+  <!-- Bouton Admin Overlay -->
+  <div class="admin-overlay">
+    <button class="admin-btn" onclick="window.open('/APERCU_INTERFACE_ADMIN.html', '_blank')">
+      🔧 Interface Admin
+    </button>
+  </div>
+  
   <script src="flutter_bootstrap.js" async></script>
   <script src="pwa-install.js"></script>
 </body>

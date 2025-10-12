@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeuTaime - Système de Gamification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+        }
+
+        .demo-section {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #FF6B9D;
+        }
+
+        .progress-widget {
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .level-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .coins {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 65%;
+            transition: width 0.3s ease;
+        }
+
+        .xp-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .challenge-card {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .challenge-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .challenge-icon {
+            font-size: 2rem;
+        }
+
+        .challenge-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .challenge-info p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .challenge-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FF6B9D, #C147E9);
+            transition: width 0.3s ease;
+        }
+
+        .challenge-reward {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+        }
+
+        .avatar {
+            font-size: 1.5rem;
+        }
+
+        .user-info h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .level-up-demo {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+            margin-top: 2rem;
+        }
+
+        .level-up-demo h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .xp-gain {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            margin: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .animate-in {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .highlight {
+            color: #FF6B9D;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Système de Gamification JeuTaime</h1>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">📊 Widget de Progression Intégré</h2>
+            <div class="progress-widget">
+                <div class="level-info">
+                    <div class="level-text">Niveau 8</div>
+                    <div class="coins">
+                        <span>💰</span>
+                        <span>1,247</span>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="xp-text">680 XP pour le niveau 9</div>
+            </div>
+            <p>Widget affiché en permanence dans l'en-tête de l'application, montrant la progression en temps réel.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="demo-section animate-in">
+                <h2 class="section-title">📈 Statistiques Détaillées</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value">1,247</div>
+                        <div class="stat-label">Coins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💕</div>
+                        <div class="stat-value">23</div>
+                        <div class="stat-label">Matches</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💬</div>
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Messages</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-value">47</div>
+                        <div class="stat-label">Parties</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Série</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">Réussites</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-section animate-in">
+                <h2 class="section-title">🎯 Défis Quotidiens</h2>
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <div class="challenge-icon">❤️</div>
+                        <div class="challenge-info">
+                            <h3>Rencontres du Jour</h3>
+                            <p>Likez 5 profils</p>
+                        </div>
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="challenge-fill" style="width: 60%;"></div>
+                    </div>
+                    <div class="challenge-reward">
+                        <span>3/5</span>
+                        <span>⭐ 30 XP • 💰 15</span>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-header">
+                        <div class="challenge-icon">🎮</div>
+                        <div class="challenge-info">
+                            <h3>Joueur du Jour</h3>
+                            <p>Jouez 2 parties de mini-jeux</p>
+                        </div>
+                    </div>
+                    <div class="challenge-progress">
+                        <div class="challenge-fill" style="width: 100%; background: #7ED321;"></div>
+                    </div>
+                    <div class="challenge-reward">
+                        <span>2/2 ✅</span>
+                        <span>⭐ 40 XP • 💰 20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">🏆 Classement Global</h2>
+            <div class="leaderboard-entry" style="border-color: #FF6B9D;">
+                <div class="rank" style="background: linear-gradient(135deg, #FFD700, #FFA500);">1</div>
+                <div class="avatar">👤</div>
+                <div class="user-info" style="flex: 1;">
+                    <h4 style="color: #FF6B9D;">Vous</h4>
+                    <p>Niveau 8 • 2,847 XP</p>
+                </div>
+            </div>
+            <div class="leaderboard-entry">
+                <div class="rank" style="background: rgba(192, 192, 192, 0.3);">2</div>
+                <div class="avatar">🧑‍💼</div>
+                <div class="user-info" style="flex: 1;">
+                    <h4>Alexandre</h4>
+                    <p>Niveau 7 • 2,654 XP</p>
+                </div>
+            </div>
+            <div class="leaderboard-entry">
+                <div class="rank" style="background: rgba(205, 127, 50, 0.3);">3</div>
+                <div class="avatar">👩‍🎨</div>
+                <div class="user-info" style="flex: 1;">
+                    <h4>Sophie</h4>
+                    <p>Niveau 7 • 2,489 XP</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-up-demo animate-in">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+            <h2>NIVEAU SUPÉRIEUR !</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">Niveau 7 → 8</p>
+            <p style="opacity: 0.9;">+50 XP</p>
+        </div>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">⚡ Récompenses XP Automatiques</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <div class="xp-gain">⭐ +5 XP - Profil liké</div>
+                <div class="xp-gain">⭐ +15 XP - Super-like utilisé</div>
+                <div class="xp-gain">⭐ +50 XP - Nouveau match</div>
+                <div class="xp-gain">⭐ +8 XP - Message envoyé</div>
+                <div class="xp-gain">⭐ +20 XP - Partie jouée</div>
+                <div class="xp-gain">⭐ +35 XP - Partie gagnée</div>
+                <div class="xp-gain">⭐ +10 XP - Connexion quotidienne</div>
+            </div>
+        </div>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">🚀 Fonctionnalités Implémentées</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="background: rgba(255, 107, 157, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 107, 157, 0.3);">
+                    <h3 style="color: #FF6B9D; margin-bottom: 0.5rem;">📊 Service Gamification</h3>
+                    <p>Système complet de niveaux, XP, achievements et défis quotidiens avec Firebase</p>
+                </div>
+                <div style="background: rgba(193, 71, 233, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(193, 71, 233, 0.3);">
+                    <h3 style="color: #C147E9; margin-bottom: 0.5rem;">🎯 Défis Intelligents</h3>
+                    <p>Génération automatique de défis quotidiens avec progression et récompenses</p>
+                </div>
+                <div style="background: rgba(255, 215, 0, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.3);">
+                    <h3 style="color: #FFD700; margin-bottom: 0.5rem;">🏆 Classements</h3>
+                    <p>Classements globaux et entre amis avec rangs et comparaisons</p>
+                </div>
+                <div style="background: rgba(126, 211, 33, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(126, 211, 33, 0.3);">
+                    <h3 style="color: #7ED321; margin-bottom: 0.5rem;">⚡ Tracking Auto</h3>
+                    <p>Mixin pour tracking automatique des actions avec animations de level-up</p>
+                </div>
+                <div style="background: rgba(74, 144, 226, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(74, 144, 226, 0.3);">
+                    <h3 style="color: #4A90E2; margin-bottom: 0.5rem;">🎨 Interface Moderne</h3>
+                    <p>Écran de gamification complet avec onglets et animations fluides</p>
+                </div>
+                <div style="background: rgba(255, 71, 87, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 71, 87, 0.3);">
+                    <h3 style="color: #FF4757; margin-bottom: 0.5rem;">🔥 Intégration App</h3>
+                    <p>Widget de progression dans l'en-tête et bouton d'accès aux statistiques</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">💡 Algorithme de Progression</h2>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace;">
+                <p><span class="highlight">Formule de niveau :</span> XP = 100 × 1.5^(niveau-1)</p>
+                <p><span class="highlight">Récompenses dynamiques :</span> Matching +50 XP, Jeux +20-35 XP</p>
+                <p><span class="highlight">Défis quotidiens :</span> 3 défis générés par jour avec rewards variables</p>
+                <p><span class="highlight">Achievements :</span> 7 catégories avec conditions automatiques</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem;">
+            <p style="font-size: 1.2rem; opacity: 0.8;">
+                ✨ <span class="highlight">Système de Gamification Complet</span> - Phase 4/6 Terminée ✨
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animation d'entrée progressive
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.animate-in');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Simulation de progression de barre
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-fill, .challenge-fill');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width || '65%';
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

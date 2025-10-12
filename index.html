@@ -1,24 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="/">
-
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="JeuTaime - L'app de rencontre immersive avec bars thématiques, défis et connexions authentiques">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Interface Admin JeuTaime - Accès Direct</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .success-container {
+            text-align: center;
+            background: rgba(22, 33, 62, 0.9);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 3px solid #4caf50;
+        }
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: #4caf50;
+        }
+        .title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        .message {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .redirect-info {
+            font-size: 16px;
+            color: #4caf50;
+        }
+    </style>
+    <script>
+        // Redirection automatique vers l'interface admin
+        setTimeout(() => {
+            window.location.href = '/APERCU_INTERFACE_ADMIN.html';
+        }, 1000);
+    </script>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">🗑️✅</div>
+        <div class="title">ANCIENNE INTERFACE SUPPRIMÉE !</div>
+        <div class="message">L'interface de Claude.ai a été supprimée avec succès</div>
+        <div class="redirect-info">Redirection vers votre interface admin dans 1 seconde...</div>
+    </div>
+</body>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="keywords" content="rencontre, dating, amour, bars, jeux, défis, romantic">
 

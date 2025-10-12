@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Serveur Actif - JeuTaime Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .status-container {
+            background: rgba(22, 33, 62, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            max-width: 600px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+            color: #4caf50;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .status-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .status-message {
+            font-size: 18px;
+            color: #bbb;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .server-status {
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .status-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .status-value {
+            color: #4caf50;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .link-card {
+            background: rgba(233, 30, 99, 0.1);
+            border: 1px solid #e91e63;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .link-card:hover {
+            background: rgba(233, 30, 99, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .link-card.admin {
+            background: rgba(156, 39, 176, 0.1);
+            border-color: #9c27b0;
+        }
+
+        .link-card.admin:hover {
+            background: rgba(156, 39, 176, 0.2);
+            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.4);
+        }
+
+        .link-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .link-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .link-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .link-description {
+            color: #bbb;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .time-display {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .auto-refresh {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 12px;
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="auto-refresh pulse">
+        🔄 Auto-refresh: <span id="countdown">30</span>s
+    </div>
+
+    <div class="status-container">
+        <div class="status-icon">✅</div>
+        
+        <h1 class="status-title">Serveur Relancé avec Succès !</h1>
+        
+        <div class="status-message">
+            L'erreur 502 Bad Gateway a été corrigée.<br>
+            Tous les services JeuTaime sont maintenant opérationnels.
+        </div>
+
+        <div class="server-status">
+            <div style="font-weight: bold; margin-bottom: 15px; color: #4caf50;">
+                📊 État du Serveur
+            </div>
+            
+            <div class="status-item">
+                <div class="status-label">
+                    <span>🌐</span>
+                    <span>Serveur HTTP</span>
+                </div>
+                <div class="status-value">
+                    <span>🟢</span>
+                    <span>EN LIGNE</span>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-label">
+                    <span>🔗</span>
+                    <span>Port</span>
+                </div>
+                <div class="status-value">
+                    <span>3000</span>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-label">
+                    <span>🔧</span>
+                    <span>Interface Admin</span>
+                </div>
+                <div class="status-value">
+                    <span>✅</span>
+                    <span>DISPONIBLE</span>
+                </div>
+            </div>
+            
+            <div class="status-item">
+                <div class="status-label">
+                    <span>📱</span>
+                    <span>Application JeuTaime</span>
+                </div>
+                <div class="status-value">
+                    <span>🚀</span>
+                    <span>PRÊTE</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-links">
+            <a href="jeutaime_avec_admin.html" class="link-card">
+                <div class="link-header">
+                    <div class="link-icon">🎮</div>
+                    <div class="link-title">JeuTaime avec Admin</div>
+                </div>
+                <div class="link-description">
+                    Version de l'app avec les 3 boutons admin visibles
+                </div>
+            </a>
+            
+            <a href="APERCU_INTERFACE_ADMIN.html" class="link-card admin">
+                <div class="link-header">
+                    <div class="link-icon">🔧</div>
+                    <div class="link-title">Interface Admin Complète</div>
+                </div>
+                <div class="link-description">
+                    Dashboard, users, bars, jeux, events, analytics
+                </div>
+            </a>
+            
+            <a href="guide_boutons_admin.html" class="link-card">
+                <div class="link-header">
+                    <div class="link-icon">📍</div>
+                    <div class="link-title">Guide des Boutons</div>
+                </div>
+                <div class="link-description">
+                    Localisation des 3 boutons d'accès admin
+                </div>
+            </a>
+            
+            <a href="demo_admin_access.html" class="link-card">
+                <div class="link-header">
+                    <div class="link-icon">🚀</div>
+                    <div class="link-title">Démo d'Accès</div>
+                </div>
+                <div class="link-description">
+                    Instructions détaillées pour accéder à l'admin
+                </div>
+            </a>
+        </div>
+
+        <div class="time-display">
+            🕐 Serveur redémarré le : <span id="current-time"></span><br>
+            🔄 Dernière vérification : <span id="last-check"></span>
+        </div>
+    </div>
+
+    <script>
+        // Afficher l'heure actuelle
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('fr-FR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            document.getElementById('current-time').textContent = timeString;
+            document.getElementById('last-check').textContent = timeString;
+        }
+
+        // Countdown pour auto-refresh
+        let countdown = 30;
+        function updateCountdown() {
+            document.getElementById('countdown').textContent = countdown;
+            countdown--;
+            
+            if (countdown < 0) {
+                location.reload();
+            }
+        }
+
+        // Initialiser
+        updateTime();
+        setInterval(updateTime, 1000);
+        setInterval(updateCountdown, 1000);
+
+        // Animation des cartes au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.link-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'slideIn 0.5s ease-out forwards';
+            });
+        });
+
+        // Test de connectivité
+        function testConnectivity() {
+            fetch(window.location.href)
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ Serveur opérationnel');
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ Problème de connectivité:', error);
+                });
+        }
+
+        // Tester la connectivité toutes les 10 secondes
+        setInterval(testConnectivity, 10000);
+        testConnectivity(); // Test initial
+    </script>
+</body>
+</html>

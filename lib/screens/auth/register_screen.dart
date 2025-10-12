@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../theme/app_colors.dart';
 import '../../services/auth_service.dart';
+import '../../utils/gamification_mixin.dart';
 import '../home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -10,7 +12,7 @@ class RegisterScreen extends StatefulWidget {
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> with GamificationMixin {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -275,20 +277,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
         age: int.parse(_ageController.text),
       );
       
-      // Afficher message de bienvenue
+      // Tracking gamification pour inscription
+      trackLogin(); // XP pour première connexion
+      
+      // Feedback haptique de succès
+      HapticFeedback.heavyImpact();
+      
+      // Afficher message de bienvenue avec gamification
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('🎉 Bienvenue dans JeuTaime ! Vous avez reçu 100 coins de bienvenue !'),
+          content: Text('🎉 Bienvenue dans JeuTaime ! +100 coins + 10 XP de bienvenue !'),
           backgroundColor: AppColors.success,
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 4),
         ),
       );
+      
+      // Attendre un peu pour que l'utilisateur voie le message
+      await Future.delayed(Duration(seconds: 1));
       
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } catch (e) {
+      // Feedback haptique d'erreur
+      HapticFeedback.lightImpact();
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Erreur lors de l\'inscription: ${e.toString()}'),

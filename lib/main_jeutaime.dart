@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'widgets/swipeable_card.dart';
+import 'widgets/optimized_widgets.dart';
+import 'utils/performance_optimizer.dart';
+import 'utils/feedback_system.dart';
+import 'utils/error_handler.dart';
+import 'utils/responsive_helper.dart';
 import 'screens/shop_screen.dart';
 import 'screens/letter_write_screen.dart';
 import 'screens/letters_screen.dart';
@@ -19,6 +24,14 @@ import 'screens/breakout_screen.dart';
 import 'screens/adoption_screen.dart';
 import 'screens/card_game_screen.dart';
 import 'screens/continue_histoire_screen.dart';
+import 'screens/admin_dashboard_screen.dart';
+import 'screens/advanced_filters_screen.dart';
+import 'screens/gamification_screen.dart';
+import 'services/matching_algorithm.dart';
+import 'services/location_service.dart';
+import 'services/gamification_service.dart';
+import 'widgets/progress_widget.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
   runApp(const JeuTaimeApp());
@@ -54,13 +67,22 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
     with TickerProviderStateMixin {
   int _currentIndex = 0;
   int _coins = 245;
+  int _previousCoins = 245;
   
-  // Animation controllers
+  // Animation controllers optimisés
   late AnimationController _swipeController;
+  late AnimationController _pageController;
   late Animation<double> _swipeAnimation;
+  late Animation<double> _pageAnimation;
   
-  // Profile data
+  // Profile data & Matching
   int _currentProfileIndex = 0;
+  List<MatchedUser> _matchedUsers = [];
+  AdvancedFilters? _currentFilters;
+  Position? _userPosition;
+  UserProfile? _currentUserProfile;
+  
+  // Données de profils étendues
   final List<Map<String, dynamic>> _profiles = [
     {
       'name': 'Maxime, 31 ans',
@@ -88,23 +110,236 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
   @override
   void initState() {
     super.initState();
-    _swipeController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+    
+    // Animation controllers optimisés
+    _swipeController = PerformanceOptimizer.createOptimizedController(
       vsync: this,
+      duration: PerformanceConstants.normalAnimation,
     );
-    _swipeAnimation = Tween<double>(begin: 0, end: 1).animate(_swipeController);
+    _pageController = PerformanceOptimizer.createOptimizedController(
+      vsync: this,
+      duration: PerformanceConstants.fastAnimation,
+    );
+    
+    _swipeAnimation = _swipeController.smoothCurve;
+    _pageAnimation = _pageController.smoothCurve;
+    
+    // Animation d'entrée
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _pageController.forward();
+      _initializeMatchingSystem();
+    });
   }
 
   @override
   void dispose() {
     _swipeController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
   void _updateCoins(int amount) {
     setState(() {
+      _previousCoins = _coins;
       _coins += amount;
     });
+    
+    // Feedback haptique pour les changements de coins
+    if (amount > 0) {
+      PerformanceOptimizer.hapticFeedback(HapticFeedbackType.selectionClick);
+    }
+  }
+
+  // === SYSTÈME DE MATCHING AVANCÉ ===
+
+  void _initializeMatchingSystem() async {
+    await _initializeUserLocation();
+    await _createCurrentUserProfile();
+    await _loadAndRankProfiles();
+  }
+
+  Future<void> _initializeUserLocation() async {
+    try {
+      _userPosition = await LocationService.instance.getCurrentPosition();
+      if (_userPosition != null) {
+        print('Position utilisateur obtenue: ${_userPosition!.latitude}, ${_userPosition!.longitude}');
+      }
+    } catch (e) {
+      print('Erreur localisation: $e');
+    }
+  }
+
+  Future<void> _createCurrentUserProfile() async {
+    // Création du profil utilisateur (normalement depuis Firebase)
+    if (_userPosition != null) {
+      final userLocation = await _userPosition!.toUserLocation();
+      
+      _currentUserProfile = UserProfile(
+        id: 'current_user',
+        name: 'Utilisateur Test',
+        age: 28,
+        location: userLocation,
+        interests: ['Voyage', 'Sport', 'Musique', 'Cuisine', 'Art'],
+        lifestyle: const Lifestyle(
+          socialActivity: 4,
+          fitnessLevel: 3,
+          dietType: 'Omnivore',
+          smoking: false,
+          drinking: true,
+        ),
+        personality: const Personality(
+          extraversion: 4,
+          openness: 5,
+          conscientiousness: 3,
+        ),
+        education: 'Master',
+        professionCategory: 'Technology',
+        preferences: const UserPreferences(
+          ageRange: AgeRange(min: 22, max: 35),
+          maxDistance: 25.0,
+        ),
+      );
+    }
+  }
+
+  Future<void> _loadAndRankProfiles() async {
+    if (_currentUserProfile == null) return;
+
+    // Génération de profils de test (normalement depuis Firebase)
+    final testProfiles = await _generateTestProfiles();
+    
+    // Application des filtres si définis
+    List<UserProfile> filteredProfiles = testProfiles;
+    if (_currentFilters != null) {
+      filteredProfiles = MatchingAlgorithm.filterProfiles(
+        testProfiles,
+        _currentUserProfile!,
+        _currentFilters!,
+      );
+    }
+
+    // Classement par compatibilité
+    _matchedUsers = MatchingAlgorithm.rankProfiles(
+      filteredProfiles,
+      _currentUserProfile!,
+    );
+
+    setState(() {});
+  }
+
+  Future<List<UserProfile>> _generateTestProfiles() async {
+    if (_userPosition == null) return [];
+
+    // Génération de positions aléatoires autour de l'utilisateur
+    final positions = LocationService.generateRandomPositionsInRadius(
+      _userPosition!,
+      50.0, // 50km de rayon
+      20, // 20 profils
+    );
+
+    final profiles = <UserProfile>[];
+    final names = ['Emma', 'Léa', 'Chloé', 'Inès', 'Manon', 'Jade', 'Louise', 'Lina'];
+    final interests = [
+      ['Voyage', 'Photographie', 'Cuisine'],
+      ['Sport', 'Musique', 'Danse'],
+      ['Art', 'Lecture', 'Cinéma'],
+      ['Nature', 'Randonnée', 'Yoga'],
+      ['Tech', 'Gaming', 'Innovation'],
+      ['Mode', 'Shopping', 'Beauty'],
+      ['Fitness', 'Nutrition', 'Wellness'],
+      ['Culture', 'Histoire', 'Musées'],
+    ];
+
+    for (int i = 0; i < positions.length && i < names.length; i++) {
+      final userLocation = await positions[i].toUserLocation();
+      
+      profiles.add(UserProfile(
+        id: 'user_$i',
+        name: '${names[i % names.length]}, ${22 + i % 10} ans',
+        age: 22 + i % 10,
+        location: userLocation,
+        interests: interests[i % interests.length],
+        lifestyle: Lifestyle(
+          socialActivity: 2 + i % 4,
+          fitnessLevel: 1 + i % 5,
+          dietType: ['Omnivore', 'Végétarien', 'Végétalien'][i % 3],
+          smoking: i % 4 == 0,
+          drinking: i % 3 != 0,
+        ),
+        personality: Personality(
+          extraversion: 1 + i % 5,
+          openness: 1 + i % 5,
+          conscientiousness: 1 + i % 5,
+        ),
+        education: ['Licence', 'Master', 'BTS/DUT'][i % 3],
+        professionCategory: ['Technology', 'Art & Design', 'Santé'][i % 3],
+        preferences: const UserPreferences(
+          ageRange: AgeRange(min: 25, max: 40),
+          maxDistance: 30.0,
+        ),
+      ));
+    }
+
+    return profiles;
+  }
+
+  void _openAdvancedFilters() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdvancedFiltersScreen(
+          initialFilters: _currentFilters,
+          onFiltersChanged: (filters) {
+            setState(() {
+              _currentFilters = filters;
+            });
+            _loadAndRankProfiles();
+          },
+        ),
+      ),
+    );
+  }
+
+  void _refreshMatches() {
+    _loadAndRankProfiles();
+  }
+
+  void _openAdminInterface() {
+    // Vérification simple pour l'exemple (remplacer par vrai check Firebase)
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF16213E),
+        title: const Row(
+          children: [
+            Text('🔧', style: TextStyle(fontSize: 24)),
+            SizedBox(width: 10),
+            Text('Accès Administration', style: TextStyle(color: Colors.white)),
+          ],
+        ),
+        content: const Text(
+          'Êtes-vous sûr de vouloir accéder à l\'interface administrateur ?',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Annuler', style: TextStyle(color: Colors.white60)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              OptimizedWidgets.navigateWithTransition(
+                context: context,
+                destination: const AdminDashboardScreen(),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+            child: const Text('Accéder'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showMessage(String title, String message) {
@@ -120,6 +355,15 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
             child: const Text('OK', style: TextStyle(color: Color(0xFFE91E63))),
           ),
         ],
+      ),
+    );
+  }
+
+  void _openGamificationScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const GamificationScreen(),
       ),
     );
   }
@@ -205,37 +449,23 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
     final cost = isFirstLetter ? 50 : 30;
     
     if (_coins < cost) {
-      showDialog(
+      ErrorHandler.handleInsufficientCoinsError(
         context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: const Color(0xFF1e1e1e),
-          title: const Text('❌ Pièces insuffisantes', style: TextStyle(color: Colors.white)),
-          content: Text(
-            'Il vous faut $cost pièces pour ${isFirstLetter ? 'commencer une correspondance' : 'envoyer une lettre'}.\nVous pouvez en acheter dans la boutique.',
-            style: const TextStyle(color: Colors.grey),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK', style: TextStyle(color: Color(0xFFE91E63))),
-            ),
-          ],
-        ),
+        required: cost,
+        current: _coins,
       );
       return;
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LetterWriteScreen(
-          recipientName: name,
-          recipientAvatar: avatar,
-          currentCoins: _coins,
-          onCoinsUpdated: (amount) {
-            _updateCoins(amount);
-          },
-        ),
+    OptimizedWidgets.navigateWithTransition(
+      context: context,
+      destination: LetterWriteScreen(
+        recipientName: name,
+        recipientAvatar: avatar,
+        currentCoins: _coins,
+        onCoinsUpdated: (amount) {
+          _updateCoins(amount);
+        },
       ),
     );
   }
@@ -269,106 +499,144 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
         border: Border(bottom: BorderSide(color: Color(0xFF333333))),
       ),
       padding: const EdgeInsets.all(20),
-      child: Row(
+      child: Column(
         children: [
-          // Avatar
-          Container(
-            width: 50,
-            height: 50,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFE91E63), Color(0xFFFF4081)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              shape: BoxShape.circle,
-            ),
-            child: const Center(
-              child: Text(
-                'UT',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              // Avatar
+              Container(
+                width: 50,
+                height: 50,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFFE91E63), Color(0xFFFF4081)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  shape: BoxShape.circle,
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 15),
-          // User info
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Utilisateur, 28 👑',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                child: const Center(
+                  child: Text(
+                    'UT',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(
-                  'Paris, France',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Coins
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFFFFD700), Color(0xFFffa500)],
               ),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('💰', style: TextStyle(fontSize: 16)),
-                const SizedBox(width: 5),
-                Text(
-                  '$_coins',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
+              const SizedBox(width: 15),
+              // User info
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Utilisateur, 28 👑',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Paris, France',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              // Actions (Progression + Admin)
+              Row(
+                children: [
+                  // Bouton Gamification
+                  OptimizedWidgets.smoothButton(
+                    text: 'Stats',
+                    icon: Icons.trending_up,
+                    onPressed: _openGamificationScreen,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFFF6B9D), Color(0xFFC147E9)],
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  const SizedBox(width: 10),
+                  // Admin button optimisé
+                  OptimizedWidgets.smoothButton(
+                    text: 'Admin',
+                    icon: Icons.settings,
+                    onPressed: _openAdminInterface,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF6A1B9A), Color(0xFF9C27B0)],
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  const SizedBox(width: 15),
+                  // Coins avec animation
+                  OptimizedWidgets.buildAnimatedCoinCounter(
+                    coins: _coins,
+                    previousCoins: _previousCoins,
+                  ),
+                ],
+              ),
+            ],
           ),
+          
+          // Widget de progression
+          const SizedBox(height: 16),
+          const ProgressWidget(),
         ],
       ),
     );
   }
 
   Widget _buildCurrentScreen() {
+    Widget screen;
+    
     switch (_currentIndex) {
       case 0:
-        return _buildHomeScreen();
+        screen = _buildHomeScreen();
+        break;
       case 1:
-        return _buildProfilesScreen();
+        screen = _buildProfilesScreen();
+        break;
       case 2:
-        return _buildSocialScreen();
+        screen = _buildSocialScreen();
+        break;
       case 3:
-        return _buildMagicScreen();
+        screen = _buildMagicScreen();
+        break;
       case 4:
-        return _buildLettersScreen();
+        screen = _buildLettersScreen();
+        break;
       case 5:
-        return _buildSettingsScreen();
+        screen = _buildSettingsScreen();
+        break;
       default:
-        return _buildHomeScreen();
+        screen = _buildHomeScreen();
     }
+    
+    // Animation d'apparition pour le contenu
+    return AnimatedBuilder(
+      animation: _pageAnimation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, 20 * (1 - _pageAnimation.value)),
+          child: Opacity(
+            opacity: _pageAnimation.value,
+            child: screen,
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildHomeScreen() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
+      padding: ResponsiveHelper.responsivePadding(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -465,6 +733,77 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
 
           const SizedBox(height: 25),
 
+          // Section Matching Avancé
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '🎯 Matchs Compatibles',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: _openAdvancedFilters,
+                    icon: const Icon(
+                      Icons.tune,
+                      color: Color(0xFFE91E63),
+                    ),
+                    tooltip: 'Filtres avancés',
+                  ),
+                  IconButton(
+                    onPressed: _refreshMatches,
+                    icon: const Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                    ),
+                    tooltip: 'Actualiser',
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+
+          // Liste des matchs avec compatibilité
+          if (_matchedUsers.isNotEmpty) ...[
+            SizedBox(
+              height: 180,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _matchedUsers.take(5).length,
+                itemBuilder: (context, index) {
+                  final match = _matchedUsers[index];
+                  return _buildMatchCard(match);
+                },
+              ),
+            ),
+          ] else ...[
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1e1e1e),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.search, color: Colors.grey),
+                  SizedBox(width: 10),
+                  Text(
+                    'Recherche de profils compatibles...',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 25),
+
           // Actions rapides
           const Text(
             '🚀 Actions Rapides',
@@ -476,14 +815,14 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
           ),
           const SizedBox(height: 15),
 
-          // Grille d'actions
+          // Grille d'actions responsive
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            crossAxisSpacing: 15,
-            mainAxisSpacing: 15,
-            childAspectRatio: 1.3,
+            crossAxisCount: ResponsiveHelper.responsiveColumns(context),
+            crossAxisSpacing: ResponsiveHelper.isMobile(context) ? 10 : 15,
+            mainAxisSpacing: ResponsiveHelper.isMobile(context) ? 10 : 15,
+            childAspectRatio: ResponsiveHelper.responsiveAspectRatio(context),
             children: [
               _buildQuickActionCard(
                 icon: '👥',
@@ -640,7 +979,10 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
                   spacing: 10,
                   runSpacing: 10,
                   children: [
-                    _buildSmallButton('👤 Test User', () {
+                    _buildSmallButton('� Admin', () {
+                      _openAdminInterface();
+                    }),
+                    _buildSmallButton('�👤 Test User', () {
                       _showMessage('✅ Utilisateur test créé !', 'Profil généré');
                     }),
                     _buildSmallButton('⚙️ Profil', () {}),
@@ -688,6 +1030,145 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
             title,
             style: const TextStyle(color: Colors.white70, fontSize: 12),
             textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMatchCard(MatchedUser match) {
+    final score = match.compatibilityScore.round();
+    final scoreColor = score >= 85 
+        ? Colors.green 
+        : score >= 70 
+            ? Colors.orange 
+            : Colors.grey;
+
+    return Container(
+      width: 140,
+      margin: const EdgeInsets.only(right: 15),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1e1e1e),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: scoreColor.withOpacity(0.3),
+          width: 2,
+        ),
+      ),
+      child: Column(
+        children: [
+          // Score de compatibilité
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: scoreColor.withOpacity(0.2),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(13),
+                topRight: Radius.circular(13),
+              ),
+            ),
+            child: Text(
+              '${score}% compatible',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: scoreColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Avatar et nom
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: const Color(0xFFE91E63),
+                        child: Text(
+                          match.profile.name.substring(0, 1),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              match.profile.name.split(',')[0],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              '${match.profile.age} ans',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  const SizedBox(height: 8),
+                  
+                  // Distance
+                  if (_userPosition != null)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: Colors.grey,
+                          size: 14,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${LocationService.calculateDistance(
+                            _userPosition!.latitude,
+                            _userPosition!.longitude,
+                            match.profile.location.latitude,
+                            match.profile.location.longitude,
+                          ).toStringAsFixed(1)} km',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                  
+                  const SizedBox(height: 8),
+                  
+                  // Raisons du match (première raison)
+                  if (match.matchReasons.isNotEmpty)
+                    Text(
+                      match.matchReasons.first,
+                      style: const TextStyle(
+                        color: Color(0xFFE91E63),
+                        fontSize: 10,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -1061,9 +1542,9 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
       final name = profile['name'].split(',')[0];
       
       _updateCoins(-25);
-      _showMessage(
-        '😊 Sourire envoyé à $name !',
-        '💰 Coût : 25 pièces\n\n✨ Si $name vous sourit en retour, vous pourrez commencer une correspondance par lettres !',
+      FeedbackSystem.showSuccessAnimation(
+        context: context,
+        message: '😊 Sourire envoyé à $name !',
       );
       
       setState(() {
@@ -1077,9 +1558,10 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
       final profile = _profiles[_currentProfileIndex];
       final name = profile['name'].split(',')[0];
       
-      _showMessage(
-        '😕 Profil passé : $name',
-        '➡️ Profil suivant...',
+      FeedbackSystem.showToast(
+        context: context,
+        message: 'Profil passé : $name',
+        icon: '➡️',
       );
       
       setState(() {
@@ -2005,6 +2487,36 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
               ),
             ],
           ),
+          
+          // Admin Section
+          _buildSettingsCard(
+            title: '🔧 Administration',
+            children: [
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF6A1B9A), Color(0xFF9C27B0)],
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  child: const Text('🔧', style: TextStyle(fontSize: 20)),
+                ),
+                title: const Text(
+                  'Interface Administrateur',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                subtitle: const Text(
+                  'Gérer l\'application, bars et utilisateurs',
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Colors.purple, size: 16),
+                onTap: _openAdminInterface,
+              ),
+            ],
+          ),
+          
           const SizedBox(height: 20),
           _buildButton(
             'Déconnexion',
@@ -2061,9 +2573,16 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
 
   Widget _buildBottomNavigation() {
     return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xFF1a1a1a),
-        border: Border(top: BorderSide(color: Color(0xFF333333))),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1a1a1a),
+        border: const Border(top: BorderSide(color: Color(0xFF333333))),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -2071,41 +2590,55 @@ class _JeuTaimeHomePageState extends State<JeuTaimeHomePage>
         elevation: 0,
         currentIndex: _currentIndex,
         onTap: (index) {
+          // Animation de navigation avec feedback haptique
+          PerformanceOptimizer.hapticFeedback(HapticFeedbackType.selectionClick);
+          
           setState(() {
             _currentIndex = index;
           });
+          
+          // Relancer l'animation de page
+          _pageController.reset();
+          _pageController.forward();
         },
         selectedItemColor: const Color(0xFFE91E63),
         unselectedItemColor: Colors.grey,
         selectedFontSize: 11,
         unselectedFontSize: 11,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Text('🏠', style: TextStyle(fontSize: 22)),
-            label: 'Accueil',
-          ),
-          BottomNavigationBarItem(
-            icon: Text('👤', style: TextStyle(fontSize: 22)),
-            label: 'Profils',
-          ),
-          BottomNavigationBarItem(
-            icon: Text('👥', style: TextStyle(fontSize: 22)),
-            label: 'Social',
-          ),
-          BottomNavigationBarItem(
-            icon: Text('✨', style: TextStyle(fontSize: 22)),
-            label: 'Magie',
-          ),
-          BottomNavigationBarItem(
-            icon: Text('💌', style: TextStyle(fontSize: 22)),
-            label: 'Lettres',
-          ),
-          BottomNavigationBarItem(
-            icon: Text('⚙️', style: TextStyle(fontSize: 22)),
-            label: 'Paramètres',
-          ),
+        items: [
+          _buildNavItem('🏠', 'Accueil', 0),
+          _buildNavItem('👤', 'Profils', 1),
+          _buildNavItem('👥', 'Social', 2),
+          _buildNavItem('✨', 'Magie', 3),
+          _buildNavItem('�', 'Lettres', 4),
+          _buildNavItem('⚙️', 'Paramètres', 5),
         ],
       ),
+    );
+  }
+  
+  BottomNavigationBarItem _buildNavItem(String emoji, String label, int index) {
+    final isSelected = _currentIndex == index;
+    
+    return BottomNavigationBarItem(
+      icon: AnimatedContainer(
+        duration: PerformanceConstants.fastAnimation,
+        curve: PerformanceConstants.defaultCurve,
+        padding: EdgeInsets.all(isSelected ? 8 : 4),
+        decoration: BoxDecoration(
+          color: isSelected 
+            ? const Color(0xFFE91E63).withOpacity(0.2)
+            : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          emoji, 
+          style: TextStyle(
+            fontSize: isSelected ? 24 : 22,
+          ),
+        ),
+      ),
+      label: label,
     );
   }
 

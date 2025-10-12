@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JeuTaime - Système d'Authentification Intégré</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A2E 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 3rem;
+        }
+
+        .demo-section {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #FF6B9D;
+        }
+
+        .auth-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .auth-screen {
+            background: rgba(15, 15, 35, 0.9);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B9D, #C147E9);
+        }
+
+        .screen-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .form-field {
+            margin-bottom: 1rem;
+        }
+
+        .form-field label {
+            display: block;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .form-field input:focus {
+            outline: none;
+            border-color: #FF6B9D;
+            box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.2);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #FF6B9D, #C147E9);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #FF6B9D;
+        }
+
+        .feature-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .auth-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: rgba(255, 107, 157, 0.1);
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #FF6B9D;
+        }
+
+        .flow-arrow {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.5rem;
+        }
+
+        .gamification-integration {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(193, 71, 233, 0.1));
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .xp-notification {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+
+        .profile-completion {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s ease;
+        }
+
+        .animate-in {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .highlight {
+            color: #FF6B9D;
+            font-weight: 600;
+        }
+
+        .demo-phone {
+            width: 300px;
+            height: 600px;
+            background: #000;
+            border-radius: 30px;
+            padding: 20px;
+            border: 3px solid #333;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .demo-phone::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0F0F23, #1A1A2E);
+            border-radius: 20px;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Authentification Firebase Intégrée</h1>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">🏗️ Architecture Complète</h2>
+            <div class="auth-flow">
+                <div class="flow-step">1</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">2</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">3</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">4</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; text-align: center; margin-top: 1rem; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 150px;">
+                    <h4 style="color: #FF6B9D;">Inscription</h4>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">+10 XP</p>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <h4 style="color: #FF6B9D;">Connexion</h4>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">+10 XP Quotidien</p>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <h4 style="color: #FF6B9D;">Profil</h4>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">+100 XP Complet</p>
+                </div>
+                <div style="flex: 1; min-width: 150px;">
+                    <h4 style="color: #FF6B9D;">Gamification</h4>
+                    <p style="font-size: 0.8rem; opacity: 0.7;">Intégrée</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-demo animate-in">
+            <div class="auth-screen">
+                <div class="screen-header">
+                    <div class="logo">💕</div>
+                    <h3>Connexion</h3>
+                </div>
+                <div class="form-field">
+                    <label>Email</label>
+                    <input type="email" placeholder="votre@email.com" value="marie@example.com">
+                </div>
+                <div class="form-field">
+                    <label>Mot de passe</label>
+                    <input type="password" placeholder="••••••••" value="motdepasse123">
+                </div>
+                <button class="btn-primary">Se connecter</button>
+                <button class="btn-secondary">🔗 Continuer avec Google</button>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="#" style="color: #FF6B9D; font-size: 0.9rem;">Mot de passe oublié ?</a>
+                </div>
+            </div>
+
+            <div class="auth-screen">
+                <div class="screen-header">
+                    <div class="logo">🆕</div>
+                    <h3>Inscription</h3>
+                </div>
+                <div class="form-field">
+                    <label>Nom</label>
+                    <input type="text" placeholder="Marie Dupont" value="Marie Dupont">
+                </div>
+                <div class="form-field">
+                    <label>Email</label>
+                    <input type="email" placeholder="marie@example.com" value="marie@example.com">
+                </div>
+                <div class="form-field">
+                    <label>Mot de passe</label>
+                    <input type="password" placeholder="••••••••" value="motdepasse123">
+                </div>
+                <button class="btn-primary">Créer mon compte</button>
+                <div class="xp-notification" style="margin-top: 1rem; font-size: 0.8rem;">
+                    ⭐ +100 coins + 10 XP de bienvenue !
+                </div>
+            </div>
+
+            <div class="auth-screen">
+                <div class="screen-header">
+                    <div class="logo">👤</div>
+                    <h3>Mon Profil</h3>
+                </div>
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #FF6B9D, #C147E9); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
+                        <span style="font-size: 2rem;">👩‍💼</span>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label>À propos de moi</label>
+                    <input type="text" placeholder="Parlez-nous de vous..." value="Passionnée de voyages et de cuisine">
+                </div>
+                <div class="form-field">
+                    <label>Ville</label>
+                    <input type="text" placeholder="Paris" value="Paris">
+                </div>
+                <div class="profile-completion">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <span style="color: #4CAF50; font-weight: 600;">✅ Profil complet !</span>
+                        <span style="color: #FFD700;">+100 XP</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gamification-integration animate-in">
+            <h2 class="section-title">⚡ Intégration Gamification</h2>
+            <p style="margin-bottom: 1.5rem; opacity: 0.8;">
+                Chaque action d'authentification récompense automatiquement l'utilisateur avec de l'XP et des coins.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                <div class="xp-notification">📱 Connexion quotidienne → +10 XP</div>
+                <div class="xp-notification">🆕 Première inscription → +100 coins</div>
+                <div class="xp-notification">📸 Photo ajoutée → +25 XP</div>
+                <div class="xp-notification">✅ Profil complet → +100 XP</div>
+                <div class="xp-notification">🔒 Email vérifié → +15 XP</div>
+            </div>
+        </div>
+
+        <div class="features-grid animate-in">
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">Sécurité Firebase</div>
+                <div class="feature-description">
+                    Authentification sécurisée avec Firebase Auth, validation email, récupération mot de passe et connexion Google intégrée.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">Interface Moderne</div>
+                <div class="feature-description">
+                    Écrans d'authentification avec animations fluides, thème sombre cohérent et feedback haptique pour une expérience premium.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">👤</div>
+                <div class="feature-title">Profils Complets</div>
+                <div class="feature-description">
+                    Gestion complète des profils utilisateur avec photos, centres d'intérêt, bio et indicateur de completion pour la gamification.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">AuthWrapper Intelligent</div>
+                <div class="feature-description">
+                    Gestion automatique des états d'authentification avec redirection, initialisation des services et vérification des profils.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <div class="feature-title">Gamification Intégrée</div>
+                <div class="feature-description">
+                    Tracking automatique XP pour connexions, inscriptions et completion de profil avec animations de level-up en temps réel.
+                </div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">Expérience Mobile</div>
+                <div class="feature-description">
+                    Design responsive optimisé mobile avec animations, validation en temps réel et feedback utilisateur immédiat.
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">🚀 Services Implémentés</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="background: rgba(255, 107, 157, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 107, 157, 0.3);">
+                    <h3 style="color: #FF6B9D; margin-bottom: 0.5rem;">🔧 AuthService</h3>
+                    <p>Service complet avec inscription, connexion, Google Auth, profils et gestion d'état</p>
+                </div>
+                <div style="background: rgba(193, 71, 233, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(193, 71, 233, 0.3);">
+                    <h3 style="color: #C147E9; margin-bottom: 0.5rem;">🎭 AuthWrapper</h3>
+                    <p>Gestionnaire d'état global avec redirection automatique et initialisation des services</p>
+                </div>
+                <div style="background: rgba(255, 215, 0, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.3);">
+                    <h3 style="color: #FFD700; margin-bottom: 0.5rem;">📱 Écrans Modernes</h3>
+                    <p>Login, Signup, Profile Edit et Forgot Password avec animations et validations</p>
+                </div>
+                <div style="background: rgba(76, 175, 80, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(76, 175, 80, 0.3);">
+                    <h3 style="color: #4CAF50; margin-bottom: 0.5rem;">⚡ Mixin Gamification</h3>
+                    <p>Tracking automatique XP avec animations de level-up et feedback haptique</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section animate-in">
+            <h2 class="section-title">💡 Flux d'Authentification</h2>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace;">
+                <p><span class="highlight">1. Démarrage :</span> AuthWrapper vérifie l'état utilisateur</p>
+                <p><span class="highlight">2. Non connecté :</span> Affichage écran de connexion</p>
+                <p><span class="highlight">3. Connexion/Inscription :</span> +10 XP automatique</p>
+                <p><span class="highlight">4. Profil incomplet :</span> Dialog de completion</p>
+                <p><span class="highlight">5. Profil complet :</span> +100 XP et accès app</p>
+                <p><span class="highlight">6. Navigation :</span> Gamification intégrée partout</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 2rem;">
+            <p style="font-size: 1.2rem; opacity: 0.8;">
+                ✨ <span class="highlight">Authentification Firebase Complète</span> - Phase 5/6 Terminée ✨
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animation d'entrée progressive
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.animate-in');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Simulation de saisie dans les formulaires
+            setTimeout(() => {
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach((input, index) => {
+                    setTimeout(() => {
+                        input.style.transform = 'scale(1.02)';
+                        input.style.borderColor = '#FF6B9D';
+                        setTimeout(() => {
+                            input.style.transform = 'scale(1)';
+                            input.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        }, 200);
+                    }, index * 100);
+                });
+            }, 2000);
+
+            // Animation de la barre de progression
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width || '100%';
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

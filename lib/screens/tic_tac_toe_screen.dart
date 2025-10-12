@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'dart:convert';
+import '../utils/gamification_mixin.dart';
 
 enum GameMode { local, online }
 
@@ -19,7 +20,7 @@ class TicTacToeScreen extends StatefulWidget {
   State<TicTacToeScreen> createState() => _TicTacToeScreenState();
 }
 
-class _TicTacToeScreenState extends State<TicTacToeScreen> {
+class _TicTacToeScreenState extends State<TicTacToeScreen> with GamificationMixin {
   // État du jeu
   List<List<String>> board = [
     ["", "", ""],
@@ -184,6 +185,12 @@ class _TicTacToeScreenState extends State<TicTacToeScreen> {
 
     if (coinsEarned > 0) {
       widget.onCoinsUpdated(coinsEarned);
+    }
+
+    // Tracking gamification
+    trackGamePlayed('Morpion'); // +20 XP pour avoir joué
+    if (playerWon) {
+      trackGameWon('Morpion'); // +35 XP pour avoir gagné
     }
 
     showDialog(

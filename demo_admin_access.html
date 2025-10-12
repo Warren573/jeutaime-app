@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Accès Interface Admin - JeuTaime</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-container {
+            background: rgba(22, 33, 62, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .demo-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .demo-title .icon {
+            font-size: 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .instruction {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #bbb;
+            line-height: 1.6;
+        }
+
+        .header-demo {
+            background: #0a0a0a;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #6A1B9A, #9C27B0);
+            padding: 10px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            color: white;
+            font-size: 18px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(156, 39, 176, 0.8);
+            }
+        }
+
+        .admin-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(156, 39, 176, 0.6);
+        }
+
+        .coins-display {
+            background: linear-gradient(135deg, #FFD700, #ffa500);
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: black;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .arrow {
+            font-size: 30px;
+            color: #e91e63;
+            animation: bounce 1s ease-in-out infinite;
+            margin: 10px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .access-button {
+            background: linear-gradient(135deg, #e91e63, #ff4081);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .access-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.4);
+        }
+
+        .steps {
+            text-align: left;
+            margin: 30px 0;
+            background: rgba(0,0,0,0.3);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .step:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .step-number {
+            background: #e91e63;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .highlight {
+            background: rgba(233, 30, 99, 0.1);
+            padding: 2px 6px;
+            border-radius: 5px;
+            color: #ff4081;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-title">
+            <span class="icon">🔧</span>
+            <span>Accès Interface Admin</span>
+        </div>
+
+        <div class="instruction">
+            Pour accéder à l'interface administrateur dans votre app JeuTaime, 
+            suivez ces étapes simples :
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-text">
+                    Ouvrez votre application JeuTaime principale
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-text">
+                    Dans l'en-tête de l'application, cherchez le bouton <span class="highlight">🔧</span> 
+                    à côté des coins 💰
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-text">
+                    Cliquez sur l'icône <span class="highlight">🔧</span> pour ouvrir la boîte de dialogue
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-text">
+                    Confirmez l'accès en cliquant sur <span class="highlight">"Accéder"</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-demo">
+            <div style="text-align: center; margin-bottom: 15px; color: #888;">
+                Aperçu de l'en-tête de votre application :
+            </div>
+            <div class="header-content">
+                <div class="header-left">
+                    <div style="font-size: 24px;">💕</div>
+                    <div>
+                        <div style="font-weight: bold;">JeuTaime</div>
+                        <div style="font-size: 12px; color: #888;">Paris, France</div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="admin-btn" onclick="openAdminInterface()">🔧</button>
+                    <div class="arrow">←</div>
+                    <div style="color: #ff4081; font-weight: bold; font-size: 14px;">
+                        CLIQUEZ ICI
+                    </div>
+                    <div class="coins-display">
+                        <span>💰</span>
+                        <span>245</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            💡 <strong>Note :</strong> Le bouton admin 🔧 est situé dans l'en-tête de l'application, 
+            juste avant l'affichage des coins. Il peut être petit, donc regardez attentivement !
+        </div>
+
+        <button class="access-button" onclick="window.open('http://localhost:3000/APERCU_INTERFACE_ADMIN.html', '_blank')">
+            <span>🚀</span>
+            Voir l'Aperçu Admin Complet
+        </button>
+
+        <button class="access-button" onclick="runMainApp()" style="background: linear-gradient(135deg, #4caf50, #8bc34a);">
+            <span>🎮</span>
+            Lancer l'App Principale
+        </button>
+    </div>
+
+    <script>
+        function openAdminInterface() {
+            alert('🎉 Parfait ! Vous avez trouvé le bouton admin !\n\nDans votre vraie application, cela ouvrira l\'interface administrateur complète avec :\n\n📊 Tableau de bord\n👥 Gestion utilisateurs\n🍺 Gestion des bars\n🎮 Statistiques des jeux\n📅 Événements & thèmes\n📈 Analytics avancées');
+            
+            // Simuler l'ouverture de l'interface admin
+            setTimeout(() => {
+                window.open('http://localhost:3000/APERCU_INTERFACE_ADMIN.html', '_blank');
+            }, 1000);
+        }
+
+        function runMainApp() {
+            alert('🚀 Pour lancer votre application principale :\n\n1. Ouvrez un terminal\n2. Tapez : flutter run -d web-server\n3. Cherchez le bouton 🔧 dans l\'en-tête\n4. Cliquez dessus pour accéder à l\'admin !');
+        }
+
+        // Animation d'instruction au chargement
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const adminBtn = document.querySelector('.admin-btn');
+                adminBtn.style.animation = 'glow 0.5s ease-in-out 3';
+                
+                setTimeout(() => {
+                    adminBtn.style.animation = 'glow 2s ease-in-out infinite';
+                }, 1500);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

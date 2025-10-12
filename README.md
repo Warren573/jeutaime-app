@@ -1,7 +1,22 @@
-# 💕 JeuTaime - Application de Rencontre Flutter
+# 💕 JeuTaime - Application de Rencontre Moderne
+
+<div align="center">
+  
+![JeuTaime Logo](https://img.shields.io/badge/JeuTaime-💕-FF6B9D?style=for-the-badge)
+![Flutter](https://img.shields.io/badge/Flutter-3.16+-02569B?style=for-the-badge&logo=flutter)
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=firebase)
+![Material Design](https://img.shields.io/badge/Material%20Design%203-757575?style=for-the-badge&logo=material-design)
+
+**Une application de rencontre moderne et ludique avec gamification, chat temps réel et expériences thématiques uniques.**
+
+[🚀 Demo Live](https://jeutaime-app.web.app) • [📖 Guide Utilisateur](USER_GUIDE.md) • [🛠️ Guide Déploiement](DEPLOYMENT_GUIDE.md)
+
+</div>
+
+---
 
 ## 🎯 Description
-Application de rencontre innovante avec système de jeux intégrés et bars thématiques pour des connexions authentiques.
+Application de rencontre innovante et moderne avec système de gamification complet, matching intelligent, chat temps réel et bars thématiques pour des connexions authentiques et ludiques.
 
 ## 🎮 Fonctionnalités Principales
 
